@@ -31,32 +31,34 @@ export const PageContainer: React.FC<PageContainerProps> = ({ zoom, children, pa
             height: `${pageHeight * pageCount}px`,
             transition: 'transform 0.15s ease-out'
           }}
-          className="a4-page-context absolute left-0 top-0 shadow-2xl bg-white border border-slate-700 select-none print:relative print:shadow-none print:border-none print:transform-none"
+          className="absolute left-0 top-0 print:relative print:transform-none"
         >
-          {/* Render actual content */}
-          <div className="absolute inset-0 w-full h-full print:relative">
-            {children}
-          </div>
+          <div className="a4-page-context relative w-full h-full shadow-2xl bg-white border border-slate-700 select-none print:shadow-none print:border-none">
+            {/* Render actual content */}
+            <div className="absolute inset-0 w-full h-full print:relative">
+              {children}
+            </div>
 
-          {/* Page boundary guidelines overlay (hidden in final print) */}
-          <div className="absolute inset-0 pointer-events-none print:hidden">
-            {Array.from({ length: pageCount - 1 }).map((_, index) => {
-              const topOffset = pageHeight * (index + 1);
-              return (
-                <div
-                  key={index}
-                  className="absolute left-0 w-full flex items-center justify-between border-t border-dashed border-red-500 bg-red-500/5 h-6 -translate-y-3"
-                  style={{ top: `${topOffset}px` }}
-                >
-                  <span className="text-[10px] font-mono text-red-500 font-bold px-2 bg-workspace-bg/90 border border-red-500/20 rounded ml-4">
-                    PAGE {index + 1} / {index + 2} BREAK
-                  </span>
-                  <span className="text-[10px] font-mono text-red-500 font-bold px-2 bg-workspace-bg/90 border border-red-500/20 rounded mr-4">
-                    A4 Print Margin Cutoff
-                  </span>
-                </div>
-              );
-            })}
+            {/* Page boundary guidelines overlay (hidden in final print) */}
+            <div className="absolute inset-0 pointer-events-none print:hidden">
+              {Array.from({ length: pageCount - 1 }).map((_, index) => {
+                const topOffset = pageHeight * (index + 1);
+                return (
+                  <div
+                    key={index}
+                    className="absolute left-0 w-full flex items-center justify-between border-t border-dashed border-red-500 bg-red-500/5 h-6 -translate-y-3"
+                    style={{ top: `${topOffset}px` }}
+                  >
+                    <span className="text-[10px] font-mono text-red-500 font-bold px-2 bg-workspace-bg/90 border border-red-500/20 rounded ml-4">
+                      PAGE {index + 1} / {index + 2} BREAK
+                    </span>
+                    <span className="text-[10px] font-mono text-red-500 font-bold px-2 bg-workspace-bg/90 border border-red-500/20 rounded mr-4">
+                      A4 Print Margin Cutoff
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
