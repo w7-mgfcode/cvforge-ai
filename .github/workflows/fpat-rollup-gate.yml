@@ -10,12 +10,75 @@ permissions:
 
 jobs:
   rollup-gate:
+    # Only gate FPAT parent issues. Acting solely on `closed` means a reopen below
+    # (which fires `reopened`, not `closed`) cannot recurse into this workflow.
     if: contains(join(github.event.issue.labels.*.name, ','), 'type:umbrella') || contains(join(github.event.issue.labels.*.name, ','), 'type:epic')
     runs-on: ubuntu-latest
 
     steps:
-      - name: Rollup gate placeholder
-        run: |
-          echo "Closed FPAT parent issue: #${{ github.event.issue.number }}"
-          echo "Native sub-issue rollup enforcement requires GitHub sub-issue API reads."
-          echo "If descendants remain open, reopen manually until fpat-rollup-gate is wired to GraphQL."
+      - name: Reopen parent if descendants remain open
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const number = context.payload.issue.number;
+
+            // Read the closed parent's native sub-issues. This is the GitHub Issues
+            // hierarchy API (not Projects v2), so the default GITHUB_TOKEN with
+            // `issues: write` is sufficient — no FPAT_PROJECT_TOKEN / project scope.
+            const query = `
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $number) {
+                    subIssuesSummary { total completed }
+                    subIssues(first: 100) {
+                      nodes { number state }
+                    }
+                  }
+                }
+              }`;
+
+            const result = await github.graphql(query, { owner, repo, number });
+            const issue = result.repository.issue;
+            const children = issue?.subIssues?.nodes ?? [];
+            const open = children.filter((c) => c.state === 'OPEN');
+
+            if (open.length === 0) {
+              core.info(
+                `Rollup gate passed: #${number} closed with ${children.length} sub-issue(s), none open.`
+              );
+              return;
+            }
+
+            const list = open.map((c) => `#${c.number}`).join(', ');
+            core.warning(
+              `Rollup gate: #${number} has ${open.length} open sub-issue(s) (${list}). Reopening.`
+            );
+
+            await github.rest.issues.update({
+              owner,
+              repo,
+              issue_number: number,
+              state: 'open',
+            });
+
+            const body = [
+              '🔁 **Rollup gate reopened this issue.**',
+              '',
+              'This `type:umbrella` / `type:epic` issue was closed while its sub-issue rollup ' +
+                `still has ${open.length} open descendant(s):`,
+              '',
+              ...open.map((c) => `- #${c.number}`),
+              '',
+              'Close the open sub-issues first. The umbrella/epic close gate ' +
+                '(`.claude/docs/flow-pack-agent-team/board-spec.md`) keeps a parent open until ' +
+                'every descendant is done. GitHub cannot block the close itself, so this is a ' +
+                'detect-and-reopen guard — issue state stays the source of truth.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body,
+            });
