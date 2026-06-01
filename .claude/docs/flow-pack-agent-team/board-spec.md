@@ -96,3 +96,12 @@ Version 1 is one-directional: issue and PR state drive Project state. Moving a P
 - Release gate: Release epic must not close while any Parallel epic is open.
 - Umbrella gate: umbrella must not close while any descendant issue remains open.
 
+The umbrella/epic close gate is enforced by `.github/workflows/fpat-rollup-gate.yml`: closing a
+`type:umbrella`/`type:epic` issue while any of its **direct** sub-issues is still open reopens the
+parent and comments the open blockers (detect-and-reopen — GitHub cannot block the close itself).
+The check is one level deep, but because the same gate runs on every close it cascades: an epic
+cannot stay closed with an open sub-issue, so an umbrella whose epics all read closed already has a
+fully closed tree. It pages through the native `subIssues` connection (cross-checked against
+`subIssuesSummary`) with the default `GITHUB_TOKEN` (`issues: write`), independent of the Projects
+v2 PAT, and is one-directional: it touches issue state only, never the board.
+
