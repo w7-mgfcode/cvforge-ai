@@ -65,6 +65,26 @@ Use `blocked-by:<issue-number>` labels only when the dependency cannot be repres
 - `M2 - Parallel Tracks`
 - `M3 - Release Gate`
 
+## Item Metadata Conventions
+
+The board renders several native columns that are **not** custom fields — they mirror the
+underlying issue/PR. Keep them populated at creation time:
+
+- **Assignees** — the board's Assignees column mirrors the issue's assignees; it is not set
+  independently. Every FPAT issue gets a default assignee from the issue templates
+  (`assignees:` in `.github/ISSUE_TEMPLATE/fpat_*.yml`, default `@w7-mgfcode`). Backfill
+  existing unassigned issues with `scripts/fpat/backfill-meta.sh`.
+- **Linked pull requests** — populated from GitHub "Development" links, primarily PR closing
+  keywords. A PR **must** carry `Closes #<issue>` (see `commit-format.md`) or the column and
+  the native sub-issue rollup stay empty. Issues closed administratively (no PR) are
+  legitimately blank.
+- **Reviewers** — requested automatically via `.github/CODEOWNERS`. The Sourcery app review is
+  separate from (and does not replace) a requested human reviewer.
+- **Labels / Milestone / Project on PRs** — `gh pr create` does not inherit these from the
+  linked issue; pass them explicitly (`--label`, `--milestone`, `--assignee`, `--reviewer`)
+  or rely on the PR template checklist. Board membership for issues comes from native auto-add
+  on `flow-pack`/`agent-team`, not from a template `projects:` key (unreliable for Projects v2).
+
 ## Sync Direction
 
 Version 1 is one-directional: issue and PR state drive Project state. Moving a Project item to `Done` must not auto-close its issue until the first umbrella has completed and the automation has been reviewed.

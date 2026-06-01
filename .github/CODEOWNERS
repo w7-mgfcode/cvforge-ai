@@ -1,0 +1,13 @@
+# CODEOWNERS — auto-requests a reviewer on every pull request.
+# Matched owners are requested for review when a PR touches matching paths.
+# Owners must have push access to the repository.
+# Docs: https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything in the repo.
+* @w7-mgfcode
+
+# FPAT delivery system — same owner today; split out here so future
+# co-maintainers can take specific surfaces without touching the global rule.
+/.claude/                @w7-mgfcode
+/.github/                @w7-mgfcode
+/scripts/fpat/           @w7-mgfcode

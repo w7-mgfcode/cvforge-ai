@@ -2,6 +2,7 @@ name: FPAT Umbrella
 description: Track one Flow-Pack Agent-Team initiative.
 title: "feat(workflow): "
 labels: ["flow-pack", "agent-team", "type:umbrella"]
+assignees: ["w7-mgfcode"]
 body:
   - type: textarea
     id: summary

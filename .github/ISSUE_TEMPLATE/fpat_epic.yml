@@ -2,6 +2,7 @@ name: FPAT Epic
 description: Track a phased FPAT delivery surface.
 title: "feat(workflow): "
 labels: ["flow-pack", "agent-team", "type:epic"]
+assignees: ["w7-mgfcode"]
 body:
   - type: input
     id: parent
