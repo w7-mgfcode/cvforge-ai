@@ -1,0 +1,30 @@
+# Tier 3 — Reference Docs (scout these, don't auto-load)
+
+Heavy reference material. **Not** loaded automatically. Read the one-line summary below to
+decide relevance, then open only the doc you need (the "Isolate/Select" strategy — keep
+hundreds of lines of reference out of the main context until required).
+
+| Doc | Read it when you need… |
+|-----|------------------------|
+| `architecture-deep-dive.md` | The full data-flow / state-ownership / module map before a cross-cutting change |
+| `print-fidelity-guide.md`   | The A4 sizing math, overflow detection internals, or to add an automated print gate |
+| `skills-cli-guide.md`       | Adding/removing/updating agent skills (`npx skills`), the lockfile, installed set |
+| `ui-design-workflow-guide.md` | The UI pipeline, tool/skill availability, and the Stitch→A4/schema reconciliation protocol |
+| `flow-pack-agent-team/board-spec.md` | GitHub Projects v2 fields, views, labels, milestones, gates, and sync direction |
+| `flow-pack-agent-team/decomposition.md` | Umbrella → epics → sub-issues hierarchy-as-data method |
+| `flow-pack-agent-team/execution-pipeline.md` | Issue → exactly-five-subtask read-only planning method |
+| `flow-pack-agent-team/continuation-discipline.md` | V1→V2 continuation planning, exact-3 research agents, and score bands |
+| `flow-pack-agent-team/agent-team.md` | Contract-first agent-team execution boundary for FPAT work |
+
+## Also Tier 3 (repo root)
+
+| Doc | Summary |
+|-----|---------|
+| `PROJECT_CONTEXT.md` | Product vision, personas, MVP feature definitions (UC-1…UC-4) |
+| `DESIGN.md`          | Editorial design system, layout configs, token intent |
+| `AGENTS.md`          | Authoritative build/test/style/security conventions |
+
+## Adding a doc
+
+Create `.claude/docs/{topic}.md`, start with a 2–3 line **Summary** header (so scouts can judge
+relevance without reading the body), then the deep content. Add a row above.

@@ -1,0 +1,56 @@
+name: FPAT Sub-Issue
+description: Track one executable FPAT unit.
+title: "feat(scope): "
+labels: ["flow-pack", "agent-team", "type:sub-issue"]
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent epic
+      placeholder: "#2"
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks / blockers
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: "- [ ] "
+    validations:
+      required: true
+  - type: textarea
+    id: why_now
+    attributes:
+      label: Why it matters now
+    validations:
+      required: true
+

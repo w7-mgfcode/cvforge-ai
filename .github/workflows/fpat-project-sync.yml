@@ -1,0 +1,25 @@
+name: FPAT Project Sync
+
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled, reopened, closed]
+  pull_request:
+    types: [opened, edited, reopened, closed, synchronize]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  explain-sync:
+    if: contains(join(github.event.issue.labels.*.name, ','), 'flow-pack') || contains(join(github.event.issue.labels.*.name, ','), 'agent-team')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Project sync placeholder
+        run: |
+          echo "FPAT Project sync requires a user Project v2 token secret."
+          echo "Configure FPAT_PROJECT_TOKEN with project permissions before enabling GraphQL field updates."
+          echo "Issue and PR state remain the source of truth for v1."
+

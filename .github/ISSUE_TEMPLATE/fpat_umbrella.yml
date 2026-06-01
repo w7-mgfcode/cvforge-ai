@@ -1,0 +1,56 @@
+name: FPAT Umbrella
+description: Track one Flow-Pack Agent-Team initiative.
+title: "feat(workflow): "
+labels: ["flow-pack", "agent-team", "type:umbrella"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is wrong with the current state?
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Approach
+      description: What architectural or workflow delta will solve it?
+    validations:
+      required: true
+  - type: textarea
+    id: decomposition
+    attributes:
+      label: Decomposition
+      description: List the Foundation, Parallel, and Release epics.
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+      description: What will not close this umbrella?
+    validations:
+      required: true
+  - type: textarea
+    id: success_criteria
+    attributes:
+      label: Success criteria
+      description: Use checkboxes.
+      value: "- [ ] "
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks
+      description: Include mitigation per risk.
+    validations:
+      required: true
+  - type: textarea
+    id: tracking
+    attributes:
+      label: Tracking
+      description: Project board, plan, source KB, confidence score.
+    validations:
+      required: true
+
