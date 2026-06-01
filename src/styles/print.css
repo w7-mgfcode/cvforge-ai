@@ -1,0 +1,55 @@
+/* CSS Print Stylesheet overrides for A4 physical document bounds */
+
+@media print {
+  html, body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide all editor workspace elements */
+  header,
+  footer,
+  aside,
+  button,
+  .print-hide,
+  .sidebar,
+  .toolbar,
+  nav,
+  .alert-box {
+    display: none !important;
+  }
+
+  /* Force print target dimensions */
+  .a4-page-context {
+    width: 210mm !important;
+    height: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: #ffffff !important;
+  }
+
+  /* Page break controllers */
+  .page-break-avoid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
