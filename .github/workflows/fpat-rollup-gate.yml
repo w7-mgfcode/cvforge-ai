@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Reopen parent if descendants remain open
+      - name: Reopen parent if direct sub-issues remain open
         uses: actions/github-script@v7
         with:
           script: |
@@ -26,33 +26,61 @@ jobs:
             // Read the closed parent's native sub-issues. This is the GitHub Issues
             // hierarchy API (not Projects v2), so the default GITHUB_TOKEN with
             // `issues: write` is sufficient — no FPAT_PROJECT_TOKEN / project scope.
+            //
+            // We check DIRECT sub-issues only (the `subIssues` connection is not
+            // recursive). That is sufficient for the FPAT umbrella -> epic -> sub-issue
+            // model because this same gate runs on every close: an epic cannot stay
+            // closed while one of its sub-issues is open, so once all of an umbrella's
+            // epics read closed their sub-issues are already closed too. The gate
+            // cascades one level at a time instead of walking the whole tree.
             const query = `
-              query($owner: String!, $repo: String!, $number: Int!) {
+              query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
                 repository(owner: $owner, name: $repo) {
                   issue(number: $number) {
                     subIssuesSummary { total completed }
-                    subIssues(first: 100) {
+                    subIssues(first: 100, after: $cursor) {
                       nodes { number state }
+                      pageInfo { hasNextPage endCursor }
                     }
                   }
                 }
               }`;
 
-            const result = await github.graphql(query, { owner, repo, number });
-            const issue = result.repository.issue;
-            const children = issue?.subIssues?.nodes ?? [];
-            const open = children.filter((c) => c.state === 'OPEN');
+            // Page through ALL direct sub-issues so children past the first 100 are
+            // never silently dropped.
+            const children = [];
+            let summary = { total: 0, completed: 0 };
+            let cursor = null;
+            for (;;) {
+              const result = await github.graphql(query, { owner, repo, number, cursor });
+              const issue = result?.repository?.issue;
+              if (!issue) {
+                core.setFailed(`Could not read issue #${number} or its sub-issues from the API.`);
+                return;
+              }
+              summary = issue.subIssuesSummary ?? summary;
+              const page = issue.subIssues;
+              children.push(...(page?.nodes ?? []));
+              if (!page?.pageInfo?.hasNextPage) break;
+              cursor = page.pageInfo.endCursor;
+            }
 
-            if (open.length === 0) {
+            const openChildren = children.filter((c) => c.state === 'OPEN');
+            // `subIssuesSummary` is GitHub's own rollup count; trust it for the gate
+            // decision and fall back to the paginated list if the two ever disagree
+            // (e.g. an API shape change or omitted page), so we never under-count opens.
+            const openCount = Math.max(summary.total - summary.completed, openChildren.length);
+
+            if (openCount === 0) {
               core.info(
-                `Rollup gate passed: #${number} closed with ${children.length} sub-issue(s), none open.`
+                `Rollup gate passed: #${number} closed with ${summary.total} direct sub-issue(s), none open.`
               );
               return;
             }
 
-            const list = open.map((c) => `#${c.number}`).join(', ');
+            const listed = openChildren.map((c) => `#${c.number}`).join(', ') || '(see the sub-issue rollup)';
             core.warning(
-              `Rollup gate: #${number} has ${open.length} open sub-issue(s) (${list}). Reopening.`
+              `Rollup gate: #${number} has ${openCount} open direct sub-issue(s) (${listed}). Reopening.`
             );
 
             await github.rest.issues.update({
@@ -62,23 +90,33 @@ jobs:
               state: 'open',
             });
 
-            const body = [
+            const lines = [
               '🔁 **Rollup gate reopened this issue.**',
               '',
-              'This `type:umbrella` / `type:epic` issue was closed while its sub-issue rollup ' +
-                `still has ${open.length} open descendant(s):`,
+              'This `type:umbrella` / `type:epic` issue was closed while its sub-issue ' +
+                `rollup still has ${openCount} open direct sub-issue(s):`,
               '',
-              ...open.map((c) => `- #${c.number}`),
+            ];
+            if (openChildren.length > 0) {
+              lines.push(...openChildren.map((c) => `- #${c.number}`));
+            }
+            if (openChildren.length < openCount) {
+              const extra = openCount - openChildren.length;
+              lines.push(`- …and ${extra} more (see the sub-issue rollup on this issue).`);
+            }
+            lines.push(
               '',
               'Close the open sub-issues first. The umbrella/epic close gate ' +
                 '(`.claude/docs/flow-pack-agent-team/board-spec.md`) keeps a parent open until ' +
-                'every descendant is done. GitHub cannot block the close itself, so this is a ' +
-                'detect-and-reopen guard — issue state stays the source of truth.',
-            ].join('\n');
+                'every direct sub-issue is done; because the same gate runs at each level it ' +
+                'cascades, keeping the whole tree closed before a parent can close. GitHub cannot ' +
+                'block the close itself, so this is a detect-and-reopen guard — issue state stays ' +
+                'the source of truth.'
+            );
 
             await github.rest.issues.createComment({
               owner,
               repo,
               issue_number: number,
-              body,
+              body: lines.join('\n'),
             });
