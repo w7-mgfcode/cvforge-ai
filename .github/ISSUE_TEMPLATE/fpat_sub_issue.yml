@@ -2,6 +2,7 @@ name: FPAT Sub-Issue
 description: Track one executable FPAT unit.
 title: "feat(scope): "
 labels: ["flow-pack", "agent-team", "type:sub-issue"]
+assignees: ["w7-mgfcode"]
 body:
   - type: input
     id: parent
