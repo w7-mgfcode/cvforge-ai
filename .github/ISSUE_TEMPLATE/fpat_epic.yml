@@ -1,0 +1,43 @@
+name: FPAT Epic
+description: Track a phased FPAT delivery surface.
+title: "feat(workflow): "
+labels: ["flow-pack", "agent-team", "type:epic"]
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent umbrella
+      placeholder: "#1"
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      options:
+        - Foundation
+        - Parallel
+        - Release
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose
+    validations:
+      required: true
+  - type: textarea
+    id: subtasks
+    attributes:
+      label: Sub-tasks
+      description: List candidate sub-issues.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: "- [ ] "
+    validations:
+      required: true
+

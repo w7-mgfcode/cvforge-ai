@@ -1,0 +1,21 @@
+name: FPAT Blocked Sweep
+
+on:
+  schedule:
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report invariant sweep scope
+        run: |
+          echo "FPAT blocked sweep checks are defined in .claude/docs/flow-pack-agent-team/board-spec.md."
+          echo "Enable GraphQL project reads after CVForge AI Delivery exists and FPAT_PROJECT_TOKEN is configured."
+

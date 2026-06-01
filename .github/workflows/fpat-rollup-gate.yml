@@ -1,0 +1,21 @@
+name: FPAT Rollup Gate
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  rollup-gate:
+    if: contains(join(github.event.issue.labels.*.name, ','), 'type:umbrella') || contains(join(github.event.issue.labels.*.name, ','), 'type:epic')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Rollup gate placeholder
+        run: |
+          echo "Closed FPAT parent issue: #${{ github.event.issue.number }}"
+          echo "Native sub-issue rollup enforcement requires GitHub sub-issue API reads."
+          echo "If descendants remain open, reopen manually until fpat-rollup-gate is wired to GraphQL."
