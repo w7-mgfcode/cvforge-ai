@@ -25,6 +25,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Fail fast and explicitly if the project-read PAT is missing, instead of letting the
+      # downstream GraphQL call fail with an opaque auth error (sub-issue #15 provisions it).
+      - name: Require FPAT_PROJECT_TOKEN
+        env:
+          FPAT_PROJECT_TOKEN: ${{ secrets.FPAT_PROJECT_TOKEN }}
+        run: |
+          if [ -z "$FPAT_PROJECT_TOKEN" ]; then
+            echo "::error title=FPAT_PROJECT_TOKEN missing::Set the FPAT_PROJECT_TOKEN secret (a PAT with Projects v2 read scope) before running this audit. See .claude/docs/flow-pack-agent-team/board-spec.md and sub-issue #15."
+            exit 1
+          fi
+
       - name: Audit board invariants (read-only)
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
@@ -39,14 +50,31 @@ jobs:
             const SCORE_GATE = 40; // board-spec.md: epic ship gate is Score >= 40.
             // "Started" = anything past the pre-work columns (Backlog / Ready).
             const STARTED = new Set(['In Progress', 'In Review', 'Blocked', 'Done']);
+            // Custom fields the invariants depend on; a missing one is a config problem, not "unset".
+            const EXPECTED_FIELDS = ['Type', 'Phase', 'Status', 'Score'];
 
-            // READ-ONLY query: items + their linked issue and the Status/Type/Phase/Score
-            // single-select & number field values. No mutation is performed anywhere below.
+            // The board can be owned by a user OR an organization, and projectV2 hangs off a
+            // different root field for each. Detect the owner type so a future move from a user
+            // to an org (or vice versa) does not silently break the query.
+            const ownerProbe = await github.graphql(
+              `query($login: String!) { repositoryOwner(login: $login) { __typename } }`,
+              { login: OWNER }
+            );
+            const ownerType = ownerProbe?.repositoryOwner?.__typename;
+            if (ownerType !== 'User' && ownerType !== 'Organization') {
+              core.setFailed(`Could not resolve owner @${OWNER} to a user or organization.`);
+              return;
+            }
+            const root = ownerType === 'Organization' ? 'organization' : 'user';
+
+            // READ-ONLY query: project fields (for config validation) + items with their linked
+            // issue and the Status/Type/Phase/Score values. No mutation is performed below.
             const query = `
               query($login: String!, $number: Int!, $cursor: String) {
-                user(login: $login) {
+                ${root}(login: $login) {
                   projectV2(number: $number) {
                     title
+                    fields(first: 50) { nodes { ... on ProjectV2FieldCommon { name } } }
                     items(first: 100, after: $cursor) {
                       nodes {
                         content {
@@ -76,23 +104,31 @@ jobs:
             // Page through every item so boards larger than 100 are never silently truncated.
             const nodes = [];
             let boardTitle = '';
+            let fieldNames = new Set();
             let cursor = null;
             for (;;) {
               const res = await github.graphql(query, { login: OWNER, number: PROJECT_NUMBER, cursor });
-              const project = res?.user?.projectV2;
+              const project = res?.[root]?.projectV2;
               if (!project) {
                 core.setFailed(
-                  `Could not read Project #${PROJECT_NUMBER} for @${OWNER}. ` +
-                  `Check that FPAT_PROJECT_TOKEN has project (read) scope.`
+                  `Could not read Project #${PROJECT_NUMBER} for ${root} @${OWNER}. ` +
+                  `Check that FPAT_PROJECT_TOKEN has project (read) scope and the number is correct.`
                 );
                 return;
               }
               boardTitle = project.title;
+              for (const f of project.fields?.nodes ?? []) {
+                if (f?.name) fieldNames.add(f.name);
+              }
               const page = project.items;
               nodes.push(...(page?.nodes ?? []));
               if (!page?.pageInfo?.hasNextPage) break;
               cursor = page.pageInfo.endCursor;
             }
+
+            // Config validation: if an expected field was renamed/deleted, every item reads as
+            // "unset" for it and the audit would silently pass. Surface that explicitly instead.
+            const missingFields = EXPECTED_FIELDS.filter((f) => !fieldNames.has(f));
 
             // Flatten each item to the fields the invariants need.
             const rows = nodes
@@ -154,12 +190,26 @@ jobs:
             core.summary
               .addHeading('FPAT Blocked Sweep', 1)
               .addRaw(
-                `Board: **${boardTitle}** (Project #${PROJECT_NUMBER}) · ` +
+                `Board: **${boardTitle}** (${root} @${OWNER}, Project #${PROJECT_NUMBER}) · ` +
                   `${rows.length} issue item(s) scanned · ` +
                   `Foundation phase open: **${foundationOpen ? 'yes' : 'no'}** · ` +
                   `Score gate: **>= ${SCORE_GATE}**`
               )
               .addEOL();
+
+            if (missingFields.length > 0) {
+              core.summary
+                .addHeading('⚠️ Board configuration', 2)
+                .addRaw(
+                  `Expected custom field(s) not found on this board: **${missingFields.join(', ')}**. ` +
+                    `The related checks may under-report until the field(s) are restored or the ` +
+                    `audit is updated. Field names are case-sensitive.`
+                )
+                .addEOL();
+              for (const f of missingFields) {
+                core.warning(`Board configuration: expected project field "${f}" is missing or renamed.`);
+              }
+            }
 
             const section = (heading, items, header, toRow) => {
               core.summary.addHeading(heading, 2);
@@ -227,4 +277,7 @@ jobs:
               core.warning(`Blocked: ${ref(r)} (${r.status === 'Blocked' ? 'Status = Blocked' : 'labeled blocked'}).`);
             }
 
-            core.info(`FPAT blocked sweep complete: ${rows.length} item(s) scanned, ${total} violation(s).`);
+            core.info(
+              `FPAT blocked sweep complete: ${rows.length} item(s) scanned, ${total} violation(s)` +
+                `${missingFields.length ? `, ${missingFields.length} missing field(s)` : ''}.`
+            );
