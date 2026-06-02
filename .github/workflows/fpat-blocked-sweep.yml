@@ -1,21 +1,281 @@
 name: FPAT Blocked Sweep
 
+# Weekly (and on-demand) READ-ONLY audit of the CVForge AI Delivery board (Project v2).
+# It reports FPAT invariant violations to the job summary; it never mutates issues or
+# board items. Invariants are defined in .claude/docs/flow-pack-agent-team/board-spec.md:
+#   1. Foundation gate  - no Parallel-phase item may be started while a Foundation epic is open.
+#   2. Score gate       - an epic must not leave Backlog with Score < 40 (ship gate >= 40).
+#   3. Blocked sweep    - surface every item flagged `blocked` (label) or Status = Blocked.
+
 on:
   schedule:
-    - cron: "17 7 * * 1"
+    - cron: "17 7 * * 1" # Mondays 07:17 UTC
   workflow_dispatch:
+    inputs:
+      project_number:
+        description: "Project v2 number to audit (defaults to the CVForge AI Delivery board)."
+        required: false
+        default: "2"
 
 permissions:
-  contents: read
-  issues: read
+  contents: read # default GITHUB_TOKEN stays read-only; the Project read uses FPAT_PROJECT_TOKEN.
 
 jobs:
   sweep:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Report invariant sweep scope
+      # Fail fast and explicitly if the project-read PAT is missing, instead of letting the
+      # downstream GraphQL call fail with an opaque auth error (sub-issue #15 provisions it).
+      - name: Require FPAT_PROJECT_TOKEN
+        env:
+          FPAT_PROJECT_TOKEN: ${{ secrets.FPAT_PROJECT_TOKEN }}
         run: |
-          echo "FPAT blocked sweep checks are defined in .claude/docs/flow-pack-agent-team/board-spec.md."
-          echo "Enable GraphQL project reads after CVForge AI Delivery exists and FPAT_PROJECT_TOKEN is configured."
+          if [ -z "$FPAT_PROJECT_TOKEN" ]; then
+            echo "::error title=FPAT_PROJECT_TOKEN missing::Set the FPAT_PROJECT_TOKEN secret (a PAT with Projects v2 read scope) before running this audit. See .claude/docs/flow-pack-agent-team/board-spec.md and sub-issue #15."
+            exit 1
+          fi
 
+      - name: Audit board invariants (read-only)
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        with:
+          # Projects v2 data is owner-scoped and unreadable by the default GITHUB_TOKEN,
+          # so authenticate the GraphQL reads with the provisioned PAT (sub-issue #15).
+          github-token: ${{ secrets.FPAT_PROJECT_TOKEN }}
+          script: |
+            const OWNER = context.repo.owner;
+            // Project number is stable (board node id PVT_kwHOCghNdc4BZZCU). Overridable via
+            // the workflow_dispatch input so the same audit can target a future board.
+            const PROJECT_NUMBER = Number(context.payload.inputs?.project_number) || 2;
+            const SCORE_GATE = 40; // board-spec.md: epic ship gate is Score >= 40.
+            // "Started" = anything past the pre-work columns (Backlog / Ready).
+            const STARTED = new Set(['In Progress', 'In Review', 'Blocked', 'Done']);
+            // Custom fields the invariants depend on; a missing one is a config problem, not "unset".
+            const EXPECTED_FIELDS = ['Type', 'Phase', 'Status', 'Score'];
+
+            // READ-ONLY query. The board can be owned by a user OR an organization; querying
+            // repositoryOwner + the ProjectV2Owner interface resolves both owner types without a
+            // separate owner-type probe. Fetches project fields (for config validation) and items
+            // with their linked issue and Status/Type/Phase/Score values. No mutation is performed.
+            const query = `
+              query($login: String!, $number: Int!, $cursor: String) {
+                repositoryOwner(login: $login) {
+                  __typename
+                  ... on ProjectV2Owner {
+                    projectV2(number: $number) {
+                      title
+                      fields(first: 50) { nodes { ... on ProjectV2FieldCommon { name } } }
+                      items(first: 100, after: $cursor) {
+                        nodes {
+                          content {
+                            __typename
+                            ... on Issue {
+                              number title state url
+                              labels(first: 50) { nodes { name } }
+                            }
+                          }
+                          fieldValues(first: 30) {
+                            nodes {
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name field { ... on ProjectV2FieldCommon { name } }
+                              }
+                              ... on ProjectV2ItemFieldNumberValue {
+                                number field { ... on ProjectV2FieldCommon { name } }
+                              }
+                            }
+                          }
+                        }
+                        pageInfo { hasNextPage endCursor }
+                      }
+                    }
+                  }
+                }
+              }`;
+
+            // Page through every item so boards larger than 100 are never silently truncated.
+            const nodes = [];
+            let boardTitle = '';
+            let ownerType = '';
+            let fieldNames = new Set();
+            let cursor = null;
+            for (;;) {
+              const res = await github.graphql(query, { login: OWNER, number: PROJECT_NUMBER, cursor });
+              const owner = res?.repositoryOwner;
+              if (!owner) {
+                core.setFailed(`Could not resolve owner @${OWNER} to a user or organization.`);
+                return;
+              }
+              const project = owner.projectV2;
+              if (!project) {
+                core.setFailed(
+                  `Could not read Project #${PROJECT_NUMBER} for @${OWNER}. ` +
+                  `Check that FPAT_PROJECT_TOKEN has project (read) scope and the number is correct.`
+                );
+                return;
+              }
+              ownerType = owner.__typename;
+              boardTitle = project.title;
+              for (const f of project.fields?.nodes ?? []) {
+                if (f?.name) fieldNames.add(f.name);
+              }
+              const page = project.items;
+              nodes.push(...(page?.nodes ?? []));
+              if (!page?.pageInfo?.hasNextPage) break;
+              cursor = page.pageInfo.endCursor;
+            }
+
+            // Config validation: if an expected field was renamed/deleted, every item reads as
+            // "unset" for it and the audit would silently pass. Surface that explicitly instead.
+            const missingFields = EXPECTED_FIELDS.filter((f) => !fieldNames.has(f));
+
+            // Flatten each item to the fields the invariants need.
+            const rows = nodes
+              .map((it) => {
+                const c = it.content || {};
+                const fv = {};
+                for (const n of it.fieldValues?.nodes ?? []) {
+                  const name = n?.field?.name;
+                  if (!name) continue;
+                  if (typeof n.name === 'string') fv[name] = n.name;
+                  else if (typeof n.number === 'number') fv[name] = n.number;
+                }
+                return {
+                  isIssue: c.__typename === 'Issue',
+                  number: c.number,
+                  title: c.title,
+                  state: c.state, // OPEN | CLOSED
+                  url: c.url,
+                  labels: (c.labels?.nodes ?? []).map((l) => l.name),
+                  type: fv.Type,
+                  phase: fv.Phase,
+                  status: fv.Status,
+                  score: typeof fv.Score === 'number' ? fv.Score : null,
+                };
+              })
+              .filter((r) => r.isIssue && r.number != null);
+
+            const ref = (r) => `#${r.number}`;
+
+            // 1. Foundation gate: only meaningful while a Foundation epic is still open.
+            const foundationOpen = rows.some(
+              (r) => r.type === 'Epic' && r.phase === 'Foundation' && r.state === 'OPEN'
+            );
+            const foundationViolations = foundationOpen
+              ? rows.filter(
+                  (r) => r.phase === 'Parallel' && r.state === 'OPEN' && STARTED.has(r.status)
+                )
+              : [];
+
+            // 2. Score gate: open epics that have left Backlog with Score below the ship gate.
+            const scoreViolations = rows.filter(
+              (r) =>
+                r.type === 'Epic' &&
+                r.state === 'OPEN' &&
+                r.status &&
+                r.status !== 'Backlog' &&
+                (r.score == null || r.score < SCORE_GATE)
+            );
+
+            // 3. Blocked sweep: anything carrying the `blocked` label or sitting in Status = Blocked.
+            const blockedItems = rows.filter(
+              (r) => r.state === 'OPEN' && (r.labels.includes('blocked') || r.status === 'Blocked')
+            );
+
+            const total =
+              foundationViolations.length + scoreViolations.length + blockedItems.length;
+
+            // ---- Report (job summary only; strictly read-only) ----
+            core.summary
+              .addHeading('FPAT Blocked Sweep', 1)
+              .addRaw(
+                `Board: **${boardTitle}** (${ownerType.toLowerCase()} @${OWNER}, Project #${PROJECT_NUMBER}) · ` +
+                  `${rows.length} issue item(s) scanned · ` +
+                  `Foundation phase open: **${foundationOpen ? 'yes' : 'no'}** · ` +
+                  `Score gate: **>= ${SCORE_GATE}**`
+              )
+              .addEOL();
+
+            if (missingFields.length > 0) {
+              core.summary
+                .addHeading('⚠️ Board configuration', 2)
+                .addRaw(
+                  `Expected custom field(s) not found on this board: **${missingFields.join(', ')}**. ` +
+                    `The related checks may under-report until the field(s) are restored or the ` +
+                    `audit is updated. Field names are case-sensitive.`
+                )
+                .addEOL();
+              for (const f of missingFields) {
+                core.warning(`Board configuration: expected project field "${f}" is missing or renamed.`);
+              }
+            }
+
+            const section = (heading, items, header, toRow) => {
+              core.summary.addHeading(heading, 2);
+              if (items.length === 0) {
+                core.summary.addRaw('✅ No violations.').addEOL();
+                return;
+              }
+              core.summary.addTable([
+                header.map((h) => ({ data: h, header: true })),
+                ...items.map(toRow),
+              ]);
+            };
+
+            section(
+              '1. Parallel work started while Foundation is open',
+              foundationViolations,
+              ['Issue', 'Status', 'Phase'],
+              (r) => [`<a href="${r.url}">${ref(r)}</a>`, r.status ?? '—', r.phase ?? '—']
+            );
+            section(
+              `2. Epics past Backlog with Score < ${SCORE_GATE}`,
+              scoreViolations,
+              ['Issue', 'Status', 'Score'],
+              (r) => [
+                `<a href="${r.url}">${ref(r)}</a>`,
+                r.status ?? '—',
+                r.score == null ? '(unset)' : String(r.score),
+              ]
+            );
+            section(
+              '3. Blocked items',
+              blockedItems,
+              ['Issue', 'Status', 'Labels'],
+              (r) => [
+                `<a href="${r.url}">${ref(r)}</a>`,
+                r.status ?? '—',
+                r.labels.filter((l) => l === 'blocked' || l.startsWith('blocked-by:')).join(', ') ||
+                  'Status = Blocked',
+              ]
+            );
+
+            core.summary
+              .addSeparator()
+              .addRaw(
+                total === 0
+                  ? '✅ **No invariant violations.** Read-only audit — nothing was modified.'
+                  : `⚠️ **${total} invariant violation(s) found.** Read-only audit — nothing was modified.`
+              )
+              .addEOL();
+
+            await core.summary.write();
+
+            // Surface each violation as an annotation without failing the run: this is an
+            // informational sweep, not a merge gate (the rollup gate handles enforcement).
+            for (const r of foundationViolations) {
+              core.warning(`Foundation gate: ${ref(r)} is "${r.status}" while a Foundation epic is open.`);
+            }
+            for (const r of scoreViolations) {
+              core.warning(
+                `Score gate: ${ref(r)} left Backlog (Status "${r.status}") with Score ` +
+                  `${r.score == null ? 'unset' : r.score} (< ${SCORE_GATE}).`
+              );
+            }
+            for (const r of blockedItems) {
+              core.warning(`Blocked: ${ref(r)} (${r.status === 'Blocked' ? 'Status = Blocked' : 'labeled blocked'}).`);
+            }
+
+            core.info(
+              `FPAT blocked sweep complete: ${rows.length} item(s) scanned, ${total} violation(s)` +
+                `${missingFields.length ? `, ${missingFields.length} missing field(s)` : ''}.`
+            );
