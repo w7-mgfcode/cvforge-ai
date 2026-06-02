@@ -1,25 +1,203 @@
 name: FPAT Project Sync
 
+# Syncs an FPAT issue's taxonomy LABELS onto its CVForge AI Delivery board fields:
+#   type:*  -> Type      phase:* -> Phase      area:*  -> Area
+# One-directional (board-spec.md V1): issue labels drive board fields, never the reverse.
+# It never closes or edits issues, and deliberately does NOT touch Status or Score
+# (Status transitions are out of scope for #16). Field and option IDs are resolved at
+# runtime from the live project by name, so there are no hardcoded "magic" option IDs.
+
 on:
   issues:
-    types: [opened, edited, labeled, unlabeled, reopened, closed]
-  pull_request:
-    types: [opened, edited, reopened, closed, synchronize]
+    types: [opened, labeled, unlabeled, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to (re)sync onto the board."
+        required: true
 
 permissions:
   contents: read
-  issues: write
-  pull-requests: read
+  issues: read # default GITHUB_TOKEN reads the issue's labels; the PAT writes the board.
+
+concurrency:
+  # Serialize per issue so rapid label changes cannot race on the same board item.
+  group: fpat-project-sync-${{ github.event.issue.number || github.event.inputs.issue_number }}
+  cancel-in-progress: false
 
 jobs:
-  explain-sync:
-    if: contains(join(github.event.issue.labels.*.name, ','), 'flow-pack') || contains(join(github.event.issue.labels.*.name, ','), 'agent-team')
+  sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Project sync placeholder
-        run: |
-          echo "FPAT Project sync requires a user Project v2 token secret."
-          echo "Configure FPAT_PROJECT_TOKEN with project permissions before enabling GraphQL field updates."
-          echo "Issue and PR state remain the source of truth for v1."
+      - name: Sync labels -> Type/Phase/Area
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          FPAT_PROJECT_TOKEN: ${{ secrets.FPAT_PROJECT_TOKEN }}
+        with:
+          # `github` (default token) reads the issue; a separate PAT-authenticated client writes
+          # the board, because Projects v2 is unreadable/unwritable by the default GITHUB_TOKEN.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const token = process.env.FPAT_PROJECT_TOKEN;
+            if (!token) {
+              core.setFailed('FPAT_PROJECT_TOKEN secret is not set; cannot sync board fields. See sub-issue #15.');
+              return;
+            }
+            // Minimal PAT-authenticated GraphQL client. github-script's bundled `github` uses the
+            // default token (for issue reads); Projects v2 writes need the PAT, and the sandboxed
+            // require cannot load a second Octokit, so call the GraphQL endpoint directly.
+            const projGraphql = async (query, variables) => {
+              const res = await fetch('https://api.github.com/graphql', {
+                method: 'POST',
+                headers: { Authorization: `bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, variables }),
+              });
+              // Read the body once, then surface clear errors for non-2xx (rate limits,
+              // transient 5xx), non-JSON bodies, GraphQL errors, and missing data — instead
+              // of an opaque res.json()/undefined-data failure.
+              const bodyText = await res.text();
+              if (!res.ok) {
+                throw new Error(
+                  `GraphQL HTTP ${res.status} ${res.statusText}: ${bodyText ? bodyText.slice(0, 300) : '<empty body>'}`
+                );
+              }
+              let json;
+              try {
+                json = JSON.parse(bodyText);
+              } catch (err) {
+                throw new Error(`GraphQL response was not JSON (HTTP ${res.status}): ${err.message}`);
+              }
+              if (json.errors) {
+                throw new Error(`GraphQL error: ${JSON.stringify(json.errors)}`);
+              }
+              if (typeof json.data === 'undefined') {
+                throw new Error(`GraphQL response missing 'data': ${bodyText.slice(0, 300)}`);
+              }
+              return json.data;
+            };
 
+            const OWNER = context.repo.owner;
+            const REPO = context.repo.repo;
+            const PROJECT_NUMBER = 2; // CVForge AI Delivery board (stable; node id PVT_kwHOCghNdc4BZZCU).
+
+            // Documented label-suffix -> single-select option NAME map (not magic option IDs).
+            // Area option names equal the label suffix exactly, so no map is needed there.
+            const TYPE_NAMES = { umbrella: 'Umbrella', epic: 'Epic', 'sub-issue': 'Sub-issue' };
+            const PHASE_NAMES = { foundation: 'Foundation', parallel: 'Parallel', release: 'Release' };
+
+            const issueNumber = Number(
+              context.payload.issue?.number ?? context.payload.inputs?.issue_number
+            );
+            if (!issueNumber) {
+              core.setFailed('No issue number on the event payload or dispatch input.');
+              return;
+            }
+
+            // Re-fetch the issue's current labels + node id (default token). Re-reading instead of
+            // trusting a possibly-stale event payload makes concurrent label edits converge.
+            const { data: issue } = await github.rest.issues.get({
+              owner: OWNER, repo: REPO, issue_number: issueNumber,
+            });
+            const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
+            const contentId = issue.node_id;
+
+            // One-directional board scope: only sync issues that belong on the FPAT board.
+            if (!labels.includes('flow-pack') && !labels.includes('agent-team')) {
+              core.info(`#${issueNumber} has no flow-pack/agent-team label; not a board issue. Skipping.`);
+              return;
+            }
+
+            const suffixes = (prefix) =>
+              labels.filter((l) => l.startsWith(prefix)).map((l) => l.slice(prefix.length));
+            const pick = (prefix, map) => {
+              const found = suffixes(prefix);
+              if (found.length === 0) return null;
+              if (found.length > 1) {
+                core.warning(`#${issueNumber} has multiple ${prefix}* labels (${found.join(', ')}); using "${found[0]}".`);
+              }
+              const name = map ? map[found[0]] : found[0];
+              if (!name) {
+                core.warning(`#${issueNumber}: ${prefix}${found[0]} has no matching board option; skipping that field.`);
+              }
+              return name ?? null;
+            };
+
+            const desired = {
+              Type: pick('type:', TYPE_NAMES),
+              Phase: pick('phase:', PHASE_NAMES),
+              Area: pick('area:', null),
+            };
+
+            // Resolve project id + the Type/Phase/Area field ids and their option ids at runtime,
+            // owner-agnostically (user- or org-owned board). No hardcoded option IDs.
+            const fieldQuery = `
+              query($login: String!, $number: Int!) {
+                repositoryOwner(login: $login) {
+                  ... on ProjectV2Owner {
+                    projectV2(number: $number) {
+                      id
+                      Type: field(name: "Type") { ... on ProjectV2SingleSelectField { id options { id name } } }
+                      Phase: field(name: "Phase") { ... on ProjectV2SingleSelectField { id options { id name } } }
+                      Area: field(name: "Area") { ... on ProjectV2SingleSelectField { id options { id name } } }
+                    }
+                  }
+                }
+              }`;
+            const fq = await projGraphql(fieldQuery, { login: OWNER, number: PROJECT_NUMBER });
+            const project = fq?.repositoryOwner?.projectV2;
+            if (!project?.id) {
+              core.setFailed(
+                `Could not read Project #${PROJECT_NUMBER} for @${OWNER}. ` +
+                `Check that FPAT_PROJECT_TOKEN has project (write) scope.`
+              );
+              return;
+            }
+
+            // Ensure the issue is on the board. addProjectV2ItemById is idempotent: it returns the
+            // existing item when already present, so this satisfies "auto-added with fields
+            // populated" even if native auto-add has not run yet, without ever duplicating items.
+            const added = await projGraphql(
+              `mutation($projectId: ID!, $contentId: ID!) {
+                 addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) { item { id } }
+               }`,
+              { projectId: project.id, contentId }
+            );
+            const itemId = added?.addProjectV2ItemById?.item?.id;
+            if (!itemId) {
+              core.setFailed(`Could not add or find the board item for #${issueNumber}.`);
+              return;
+            }
+
+            // Apply each managed field. Setting a single-select to its current value is a no-op,
+            // so re-runs are idempotent. A missing label leaves that field untouched (no clearing).
+            const applied = [];
+            for (const key of ['Type', 'Phase', 'Area']) {
+              const name = desired[key];
+              if (!name) continue;
+              const field = project[key];
+              if (!field?.id) {
+                core.warning(`Board has no "${key}" single-select field; skipping.`);
+                continue;
+              }
+              const option = (field.options ?? []).find((o) => o.name === name);
+              if (!option) {
+                core.warning(`#${issueNumber}: the "${key}" field has no option named "${name}"; skipping.`);
+                continue;
+              }
+              await projGraphql(
+                `mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                   updateProjectV2ItemFieldValue(input: {
+                     projectId: $projectId, itemId: $itemId, fieldId: $fieldId,
+                     value: { singleSelectOptionId: $optionId }
+                   }) { projectV2Item { id } }
+                 }`,
+                { projectId: project.id, itemId, fieldId: field.id, optionId: option.id }
+              );
+              applied.push(`${key} = ${name}`);
+            }
+
+            const summary = applied.length
+              ? `Synced #${issueNumber}: ${applied.join(', ')}.`
+              : `#${issueNumber}: no type:/phase:/area: labels to sync.`;
+            core.info(summary);
+            await core.summary.addRaw(`**FPAT Project Sync** — ${summary}`).write();
