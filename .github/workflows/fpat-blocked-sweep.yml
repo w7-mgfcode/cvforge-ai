@@ -53,49 +53,40 @@ jobs:
             // Custom fields the invariants depend on; a missing one is a config problem, not "unset".
             const EXPECTED_FIELDS = ['Type', 'Phase', 'Status', 'Score'];
 
-            // The board can be owned by a user OR an organization, and projectV2 hangs off a
-            // different root field for each. Detect the owner type so a future move from a user
-            // to an org (or vice versa) does not silently break the query.
-            const ownerProbe = await github.graphql(
-              `query($login: String!) { repositoryOwner(login: $login) { __typename } }`,
-              { login: OWNER }
-            );
-            const ownerType = ownerProbe?.repositoryOwner?.__typename;
-            if (ownerType !== 'User' && ownerType !== 'Organization') {
-              core.setFailed(`Could not resolve owner @${OWNER} to a user or organization.`);
-              return;
-            }
-            const root = ownerType === 'Organization' ? 'organization' : 'user';
-
-            // READ-ONLY query: project fields (for config validation) + items with their linked
-            // issue and the Status/Type/Phase/Score values. No mutation is performed below.
+            // READ-ONLY query. The board can be owned by a user OR an organization; querying
+            // repositoryOwner + the ProjectV2Owner interface resolves both owner types without a
+            // separate owner-type probe. Fetches project fields (for config validation) and items
+            // with their linked issue and Status/Type/Phase/Score values. No mutation is performed.
             const query = `
               query($login: String!, $number: Int!, $cursor: String) {
-                ${root}(login: $login) {
-                  projectV2(number: $number) {
-                    title
-                    fields(first: 50) { nodes { ... on ProjectV2FieldCommon { name } } }
-                    items(first: 100, after: $cursor) {
-                      nodes {
-                        content {
-                          __typename
-                          ... on Issue {
-                            number title state url
-                            labels(first: 50) { nodes { name } }
-                          }
-                        }
-                        fieldValues(first: 30) {
-                          nodes {
-                            ... on ProjectV2ItemFieldSingleSelectValue {
-                              name field { ... on ProjectV2FieldCommon { name } }
-                            }
-                            ... on ProjectV2ItemFieldNumberValue {
-                              number field { ... on ProjectV2FieldCommon { name } }
+                repositoryOwner(login: $login) {
+                  __typename
+                  ... on ProjectV2Owner {
+                    projectV2(number: $number) {
+                      title
+                      fields(first: 50) { nodes { ... on ProjectV2FieldCommon { name } } }
+                      items(first: 100, after: $cursor) {
+                        nodes {
+                          content {
+                            __typename
+                            ... on Issue {
+                              number title state url
+                              labels(first: 50) { nodes { name } }
                             }
                           }
+                          fieldValues(first: 30) {
+                            nodes {
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                name field { ... on ProjectV2FieldCommon { name } }
+                              }
+                              ... on ProjectV2ItemFieldNumberValue {
+                                number field { ... on ProjectV2FieldCommon { name } }
+                              }
+                            }
+                          }
                         }
+                        pageInfo { hasNextPage endCursor }
                       }
-                      pageInfo { hasNextPage endCursor }
                     }
                   }
                 }
@@ -104,18 +95,25 @@ jobs:
             // Page through every item so boards larger than 100 are never silently truncated.
             const nodes = [];
             let boardTitle = '';
+            let ownerType = '';
             let fieldNames = new Set();
             let cursor = null;
             for (;;) {
               const res = await github.graphql(query, { login: OWNER, number: PROJECT_NUMBER, cursor });
-              const project = res?.[root]?.projectV2;
+              const owner = res?.repositoryOwner;
+              if (!owner) {
+                core.setFailed(`Could not resolve owner @${OWNER} to a user or organization.`);
+                return;
+              }
+              const project = owner.projectV2;
               if (!project) {
                 core.setFailed(
-                  `Could not read Project #${PROJECT_NUMBER} for ${root} @${OWNER}. ` +
+                  `Could not read Project #${PROJECT_NUMBER} for @${OWNER}. ` +
                   `Check that FPAT_PROJECT_TOKEN has project (read) scope and the number is correct.`
                 );
                 return;
               }
+              ownerType = owner.__typename;
               boardTitle = project.title;
               for (const f of project.fields?.nodes ?? []) {
                 if (f?.name) fieldNames.add(f.name);
@@ -190,7 +188,7 @@ jobs:
             core.summary
               .addHeading('FPAT Blocked Sweep', 1)
               .addRaw(
-                `Board: **${boardTitle}** (${root} @${OWNER}, Project #${PROJECT_NUMBER}) · ` +
+                `Board: **${boardTitle}** (${ownerType.toLowerCase()} @${OWNER}, Project #${PROJECT_NUMBER}) · ` +
                   `${rows.length} issue item(s) scanned · ` +
                   `Foundation phase open: **${foundationOpen ? 'yes' : 'no'}** · ` +
                   `Score gate: **>= ${SCORE_GATE}**`
