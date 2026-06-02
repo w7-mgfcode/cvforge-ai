@@ -43,7 +43,21 @@ jobs:
               core.setFailed('FPAT_PROJECT_TOKEN secret is not set; cannot sync board fields. See sub-issue #15.');
               return;
             }
-            const proj = require('@actions/github').getOctokit(token);
+            // Minimal PAT-authenticated GraphQL client. github-script's bundled `github` uses the
+            // default token (for issue reads); Projects v2 writes need the PAT, and the sandboxed
+            // require cannot load a second Octokit, so call the GraphQL endpoint directly.
+            const projGraphql = async (query, variables) => {
+              const res = await fetch('https://api.github.com/graphql', {
+                method: 'POST',
+                headers: { Authorization: `bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query, variables }),
+              });
+              const json = await res.json();
+              if (json.errors) {
+                throw new Error(`GraphQL error: ${JSON.stringify(json.errors)}`);
+              }
+              return json.data;
+            };
 
             const OWNER = context.repo.owner;
             const REPO = context.repo.repo;
@@ -112,7 +126,7 @@ jobs:
                   }
                 }
               }`;
-            const fq = await proj.graphql(fieldQuery, { login: OWNER, number: PROJECT_NUMBER });
+            const fq = await projGraphql(fieldQuery, { login: OWNER, number: PROJECT_NUMBER });
             const project = fq?.repositoryOwner?.projectV2;
             if (!project?.id) {
               core.setFailed(
@@ -125,7 +139,7 @@ jobs:
             // Ensure the issue is on the board. addProjectV2ItemById is idempotent: it returns the
             // existing item when already present, so this satisfies "auto-added with fields
             // populated" even if native auto-add has not run yet, without ever duplicating items.
-            const added = await proj.graphql(
+            const added = await projGraphql(
               `mutation($projectId: ID!, $contentId: ID!) {
                  addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) { item { id } }
                }`,
@@ -153,7 +167,7 @@ jobs:
                 core.warning(`#${issueNumber}: the "${key}" field has no option named "${name}"; skipping.`);
                 continue;
               }
-              await proj.graphql(
+              await projGraphql(
                 `mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
                    updateProjectV2ItemFieldValue(input: {
                      projectId: $projectId, itemId: $itemId, fieldId: $fieldId,
