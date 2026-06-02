@@ -52,9 +52,26 @@ jobs:
                 headers: { Authorization: `bearer ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query, variables }),
               });
-              const json = await res.json();
+              // Read the body once, then surface clear errors for non-2xx (rate limits,
+              // transient 5xx), non-JSON bodies, GraphQL errors, and missing data — instead
+              // of an opaque res.json()/undefined-data failure.
+              const bodyText = await res.text();
+              if (!res.ok) {
+                throw new Error(
+                  `GraphQL HTTP ${res.status} ${res.statusText}: ${bodyText ? bodyText.slice(0, 300) : '<empty body>'}`
+                );
+              }
+              let json;
+              try {
+                json = JSON.parse(bodyText);
+              } catch (err) {
+                throw new Error(`GraphQL response was not JSON (HTTP ${res.status}): ${err.message}`);
+              }
               if (json.errors) {
                 throw new Error(`GraphQL error: ${JSON.stringify(json.errors)}`);
+              }
+              if (typeof json.data === 'undefined') {
+                throw new Error(`GraphQL response missing 'data': ${bodyText.slice(0, 300)}`);
               }
               return json.data;
             };
