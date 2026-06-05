@@ -27,6 +27,9 @@ jobs:
       - name: Test continuation negotiation band
         run: node scripts/fpat/test-negotiation-band.mjs
 
+      - name: Check /fpat-continuation doc consistency
+        run: node scripts/fpat/check-doc-consistency.mjs
+
       - name: Lint application
         run: npm run lint
 
