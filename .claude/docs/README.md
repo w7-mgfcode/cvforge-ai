@@ -16,6 +16,12 @@ hundreds of lines of reference out of the main context until required).
 | `flow-pack-agent-team/continuation-discipline.md` | V1→V2 continuation planning, exact-3 research agents, and score bands |
 | `flow-pack-agent-team/agent-team.md` | Contract-first agent-team execution boundary for FPAT work |
 
+## Reports (dated delivery artifacts)
+
+| Report | Summary |
+|--------|---------|
+| `docs/reports/2026-06-05/fpat-umbrella-dogfood.md` | First FPAT adoption umbrella (#1) delivery + release-gate dogfood: A4 print fidelity across all 3 templates (browser + static), drift resolution, closeout |
+
 ## Also Tier 3 (repo root)
 
 | Doc | Summary |
