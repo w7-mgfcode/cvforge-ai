@@ -80,3 +80,28 @@ total out of 50).
 A defer item with a blank or missing `reason:` is invalid output. A `36-39` item must land in the
 negotiation list — it is never silently shipped or deferred.
 
+## Feeding an approved V2 into the umbrella (gated)
+
+The continuation pass is read-only and produces the three lists above. Promoting them into the
+delivery hierarchy is a **separate, explicitly gated step** — it is the only write the flow ever
+makes, and it happens only after the user approves the V2 ship list.
+
+Gate and procedure:
+
+1. **Approval gate.** Do not touch any issue until the user approves the V2 ship list. The
+   planning pass itself never writes (see **Guardrails** in
+   `.claude/commands/fpat-continuation.md`).
+2. **Feed only V2 ship items.** For each approved V2 item, append one epic line under umbrella
+   #1's `## Decomposition` section (the umbrella body — see the umbrella contract in
+   `decomposition.md`), with its phase/area. Negotiation-list items are **not** fed until the
+   user resolves them into ship or defer; defer items are recorded with their `reason:` and are
+   not fed.
+3. **No board field writes.** This step edits issue bodies / hierarchy only. It never sets the
+   board `Status` or `Score` — board membership and Type/Phase/Area come from labels + native
+   auto-add (`board-spec.md` → Automation & secrets).
+4. **Close gate still applies.** New epics appended under #1 keep the umbrella open until they
+   close, enforced by `fpat-rollup-gate.yml` (`board-spec.md` → Gates).
+
+This keeps V1→V2 continuation one-directional and human-gated: research-survived items flow into
+the umbrella only on explicit approval, and nothing the pass discovers mutates GitHub on its own.
+
