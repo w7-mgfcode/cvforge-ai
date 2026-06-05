@@ -33,7 +33,7 @@ Score bands:
 
 - `>= 40`: ship
 - `< 36`: defer
-- `36-39`: negotiate with the user
+- `36–39`: negotiate with the user
 
 Keep the bands verbatim for the first CVForge AI adoption umbrella. These bands are owned by the
 `flow-pack-agent-team-scoring` skill and applied at `/fpat-continuation` step 7 — keep them
@@ -77,7 +77,7 @@ total out of 50).
   - reason: <explicit, specific defer reason>
 ```
 
-A defer item with a blank or missing `reason:` is invalid output. A `36-39` item must land in the
+A defer item with a blank or missing `reason:` is invalid output. A `36–39` item must land in the
 negotiation list — it is never silently shipped or deferred.
 
 ## Feeding an approved V2 into the umbrella (gated)
