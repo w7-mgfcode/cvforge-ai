@@ -19,7 +19,8 @@ is legacy drift — do not reintroduce it.
 - **Research: exactly 3 read-only passes** — Known Issues, Best Practices, Dependencies.
 - **Scoring: the 5-dimension continuation rubric** — Value, Risk, Readiness, Complexity, Evidence.
   Reuse the `flow-pack-agent-team-scoring` skill for the rubric and bands.
-- **Score bands (verbatim):** `>= 40` ship · `< 36` defer · `36-39` negotiate.
+- **Score bands (verbatim):** `>= 40` ship · `< 36` defer · `36–39` negotiate. These bands are
+  owned by the `flow-pack-agent-team-scoring` skill — keep them byte-identical with it.
 - **Output: exactly 3 lists** — V2 ship, negotiation, defer — each item carrying its per-item
   5-dimension score, and every defer item carrying an explicit defer reason.
 
@@ -46,7 +47,7 @@ is legacy drift — do not reintroduce it.
 7. Apply the score bands verbatim:
    - `>= 40`: V2 ship
    - `< 36`: defer
-   - `36-39`: negotiate
+   - `36–39`: negotiate
 8. Output the V2 ship list, the negotiation list, and the defer list, using the templates in
    `.claude/docs/flow-pack-agent-team/continuation-discipline.md` (per-item 5-dim scores;
    explicit reason on every defer item).
