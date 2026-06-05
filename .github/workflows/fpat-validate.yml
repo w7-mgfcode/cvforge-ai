@@ -24,6 +24,9 @@ jobs:
       - name: Validate FPAT artifacts
         run: node scripts/fpat/validate-issues.mjs
 
+      - name: Test continuation negotiation band
+        run: node scripts/fpat/test-negotiation-band.mjs
+
       - name: Lint application
         run: npm run lint
 
