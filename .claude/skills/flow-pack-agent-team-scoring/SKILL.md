@@ -65,6 +65,11 @@ Score each dimension 1–10. Source:
 The board's `Score` field stores this 5-dimension total; `fpat-blocked-sweep.yml` audits epics
 that left Backlog with `Score < 40`.
 
+**Single source of truth for the bands.** These three bands are the verbatim set that
+`/fpat-continuation` applies at its step 7 (see `.claude/commands/fpat-continuation.md`). Keep
+them byte-identical across this skill, that command, and
+`.claude/docs/flow-pack-agent-team/continuation-discipline.md` — if one changes, change all three.
+
 ## Instructions
 
 1. Pick the rubric: 7-dimension for subtasks/directions, 5-dimension for epic ship decisions.
