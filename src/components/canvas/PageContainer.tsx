@@ -16,7 +16,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({ zoom, children, pa
   return (
     <div className="flex justify-center p-4 lg:p-6 overflow-auto h-full w-full bg-workspace-bg print:p-0 print:overflow-visible print:h-auto print:bg-white">
       <div
-        className="relative flex-shrink-0 print:w-[210mm] print:h-auto"
+        className="a4-canvas-frame relative flex-shrink-0 print:w-[210mm] print:h-auto"
         style={{
           width: `${scaledPageWidth}px`,
           height: `${scaledPageHeight}px`,
@@ -31,7 +31,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({ zoom, children, pa
             height: `${pageHeight * pageCount}px`,
             transition: 'transform 0.15s ease-out'
           }}
-          className="absolute left-0 top-0 print:relative print:transform-none"
+          className="a4-canvas-scaler absolute left-0 top-0 print:relative print:transform-none"
         >
           <div className="a4-page-context relative w-full h-full shadow-2xl bg-white border border-slate-700 select-none print:shadow-none print:border-none">
             {/* Render actual content */}

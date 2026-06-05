@@ -12,15 +12,16 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide all editor workspace elements */
-  header,
-  footer,
-  aside,
-  button,
+  /* Hide editor workspace chrome ONLY.
+     Scope this to chrome selectors — NOT semantic tags. Résumé templates use
+     <header> (identity/contacts) and <aside> (dossier skills/credentials); hiding
+     those tags here silently destroyed exported résumé content (#62). All studio
+     chrome carries `print:hidden` and/or is the workspace <nav>, so chrome stays
+     hidden without hiding résumé structure. */
+  nav,
   .print-hide,
   .sidebar,
   .toolbar,
-  nav,
   .alert-box {
     display: none !important;
   }
@@ -35,6 +36,21 @@
     border: none !important;
     box-shadow: none !important;
     background-color: #ffffff !important;
+  }
+
+  /* Collapse the preview canvas wrappers in print.
+     On screen these carry inline pixel width/height/transform sized to
+     `pageHeight * pageCount` (e.g. 2244px for 2 pages) to drive the multi-page
+     zoom canvas. In print that fixed height reserved a second physical A4 page
+     even when content fit on one, emitting a blank trailing page (#62). The
+     `!important` here beats the (non-important) inline styles so print paginates
+     by real content height. */
+  .a4-canvas-frame,
+  .a4-canvas-scaler {
+    position: relative !important;
+    width: 210mm !important;
+    height: auto !important;
+    transform: none !important;
   }
 
   /* Page break controllers */

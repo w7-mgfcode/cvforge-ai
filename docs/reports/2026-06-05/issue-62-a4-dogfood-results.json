@@ -1,0 +1,65 @@
+[
+  {
+    "id": "dossier",
+    "name": "Executive Technical Dossier",
+    "screen": {
+      "scrollHeight": 2242,
+      "offsetHeight": 2244,
+      "pages": 2,
+      "budget": 2244,
+      "overflow": 0
+    },
+    "print": {
+      "a4Height": 1084,
+      "docHeight": 1084,
+      "printOverflow": 0,
+      "phantomPage": false,
+      "missing": []
+    },
+    "compliant": true,
+    "screenShot": "docs/reports/2026-06-05/issue-62-a4-dossier.png",
+    "printShot": "docs/reports/2026-06-05/issue-62-a4-dossier-print.png"
+  },
+  {
+    "id": "ats",
+    "name": "Clean ATS Hybrid",
+    "screen": {
+      "scrollHeight": 2242,
+      "offsetHeight": 2244,
+      "pages": 2,
+      "budget": 2244,
+      "overflow": 0
+    },
+    "print": {
+      "a4Height": 1121,
+      "docHeight": 1121,
+      "printOverflow": 0,
+      "phantomPage": false,
+      "missing": []
+    },
+    "compliant": true,
+    "screenShot": "docs/reports/2026-06-05/issue-62-a4-ats.png",
+    "printShot": "docs/reports/2026-06-05/issue-62-a4-ats-print.png"
+  },
+  {
+    "id": "visual",
+    "name": "Visual AI Portfolio",
+    "screen": {
+      "scrollHeight": 2242,
+      "offsetHeight": 2244,
+      "pages": 2,
+      "budget": 2244,
+      "overflow": 0
+    },
+    "print": {
+      "a4Height": 957,
+      "docHeight": 957,
+      "printOverflow": 0,
+      "phantomPage": false,
+      "missing": []
+    },
+    "compliant": true,
+    "screenShot": "docs/reports/2026-06-05/issue-62-a4-visual.png",
+    "printShot": "docs/reports/2026-06-05/issue-62-a4-visual-print.png"
+  }
+]
