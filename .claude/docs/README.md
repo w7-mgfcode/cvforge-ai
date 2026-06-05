@@ -21,6 +21,7 @@ hundreds of lines of reference out of the main context until required).
 | Report | Summary |
 |--------|---------|
 | `docs/reports/2026-06-05/fpat-umbrella-dogfood.md` | First FPAT adoption umbrella (#1) delivery + release-gate dogfood: A4 print fidelity across all 3 templates (browser + static), drift resolution, closeout |
+| `docs/reports/2026-06-05/fpat-release-archive.md` | Read-only post-completion audit of umbrella #1: final-state verification (issues/board/rollup-gate/PRs), local validation, evidence index, cold-start reproducibility |
 
 ## Also Tier 3 (repo root)
 
