@@ -1,0 +1,35 @@
+[
+  {
+    "id": "dossier",
+    "name": "Executive Technical Dossier",
+    "scrollHeight": 2242,
+    "offsetHeight": 2244,
+    "pages": 2,
+    "budget": 2244,
+    "overflow": 0,
+    "compliant": true,
+    "shot": "docs/reports/2026-06-05/a4-dossier.png"
+  },
+  {
+    "id": "ats",
+    "name": "Clean ATS Hybrid",
+    "scrollHeight": 2242,
+    "offsetHeight": 2244,
+    "pages": 2,
+    "budget": 2244,
+    "overflow": 0,
+    "compliant": true,
+    "shot": "docs/reports/2026-06-05/a4-ats.png"
+  },
+  {
+    "id": "visual",
+    "name": "Visual AI Portfolio",
+    "scrollHeight": 2242,
+    "offsetHeight": 2244,
+    "pages": 2,
+    "budget": 2244,
+    "overflow": 0,
+    "compliant": true,
+    "shot": "docs/reports/2026-06-05/a4-visual.png"
+  }
+]

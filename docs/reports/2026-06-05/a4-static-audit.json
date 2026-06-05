@@ -1,0 +1,12 @@
+{
+  "isCompliant": true,
+  "overflowPixels": 0,
+  "warnings": [],
+  "metrics": {
+    "totalCharCount": 1261,
+    "skillDensity": 6,
+    "timelineBreadth": 3,
+    "documentRevision": 1
+  },
+  "calculateOverflowSpotCheck": 0
+}
