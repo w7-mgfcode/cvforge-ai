@@ -1,0 +1,366 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T15:10:51.492Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "FPAT Umbrella 2 — cycle-0 baseline (freeze of the Umbrella #1-era eval reports)",
+    "note": "Frozen copy of already-shipped eval report values, pinned for next-cycle comparison. Every number is copied programmatically from the source reports in `inputs` — never recomputed, never fetched live. Values are DATA, not gates. Absent/null means \"not measured at baseline\", never \"zero problems\". Envelope reuses lib/schema.mjs DomainReportSchema; metric sub-blocks each carry their own `source`."
+  },
+  "inputs": [
+    "docs/reports/2026-06-07/throughput.json",
+    "docs/reports/2026-06-07/throughput-mismatch-analysis.md",
+    "docs/reports/2026-06-11/planning-accuracy.json",
+    "docs/reports/2026-06-11/workflow-reliability.json",
+    "docs/reports/2026-06-11/signal-quality.json",
+    "docs/reports/2026-06-11/board-consistency.json"
+  ],
+  "metrics": {
+    "officialBaseline": {
+      "closedFlowPackIssues": 33,
+      "mergedFlowPackPRs": 21,
+      "issueToPrRatio": 1.57,
+      "byTypeLabel": {
+        "sub-issue": 27,
+        "epic": 5,
+        "umbrella": 1
+      },
+      "asOf": "2026-06-07T15:39:39.797Z",
+      "status": "OFFICIAL — the only benchmark baseline for cycle-over-cycle comparison",
+      "source": "docs/reports/2026-06-07/throughput.json (metrics.closedIssues, metrics.mergedPRs)"
+    },
+    "historicalEnvelope": {
+      "closedIssuesAllLabels": 37,
+      "mergedPRsAllLabels": 25,
+      "matchesOfficialBaseline": false,
+      "status": "NON-BENCHMARK — broader communication/activity envelope only. Never compare against it. Gap decomposition (disposable #29/#30, definitional bug items, missing-label PRs #12/#14): see throughput-mismatch-analysis.md §5.",
+      "source": "docs/reports/2026-06-07/throughput.json (metrics.baselineRecompute) + docs/reports/2026-06-07/throughput-mismatch-analysis.md"
+    },
+    "cycleTimes": {
+      "issueCycleTimeHours": {
+        "count": 33,
+        "min": 0.06,
+        "max": 87.17,
+        "mean": 14.69,
+        "median": 0.86,
+        "p90": 81.36,
+        "unit": "hours"
+      },
+      "prMergeTimeHours": {
+        "count": 21,
+        "min": 0.02,
+        "max": 2.3,
+        "mean": 0.26,
+        "median": 0.02,
+        "p90": 0.27,
+        "unit": "hours"
+      },
+      "source": "docs/reports/2026-06-07/throughput.json (metrics.issueCycleTimeHours, metrics.prMergeTimeHours)"
+    },
+    "planningAccuracy": {
+      "asOf": "2026-06-11T13:14:43.117Z",
+      "branchNaming": {
+        "totalMergedPRs": 25,
+        "compliant": 22,
+        "complianceRate": 0.88,
+        "violationPRs": [
+          63,
+          61,
+          24
+        ]
+      },
+      "commitFormat": {
+        "totalCommits": 33,
+        "compliant": 26,
+        "complianceRate": 0.788,
+        "caveat": "ERA-MIXED — pre-FPAT-convention commits count as violations (source report `inferred`). Split by era before any cycle-over-cycle comparison."
+      },
+      "epicFanOut": {
+        "epicsChecked": 6,
+        "exactlyFive": 4,
+        "perEpic": [
+          {
+            "epic": 29,
+            "subIssueCount": 1
+          },
+          {
+            "epic": 6,
+            "subIssueCount": 5
+          },
+          {
+            "epic": 5,
+            "subIssueCount": 5
+          },
+          {
+            "epic": 4,
+            "subIssueCount": 5
+          },
+          {
+            "epic": 3,
+            "subIssueCount": 6
+          },
+          {
+            "epic": 2,
+            "subIssueCount": 5
+          }
+        ]
+      },
+      "prLinkage": {
+        "totalMergedPRs": 25,
+        "withClosingKeyword": 23,
+        "complianceRate": 0.92,
+        "violationPRs": [
+          61,
+          14
+        ]
+      },
+      "source": "docs/reports/2026-06-11/planning-accuracy.json (metrics.*)"
+    },
+    "workflowReliability": {
+      "asOf": "2026-06-11T13:14:57.647Z",
+      "until": "2026-06-07T23:59:59.999Z",
+      "rawAggregate": {
+        "total": 257,
+        "success": 155,
+        "skipped": 56,
+        "cancelled": 45,
+        "failure": 1,
+        "cancelRate": 0.175
+      },
+      "windowedAggregate": {
+        "total": 256,
+        "success": 154,
+        "skipped": 56,
+        "cancelled": 45,
+        "failure": 1,
+        "cancelRate": 0.176
+      },
+      "perWorkflowRaw": {
+        "fpat-project-sync": {
+          "total": 162,
+          "success": 85,
+          "skipped": 31,
+          "cancelled": 45,
+          "failure": 1,
+          "cancelRate": 0.278
+        },
+        "fpat-blocked-sweep": {
+          "total": 4,
+          "success": 4,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "cancelRate": 0
+        },
+        "fpat-rollup-gate": {
+          "total": 33,
+          "success": 8,
+          "skipped": 25,
+          "cancelled": 0,
+          "failure": 0,
+          "cancelRate": 0
+        },
+        "fpat-validate": {
+          "total": 58,
+          "success": 58,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "cancelRate": 0
+        }
+      },
+      "projectSyncCancellation": {
+        "cancelled": 45,
+        "total": 162,
+        "rate": 0.278
+      },
+      "caveat": "NON-STATIONARY — run history grows; compare only at a pinned asOf/--until. The historical 56/14/30 tally is a stale snapshot, never a benchmark.",
+      "source": "docs/reports/2026-06-11/workflow-reliability.json (metrics.raw, metrics.windowed, metrics.projectSyncCancellation)"
+    },
+    "signalQuality": {
+      "asOf": "2026-06-11T13:15:11.003Z",
+      "labelCoverage": {
+        "fpatLookingMissingFlowPack": {
+          "issueCount": 2,
+          "prCount": 2,
+          "issueNumbers": [
+            30,
+            29
+          ],
+          "prNumbers": [
+            14,
+            12
+          ],
+          "caveat": "HEURISTIC candidates only — human confirmation required; never auto-acted on."
+        },
+        "flowPackMissingTaxonomy": {
+          "issueCount": 12,
+          "prCount": 1,
+          "issueNumbers": [
+            13,
+            11,
+            10,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1
+          ]
+        }
+      },
+      "runNoise": {
+        "cancelledSuperseded": 45,
+        "cancelledNotSuperseded": 0,
+        "skippedSuperseded": 28,
+        "skippedNotSuperseded": 28
+      },
+      "gateFalseNegatives": {
+        "mergedBranchNamingViolations": 3,
+        "mergedLinkageViolations": 2,
+        "mainCommitFormatViolations": 7
+      },
+      "source": "docs/reports/2026-06-11/signal-quality.json (metrics.labelCoverage, metrics.runNoise, metrics.gateFalseNegatives)"
+    },
+    "boardConsistency": {
+      "asOf": "2026-06-11T14:09:47.984Z",
+      "access": {
+        "tokenSource": "gh-auth",
+        "degraded": false,
+        "probeError": null
+      },
+      "board": {
+        "number": 2,
+        "title": "CVForge AI — WorkflowCV Studio Roadmap",
+        "itemCount": 53
+      },
+      "fields": {
+        "missingCount": 0,
+        "optionDriftCount": 0
+      },
+      "membership": {
+        "flowPackTotal": 55,
+        "onBoard": 53,
+        "flowPackNotOnBoard": [
+          {
+            "number": 23,
+            "kind": "PullRequest"
+          },
+          {
+            "number": 22,
+            "kind": "PullRequest"
+          }
+        ],
+        "boardItemsNotFlowPackCount": 0
+      },
+      "labelFieldSync": {
+        "itemsChecked": 53,
+        "mismatchCount": 0,
+        "missingFieldValueCount": 55,
+        "caveat": "Item-kind split (issue vs PR items) is NOT measured in the source report; planned as Umbrella 2 sub-issue 2.3 before any sync-trigger decision is evaluated."
+      },
+      "statusCoherence": {
+        "itemsChecked": 53,
+        "closedNotDoneCount": 20,
+        "doneButOpenCount": 0,
+        "caveat": "closed-not-Done is LEGAL under the designed one-directional sync — not drift."
+      },
+      "scoreGate": {
+        "epicsChecked": 5,
+        "missingScoreEpics": [
+          2,
+          3
+        ],
+        "belowGateOffBacklogCount": 0
+      },
+      "source": "docs/reports/2026-06-11/board-consistency.json (metrics.*)"
+    },
+    "labelGapDecisions": {
+      "decision": "NO RETRO-LABELING — drift is measured, not manually fixed.",
+      "decidedOn": "2026-06-11",
+      "detail": {
+        "historicalGapPRs": [
+          12,
+          14
+        ],
+        "disposableFixtureIssues": [
+          29,
+          30
+        ],
+        "areaTaxonomyDrift": "foundation-era; left as measured signal"
+      },
+      "effect": "The official 33/21 baseline is preserved; membership checks use the CURRENT flow-pack label by construction.",
+      "refs": [
+        "scripts/fpat/eval/README.md (§1 board-consistency, §2)",
+        "docs/reports/2026-06-07/throughput-mismatch-analysis.md (§5–6)",
+        "docs/reports/2026-06-11/board-consistency.json (scope.note)"
+      ]
+    },
+    "parkedDecisions": [
+      {
+        "id": "extend-project-sync-to-pr-events",
+        "status": "PARKED — needs explicit human approval",
+        "frozenBeforeValue": {
+          "metric": "boardConsistency.labelFieldSync.missingFieldValueCount",
+          "value": 55
+        },
+        "rule": "If approved, date the change and compare pre/post populations separately."
+      },
+      {
+        "id": "backfill-epic-scores",
+        "status": "PARKED — needs explicit human approval",
+        "frozenBeforeValue": {
+          "metric": "boardConsistency.scoreGate.missingScoreEpics",
+          "value": [
+            2,
+            3
+          ]
+        },
+        "rule": "If approved, date the change and compare pre/post populations separately."
+      },
+      {
+        "id": "retro-auto-add-early-prs",
+        "status": "PARKED — same no-retro-mutation stance as the label decision",
+        "frozenBeforeValue": {
+          "metric": "boardConsistency.membership.flowPackNotOnBoard",
+          "value": [
+            23,
+            22
+          ]
+        },
+        "rule": "If approved, date the change and compare pre/post populations separately."
+      }
+    ],
+    "comparisonRules": [
+      "Compare ONLY against officialBaseline (33/21). historicalEnvelope (37/25) and the stale 56/14/30 run tally are never benchmarks.",
+      "Re-run audits with the identical commands and a pinned --until; compare windowed-to-windowed at stated dates only (run history is non-stationary).",
+      "Never compare a degraded run to a live run; null/absent blocks mean \"not measured\", never \"zero problems\".",
+      "Split commit-format compliance by era before comparing — the frozen 26/33 rate mixes pre- and post-convention commits.",
+      "Always report counts alongside rates (small-n: 25 PRs, 33 issues, 5 epics).",
+      "Any approved board/label mutation must be dated in a decision log; measurements straddling it are compared pre/post separately, never pooled.",
+      "No delivery-improvement claim from any single cycle — n=1, no comparison cohort. Two identically-measured cycles are the minimum for directional claims.",
+      "Board membership is defined by the CURRENT flow-pack label (no-retro-labeling decision honored by construction)."
+    ]
+  },
+  "findings": [
+    "Official cycle-0 baseline frozen: 33 closed flow-pack issues / 21 merged flow-pack PRs (asOf 2026-06-07).",
+    "Planning-accuracy frozen: branch 22/25, commit 26/33 (era-mixed), epic fan-out 4/6 exactly-five, PR linkage 23/25.",
+    "Workflow-reliability frozen at --until 2026-06-07: aggregate 155/56/45/1 of 257 raw; project-sync cancel rate 45/162.",
+    "Signal-quality frozen: 2+2 heuristic label candidates; 12+1 taxonomy gaps; 45/45 cancellations superseded; gate false negatives 3/2/7.",
+    "Board-consistency frozen (live, gh-auth): 53 items, 0 field drift, 53/55 membership, 55 labeled-but-unset field values, 20 closed-not-Done (designed), 2/5 epics missing Score.",
+    "Three parked board-mutation decisions recorded with their frozen before-values."
+  ],
+  "inferred": [],
+  "proven": [
+    "Every frozen value is copied programmatically from a shipped report named in `inputs`; traceability is checked by an offline diff (see validation)."
+  ],
+  "notProven": [
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort. This manifest enables a future comparison; it does not make one.",
+    "Why any frozen drift value arose (root causes live in the source reports as inferred/notProven, not here).",
+    "That heuristic label-coverage candidates should carry flow-pack — human confirmation required."
+  ],
+  "confidence": "high"
+}
