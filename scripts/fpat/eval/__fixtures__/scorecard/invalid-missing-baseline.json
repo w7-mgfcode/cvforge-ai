@@ -1,0 +1,25 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2031-01-01T00:00:00.000Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "SYNTHETIC FIXTURE — INVALID ON PURPOSE (officialBaseline missing)",
+    "note": "Every number in this file is FICTION (see __fixtures__/README.md). officialBaseline is the only always-required metric block ('always present on a scorecard', lib/scorecard.mjs) — this manifest omits it, so check-scorecard.mjs MUST exit 1. If it ever exits 0, the required-block contract has drifted."
+  },
+  "inputs": [],
+  "metrics": {
+    "comparisonRules": [
+      "SYNTHETIC — fiction; this manifest exists to be rejected."
+    ]
+  },
+  "findings": [
+    "SYNTHETIC: invalid scorecard fixture — a scorecard without officialBaseline must not parse."
+  ],
+  "inferred": [],
+  "proven": [],
+  "notProven": [
+    "Anything about real FPAT delivery — every value here is fiction."
+  ],
+  "confidence": "low"
+}

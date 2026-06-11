@@ -1,0 +1,8 @@
+{
+  "exitCode": 1,
+  "stdout": [],
+  "stderr": [
+    "[check-scorecard] CONTRACT MISMATCH — <fixtures>/scorecard/invalid-missing-baseline.json does not conform to ScorecardSchema:",
+    "  - metrics.officialBaseline: <zod-message>"
+  ]
+}

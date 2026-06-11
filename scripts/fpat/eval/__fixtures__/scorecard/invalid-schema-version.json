@@ -1,0 +1,34 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "2.0.0",
+  "generatedAt": "2031-01-01T00:00:00.000Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "SYNTHETIC FIXTURE — INVALID ON PURPOSE (wrong schemaVersion literal)",
+    "note": "Every number in this file is FICTION (see __fixtures__/README.md). This manifest is otherwise identical to valid-minimal.json but declares schemaVersion 2.0.0 against the 1.0.0 contract — check-scorecard.mjs MUST exit 1 on it. If it ever exits 0, the schemaVersion lock has drifted."
+  },
+  "inputs": [],
+  "metrics": {
+    "officialBaseline": {
+      "closedFlowPackIssues": 0,
+      "mergedFlowPackPRs": 0,
+      "issueToPrRatio": null,
+      "byTypeLabel": {},
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "status": "SYNTHETIC — empty fictional baseline; never a benchmark",
+      "source": "fiction — no source report exists"
+    },
+    "comparisonRules": [
+      "SYNTHETIC — fiction; this manifest exists to be rejected."
+    ]
+  },
+  "findings": [
+    "SYNTHETIC: invalid scorecard fixture — schemaVersion 2.0.0 must fail the 1.0.0 literal."
+  ],
+  "inferred": [],
+  "proven": [],
+  "notProven": [
+    "Anything about real FPAT delivery — every value here is fiction."
+  ],
+  "confidence": "low"
+}
