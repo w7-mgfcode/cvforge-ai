@@ -1,0 +1,55 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2031-01-01T00:00:00.000Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "SYNTHETIC FIXTURE — INVALID ON PURPOSE (cancelRate 1.5 out of [0,1])",
+    "note": "Every number in this file is FICTION (see __fixtures__/README.md). The workflowReliability block is valid except rawAggregate.cancelRate = 1.5, which violates the z.number().min(0).max(1) bound — check-scorecard.mjs MUST exit 1. This is a RANGE-contract failure, not a threshold: 0.94 is legal data (see valid-full.json), 1.5 is not a rate. If it ever exits 0, the range contract has drifted."
+  },
+  "inputs": [],
+  "metrics": {
+    "officialBaseline": {
+      "closedFlowPackIssues": 0,
+      "mergedFlowPackPRs": 0,
+      "issueToPrRatio": null,
+      "byTypeLabel": {},
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "status": "SYNTHETIC — empty fictional baseline; never a benchmark",
+      "source": "fiction — no source report exists"
+    },
+    "workflowReliability": {
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "until": null,
+      "rawAggregate": {
+        "total": 2,
+        "success": 1,
+        "skipped": 0,
+        "cancelled": 1,
+        "failure": 0,
+        "cancelRate": 1.5
+      },
+      "windowedAggregate": null,
+      "perWorkflowRaw": {},
+      "projectSyncCancellation": {
+        "cancelled": 1,
+        "total": 2,
+        "rate": 0.5
+      },
+      "caveat": "SYNTHETIC — single intended violation: rawAggregate.cancelRate 1.5",
+      "source": "fiction — no source report exists"
+    },
+    "comparisonRules": [
+      "SYNTHETIC — fiction; this manifest exists to be rejected."
+    ]
+  },
+  "findings": [
+    "SYNTHETIC: invalid scorecard fixture — a rate outside [0,1] must not parse (ranges are contract, not thresholds)."
+  ],
+  "inferred": [],
+  "proven": [],
+  "notProven": [
+    "Anything about real FPAT delivery — every value here is fiction."
+  ],
+  "confidence": "low"
+}

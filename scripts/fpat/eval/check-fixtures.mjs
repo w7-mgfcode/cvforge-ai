@@ -86,10 +86,31 @@ const CASES = [
 const SCORECARD_CASES = [
   { name: 'scorecard.valid-full', manifest: 'scorecard/valid-full.json', expectExit: 0 },
   { name: 'scorecard.valid-minimal', manifest: 'scorecard/valid-minimal.json', expectExit: 0 },
+  {
+    name: 'scorecard.invalid-schema-version',
+    manifest: 'scorecard/invalid-schema-version.json',
+    expectExit: 1,
+  },
+  {
+    name: 'scorecard.invalid-missing-baseline',
+    manifest: 'scorecard/invalid-missing-baseline.json',
+    expectExit: 1,
+  },
+  {
+    name: 'scorecard.invalid-out-of-range-rate',
+    manifest: 'scorecard/invalid-out-of-range-rate.json',
+    expectExit: 1,
+  },
 ];
 
 const streamLines = (s) =>
   String(s ?? '').replaceAll(FIXTURES, '<fixtures>').trim().split('\n').filter(Boolean);
+
+// Zod issue lines ("  - <path>: <message>") keep the PATH and drop the message:
+// zod is semver-ranged (^4.4.3), so message wording may drift across upgrades —
+// issue paths are the stable contract the goldens assert.
+const normalizeIssueLines = (lines) =>
+  lines.map((l) => l.replace(/^(\s+- [^:]+): .+$/, '$1: <zod-message>'));
 
 function runScorecardCase(c) {
   let exitCode = 0;
@@ -107,7 +128,7 @@ function runScorecardCase(c) {
     stdout = String(err.stdout ?? '');
     stderr = String(err.stderr ?? '');
   }
-  return { exitCode, stdout: streamLines(stdout), stderr: streamLines(stderr) };
+  return { exitCode, stdout: streamLines(stdout), stderr: normalizeIssueLines(streamLines(stderr)) };
 }
 
 function main() {
