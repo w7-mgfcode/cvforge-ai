@@ -36,7 +36,9 @@ reports as real FPAT delivery data (the official baseline lives in
 The dataset makes every audit branch execute, including ones the real repo/board has
 never triggered: branch/commit/linkage violations (PR #11, `wip: tweak things`),
 non-exactly-5 and null fan-outs, an FPAT-looking unlabeled issue/PR (#6/#11), taxonomy
-gaps (#1/#3, PRs #12/#13), all four supersession quadrants, `--until` windowing (run
+gaps (#1/#3, PRs #12/#13), all four supersession quadrants, a queue-collapse overlap cluster (project-sync runs
+119–121: cancelled 120's short queued window overlaps in-progress 119 and superseder
+121 — #73's analysis pattern), `--until` windowing (run
 108 is outside the cutoff), a missing field (Estimate), option drift (Status lacks
 Blocked), off-board flow-pack PRs (#12/#13), label↔field mismatches on both item kinds
 (Issue #4 phase, board-only PR #14 phase), unset synced fields (#5/#10),
