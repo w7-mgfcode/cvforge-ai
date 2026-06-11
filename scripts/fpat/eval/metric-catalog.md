@@ -23,9 +23,12 @@ heuristic, degraded-null); keep them attached whenever a metric is quoted.
 
 The scorecard contract is `SCORECARD_SCHEMA_VERSION` in
 `scripts/fpat/eval/lib/scorecard.mjs`; conformance against the frozen manifest
-is re-runnable via `node scripts/fpat/eval/check-scorecard.mjs`. Versioning
-never introduces thresholds — a `schemaVersion` bump changes the shape contract
-only. The stance (verbatim from `scripts/fpat/eval/README.md`) applies to every
+is re-runnable via `node scripts/fpat/eval/check-scorecard.mjs`. Contract drift
+is additionally caught offline by the scorecard cases in `check-fixtures.mjs`
+(`__fixtures__/scorecard/`, 2 accept + 3 reject, #74): a schema change that
+flips a case's exit code surfaces as a MISMATCH and an `--update` regold
+refusal. Versioning never introduces thresholds — a `schemaVersion` bump
+changes the shape contract only. The stance (verbatim from `scripts/fpat/eval/README.md`) applies to every
 version unchanged:
 
 > Read-only, deterministic. Raw metrics only — no thresholds, no pass/fail, never a CI gate.
@@ -54,7 +57,10 @@ Any change to `scripts/fpat/eval/lib/scorecard.mjs` or
 `scripts/fpat/eval/lib/schema.mjs` updates this catalog **in the same change**
 (rows, caveats, and the bump rules above when exercised) — and any catalog
 change that implies a different shape updates the schema in the same change. A
-schema PR without the matching catalog edit is incomplete by definition.
+schema PR without the matching catalog edit is incomplete by definition. A
+`scorecard.mjs` change that alters acceptance behavior also regolds the
+scorecard fixture cases (`check-fixtures.mjs --update`, inspect the diff) in
+the same change.
 
 ## Shared report envelope
 
