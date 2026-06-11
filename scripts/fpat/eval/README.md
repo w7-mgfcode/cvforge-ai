@@ -66,6 +66,8 @@ Metric catalog (every metric × schema location × source path × frozen cycle-0
 - Shared infra: `lib/{gh,stats,report,schema}.mjs` (Zod envelope: `domain, schemaVersion,
   generatedAt, scope, inputs, metrics, findings, inferred, proven, notProven, confidence`).
   Schema `.parse()` is an internal-error guard only — it never gates on metric values.
+  The frozen-manifest contract is `lib/scorecard.mjs` (`schemaVersion` bump + lock-step
+  rules: `metric-catalog.md`); `check-scorecard.mjs` re-runs conformance on demand.
 
 ## 4. Run commands
 
