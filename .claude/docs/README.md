@@ -22,6 +22,7 @@ hundreds of lines of reference out of the main context until required).
 |--------|---------|
 | `docs/reports/2026-06-05/fpat-umbrella-dogfood.md` | First FPAT adoption umbrella (#1) delivery + release-gate dogfood: A4 print fidelity across all 3 templates (browser + static), drift resolution, closeout |
 | `docs/reports/2026-06-05/fpat-release-archive.md` | Read-only post-completion audit of umbrella #1: final-state verification (issues/board/rollup-gate/PRs), local validation, evidence index, cold-start reproducibility |
+| `docs/reports/2026-06-11/baseline-manifest.json` | Frozen Umbrella-2 cycle-0 baseline (official 33/21, per-domain metrics, parked decisions, comparison rules) — the artifact `ScorecardSchema` models |
 
 ## Also Tier 3 (repo root)
 
@@ -30,6 +31,8 @@ hundreds of lines of reference out of the main context until required).
 | `PROJECT_CONTEXT.md` | Product vision, personas, MVP feature definitions (UC-1…UC-4) |
 | `DESIGN.md`          | Editorial design system, layout configs, token intent |
 | `AGENTS.md`          | Authoritative build/test/style/security conventions |
+| `scripts/fpat/eval/README.md` | FPAT eval audit suite: the 5 domains, degraded-first board audit, fixtures, run commands, data-not-gates stance |
+| `scripts/fpat/eval/metric-catalog.md` | Every eval metric × schema location × source path × frozen cycle-0 reference × caveat, plus the `schemaVersion` + lock-step contract (`lib/scorecard.mjs`, `check-scorecard.mjs`) |
 
 ## Adding a doc
 
