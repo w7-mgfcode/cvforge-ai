@@ -1,5 +1,5 @@
 {
-  "totalCount": 8,
+  "totalCount": 9,
   "items": [
     {
       "id": "PVTI_fx_1",
@@ -93,6 +93,22 @@
         "title": "feat(scripts): add fixture loader (#4)",
         "repository": "w7-mgfcode/cvforge-ai",
         "url": "https://github.com/w7-mgfcode/cvforge-ai/pull/10"
+      }
+    },
+    {
+      "id": "PVTI_fx_14",
+      "title": "feat(scripts): per-kind split spike (#4)",
+      "labels": ["flow-pack", "type:sub-issue", "phase:foundation", "area:scripts"],
+      "type": "Sub-issue",
+      "phase": "Parallel",
+      "area": "scripts",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "PullRequest",
+        "number": 14,
+        "title": "feat(scripts): per-kind split spike (#4)",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/pull/14"
       }
     },
     {

@@ -17,7 +17,7 @@
       "title": "Fixtureverse Delivery",
       "owner": "w7-mgfcode",
       "visibility": "public",
-      "itemCount": 8,
+      "itemCount": 9,
       "possiblyTruncated": false,
       "url": "https://github.com/users/w7-mgfcode/projects/2"
     },
@@ -74,10 +74,16 @@
       ]
     },
     "labelFieldSync": {
-      "itemsChecked": 7,
+      "itemsChecked": 8,
       "mismatches": [
         {
           "number": 4,
+          "dimension": "phase",
+          "label": "phase:foundation",
+          "fieldValue": "Parallel"
+        },
+        {
+          "number": 14,
           "dimension": "phase",
           "label": "phase:foundation",
           "fieldValue": "Parallel"
@@ -146,10 +152,10 @@
     }
   },
   "findings": [
-    "Board \"Fixtureverse Delivery\" (#2, public): 8 items.",
+    "Board \"Fixtureverse Delivery\" (#2, public): 9 items.",
     "Fields: 1 missing, 1 with option drift.",
     "Membership: 6/8 flow-pack items on board; 2 missing; 2 board items without flow-pack.",
-    "Label↔field sync: 1 mismatches, 4 labeled-but-unset field values across 7 items.",
+    "Label↔field sync: 2 mismatches, 4 labeled-but-unset field values across 8 items.",
     "Status coherence: 2 closed-not-Done, 1 Done-but-open (legal under one-directional sync; measured).",
     "Score gate signal: 1/2 epics missing Score; 1 below 40 while off Backlog."
   ],
