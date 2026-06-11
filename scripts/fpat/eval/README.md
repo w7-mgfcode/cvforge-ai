@@ -32,7 +32,10 @@ Metric catalog (every metric × schema location × source path × frozen cycle-0
   not (potentially lost work), and gate false negatives (contract violations that merged).
 - **Board-consistency** — Projects v2 board #2 vs board-spec and issue/PR state: field
   catalog + option drift, `flow-pack` ↔ board membership (auto-add effectiveness),
-  `type:`/`phase:`/`area:` label ↔ field sync, Status vs issue-state coherence, and the
+  `type:`/`phase:`/`area:` label ↔ field sync — totals plus the per-kind Issue vs
+  PullRequest split (`byKind` summary + per-entry `kind`, #72; additive-optional, so the
+  frozen cycle-0 reference stays total-only; first live measurement:
+  `docs/reports/2026-06-11/e2-live-run/`) — Status vs issue-state coherence, and the
   epic Score ship-gate signal (reported, never enforced). Board blocks are `null` when
   run degraded — `null` means *not measured*, never "zero problems". Membership uses the
   CURRENT `flow-pack` label, so the 2026-06-11 no-mutation decision on historical label
