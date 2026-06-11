@@ -31,11 +31,18 @@ import { DomainReportSchema } from './lib/schema.mjs';
 
 const WORKFLOW = 'fpat-project-sync';
 
+// Both options here take values; a bare flag would silently corrupt the window
+// (`cutoff === true` string-compares) or the limit (`Number(true) === 1`), so a
+// missing value is a tooling error: fail fast (Sourcery review on PR #102).
 function arg(name, def = undefined) {
   const i = process.argv.indexOf(`--${name}`);
   if (i === -1) return def;
   const next = process.argv[i + 1];
-  return next && !next.startsWith('--') ? next : true;
+  if (!next || next.startsWith('--')) {
+    console.error(`[project-sync-cancellation] --${name} requires a value`);
+    process.exit(1);
+  }
+  return next;
 }
 
 const rate = (num, den) => (den ? Math.round((num / den) * 1000) / 1000 : null);
