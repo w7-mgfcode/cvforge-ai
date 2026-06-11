@@ -3,6 +3,8 @@
 Read-only, deterministic. Raw metrics only — no thresholds, no pass/fail, never a CI gate.
 All audits exit `0` even on "bad" numbers; non-zero means a tooling error only.
 
+Metric catalog (every metric × schema location × source path × frozen cycle-0 reference × caveat): `metric-catalog.md`.
+
 ## 1. The audits
 
 | Script | Domain | Stage | Writes |
