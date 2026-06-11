@@ -1,0 +1,1705 @@
+{
+  "domain": "workflow-reliability",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T13:14:57.647Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Per-workflow run reliability for the four FPAT workflows (fpat-project-sync, fpat-blocked-sweep, fpat-rollup-gate, fpat-validate). Run history is non-stationary — only the asOf timestamp (and the optional --until window) makes a tally reproducible. The historical 56/14/30 figure is a stale point-in-time snapshot, never a benchmark."
+  },
+  "inputs": [
+    "gh run list --workflow fpat-project-sync.yml --limit 1000 --json databaseId,conclusion,status,createdAt,updatedAt,event",
+    "gh run list --workflow fpat-blocked-sweep.yml --limit 1000 --json databaseId,conclusion,status,createdAt,updatedAt,event",
+    "gh run list --workflow fpat-rollup-gate.yml --limit 1000 --json databaseId,conclusion,status,createdAt,updatedAt,event",
+    "gh run list --workflow fpat-validate.yml --limit 1000 --json databaseId,conclusion,status,createdAt,updatedAt,event"
+  ],
+  "metrics": {
+    "asOf": "2026-06-11T13:14:57.647Z",
+    "until": "2026-06-07T23:59:59.999Z",
+    "limitPerWorkflow": 1000,
+    "possiblyTruncated": [],
+    "raw": {
+      "perWorkflow": {
+        "fpat-project-sync": {
+          "total": 162,
+          "success": 85,
+          "skipped": 31,
+          "cancelled": 45,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0.278,
+          "avgDurationHours": 0
+        },
+        "fpat-blocked-sweep": {
+          "total": 4,
+          "success": 4,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0
+        },
+        "fpat-rollup-gate": {
+          "total": 33,
+          "success": 8,
+          "skipped": 25,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0
+        },
+        "fpat-validate": {
+          "total": 58,
+          "success": 58,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.01
+        }
+      },
+      "aggregate": {
+        "total": 257,
+        "success": 155,
+        "skipped": 56,
+        "cancelled": 45,
+        "failure": 1,
+        "other": 0,
+        "cancelRate": 0.175,
+        "avgDurationHours": 0
+      }
+    },
+    "windowed": {
+      "perWorkflow": {
+        "fpat-project-sync": {
+          "total": 162,
+          "success": 85,
+          "skipped": 31,
+          "cancelled": 45,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0.278,
+          "avgDurationHours": 0
+        },
+        "fpat-blocked-sweep": {
+          "total": 3,
+          "success": 3,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0
+        },
+        "fpat-rollup-gate": {
+          "total": 33,
+          "success": 8,
+          "skipped": 25,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0
+        },
+        "fpat-validate": {
+          "total": 58,
+          "success": 58,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.01
+        }
+      },
+      "aggregate": {
+        "total": 256,
+        "success": 154,
+        "skipped": 56,
+        "cancelled": 45,
+        "failure": 1,
+        "other": 0,
+        "cancelRate": 0.176,
+        "avgDurationHours": 0
+      }
+    },
+    "projectSyncCancellation": {
+      "cancelled": 45,
+      "total": 162,
+      "rate": 0.278
+    },
+    "runsTimeline": {
+      "fpat-project-sync": [
+        {
+          "id": 27000146343,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T06:49:55Z",
+          "event": "issues"
+        },
+        {
+          "id": 27000146321,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T06:49:55Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994234878,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994234715,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994234680,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994234597,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994234384,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:18Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994233531,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994233429,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994233335,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:16Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994233226,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:16Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994233130,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:16Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994231688,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994231635,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994231524,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994231483,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994231370,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994229727,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:09Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994229644,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:09Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994229586,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:09Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994229505,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:09Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994229368,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:09Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994228450,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:07Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994228435,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:07Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994228227,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994228216,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T03:51:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994228207,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:51:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991265960,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:15:07Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991265670,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991265663,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991265594,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:06Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991265232,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:15:05Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991264572,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:15:05Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991264010,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:04Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991263894,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:03Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991263731,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:15:03Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991263621,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:15:03Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991261462,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991261362,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991261160,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991261015,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991260985,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991259893,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:56Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991259679,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:56Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991259630,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:56Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991259413,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:56Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991259309,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:55Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991257976,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:53Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991257925,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:53Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991257693,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:53Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991257680,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T02:14:53Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991257638,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:14:52Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988708401,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:25Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988708369,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:25Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988708221,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:25Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988708208,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:25Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988708055,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:24Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988707277,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988707097,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988707059,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706914,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:22Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706752,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:22Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706365,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706335,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706246,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706127,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988706057,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988705552,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:20Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988705288,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988705243,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988705100,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988704903,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988704130,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:18Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988704085,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988703903,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T00:54:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988703850,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26988703837,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-05T00:54:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983389345,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:36Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983389210,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:36Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983388409,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:35Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983388406,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:35Z",
+          "event": "issues"
+        },
+        {
+          "id": 26792418680,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:20:34Z",
+          "event": "issues"
+        },
+        {
+          "id": 26792392383,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:19:53Z",
+          "event": "issues"
+        },
+        {
+          "id": 26792200325,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:14:07Z",
+          "event": "workflow_dispatch"
+        },
+        {
+          "id": 26791948047,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:06:18Z",
+          "event": "workflow_dispatch"
+        },
+        {
+          "id": 26791895910,
+          "conclusion": "failure",
+          "createdAt": "2026-06-02T01:04:45Z",
+          "event": "workflow_dispatch"
+        },
+        {
+          "id": 26791348869,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:48:47Z",
+          "event": "issues"
+        },
+        {
+          "id": 26791348684,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:48:46Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26791247342,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:45:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26791131970,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:42:32Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26790937853,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:37:01Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26790906082,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:36:06Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26790900317,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:35:56Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26788674592,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T23:35:49Z",
+          "event": "issues"
+        },
+        {
+          "id": 26788662337,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T23:35:30Z",
+          "event": "issues"
+        },
+        {
+          "id": 26788598481,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T23:33:54Z",
+          "event": "issues"
+        },
+        {
+          "id": 26788598432,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T23:33:54Z",
+          "event": "issues"
+        },
+        {
+          "id": 26774523647,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:40:05Z",
+          "event": "issues"
+        },
+        {
+          "id": 26774519631,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:40:00Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26774456033,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:38:42Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26774405626,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:37:43Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26774403415,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:37:40Z",
+          "event": "issues"
+        },
+        {
+          "id": 26772853505,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:07:33Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26772780677,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:06:07Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26772769610,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:05:55Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26772687870,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:04:19Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26771925068,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T17:49:31Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26771881461,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T17:48:37Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26767523558,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:22:35Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26767512189,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:22:22Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766623967,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:05:14Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766623387,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T16:05:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766445520,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:01:53Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766398867,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:01:01Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766386279,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:00:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766102040,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:37Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766084033,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766083959,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766083654,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:17Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766082846,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:16Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766081617,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:55:15Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764869982,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T15:32:39Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764868173,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T15:32:37Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764867933,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T15:32:37Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764277652,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:57Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764272845,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:52Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764264517,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:43Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764264470,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:43Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764263529,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:42Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764262912,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:41Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764262601,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:41Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764261276,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:40Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764254608,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:33Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764254602,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:33Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764253943,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:32Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764253691,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:32Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764253515,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:32Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764252970,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:31Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764251562,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:29Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764251164,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:29Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764251106,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:29Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764250489,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:28Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764249703,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:27Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764249076,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:27Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764248977,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:27Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764248434,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:26Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764248088,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:26Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764247278,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:25Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764245695,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764245097,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764244921,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:22Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764244776,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:22Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764244574,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:22Z",
+          "event": "issues"
+        },
+        {
+          "id": 26764243648,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:21:21Z",
+          "event": "issues"
+        },
+        {
+          "id": 26763207603,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:02:43Z",
+          "event": "issues"
+        },
+        {
+          "id": 26762734809,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T14:54:28Z",
+          "event": "issues"
+        },
+        {
+          "id": 26762734341,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T14:54:28Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26762673222,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T14:53:24Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26762671613,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T14:53:22Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26759402212,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T13:55:57Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26759372554,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T13:55:26Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26758227934,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T13:34:16Z",
+          "event": "pull_request"
+        }
+      ],
+      "fpat-blocked-sweep": [
+        {
+          "id": 27126820973,
+          "conclusion": "success",
+          "createdAt": "2026-06-08T08:58:14Z",
+          "event": "schedule"
+        },
+        {
+          "id": 26791246021,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:45:45Z",
+          "event": "workflow_dispatch"
+        },
+        {
+          "id": 26791135852,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:42:39Z",
+          "event": "workflow_dispatch"
+        },
+        {
+          "id": 26790818941,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:33:37Z",
+          "event": "workflow_dispatch"
+        }
+      ],
+      "fpat-rollup-gate": [
+        {
+          "id": 27008223500,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T09:55:31Z",
+          "event": "issues"
+        },
+        {
+          "id": 26995088964,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:18:44Z",
+          "event": "issues"
+        },
+        {
+          "id": 26995026712,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:16:35Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994988807,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T04:15:19Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994915515,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T04:12:55Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994817553,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T04:09:50Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994456722,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T03:58:39Z",
+          "event": "issues"
+        },
+        {
+          "id": 26994347461,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T03:54:59Z",
+          "event": "issues"
+        },
+        {
+          "id": 26992361430,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:50:58Z",
+          "event": "issues"
+        },
+        {
+          "id": 26992317747,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T02:49:36Z",
+          "event": "issues"
+        },
+        {
+          "id": 26992233350,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T02:46:45Z",
+          "event": "issues"
+        },
+        {
+          "id": 26992120067,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T02:42:54Z",
+          "event": "issues"
+        },
+        {
+          "id": 26992028030,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T02:39:54Z",
+          "event": "issues"
+        },
+        {
+          "id": 26991911550,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T02:35:57Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990658382,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:55:32Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990599939,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T01:53:39Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990459754,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T01:49:13Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990350294,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T01:45:42Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990205695,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T01:41:20Z",
+          "event": "issues"
+        },
+        {
+          "id": 26990121105,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-05T01:38:35Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983508367,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:31:23Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983431208,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:29:39Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983430226,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-04T22:29:37Z",
+          "event": "issues"
+        },
+        {
+          "id": 26983402141,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:55Z",
+          "event": "issues"
+        },
+        {
+          "id": 26796686038,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T03:34:20Z",
+          "event": "issues"
+        },
+        {
+          "id": 26792288141,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T01:16:49Z",
+          "event": "issues"
+        },
+        {
+          "id": 26791348875,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-02T00:48:47Z",
+          "event": "issues"
+        },
+        {
+          "id": 26788674617,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T23:35:49Z",
+          "event": "issues"
+        },
+        {
+          "id": 26774523668,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:40:05Z",
+          "event": "issues"
+        },
+        {
+          "id": 26774403334,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T18:37:40Z",
+          "event": "issues"
+        },
+        {
+          "id": 26766624280,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T16:05:14Z",
+          "event": "issues"
+        },
+        {
+          "id": 26763207880,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T15:02:43Z",
+          "event": "issues"
+        },
+        {
+          "id": 26762734750,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T14:54:28Z",
+          "event": "issues"
+        }
+      ],
+      "fpat-validate": [
+        {
+          "id": 27008223236,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T09:55:30Z",
+          "event": "push"
+        },
+        {
+          "id": 27008053115,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T09:51:47Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 27007339409,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T09:35:58Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 27006475023,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T09:16:41Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26996667830,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T05:08:54Z",
+          "event": "push"
+        },
+        {
+          "id": 26996145228,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:52:34Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26994988399,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:15:18Z",
+          "event": "push"
+        },
+        {
+          "id": 26994950101,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:14:03Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26994915245,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:12:54Z",
+          "event": "push"
+        },
+        {
+          "id": 26994875279,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:11:40Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26994817361,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:09:50Z",
+          "event": "push"
+        },
+        {
+          "id": 26994775603,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T04:08:32Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26994456713,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:58:39Z",
+          "event": "push"
+        },
+        {
+          "id": 26994422185,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:57:26Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26994347524,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:54:59Z",
+          "event": "push"
+        },
+        {
+          "id": 26994305296,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T03:53:34Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26992317633,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:49:36Z",
+          "event": "push"
+        },
+        {
+          "id": 26992275325,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:48:11Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26992233175,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:46:44Z",
+          "event": "push"
+        },
+        {
+          "id": 26992191946,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:45:17Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26992120036,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:42:54Z",
+          "event": "push"
+        },
+        {
+          "id": 26992074532,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:41:29Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26992028022,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:39:54Z",
+          "event": "push"
+        },
+        {
+          "id": 26991986842,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:38:27Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26991911355,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:35:57Z",
+          "event": "push"
+        },
+        {
+          "id": 26991751560,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T02:30:47Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26990599695,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:53:38Z",
+          "event": "push"
+        },
+        {
+          "id": 26990565094,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:52:33Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26990459745,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:49:13Z",
+          "event": "push"
+        },
+        {
+          "id": 26990414905,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:47:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26990350024,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:45:42Z",
+          "event": "push"
+        },
+        {
+          "id": 26990303231,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:44:15Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26990205544,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:41:20Z",
+          "event": "push"
+        },
+        {
+          "id": 26990159222,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:39:52Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26990120712,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:38:34Z",
+          "event": "push"
+        },
+        {
+          "id": 26989950725,
+          "conclusion": "success",
+          "createdAt": "2026-06-05T01:32:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26796685708,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T03:34:19Z",
+          "event": "push"
+        },
+        {
+          "id": 26792786754,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:31:36Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26792288000,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:16:49Z",
+          "event": "push"
+        },
+        {
+          "id": 26792202575,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:14:11Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26791978748,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T01:07:14Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26791348711,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:48:46Z",
+          "event": "push"
+        },
+        {
+          "id": 26791247360,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:45:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26791131990,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:42:32Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26790900304,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T00:35:56Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26774521283,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:40:02Z",
+          "event": "push"
+        },
+        {
+          "id": 26774455597,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:38:42Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26774404420,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:37:42Z",
+          "event": "push"
+        },
+        {
+          "id": 26772853382,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:07:33Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26772769523,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:05:54Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26772687824,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T18:04:18Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26771881375,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T17:48:37Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26767512155,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T16:22:22Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26766623673,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T16:05:14Z",
+          "event": "push"
+        },
+        {
+          "id": 26766386241,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T16:00:48Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26762734438,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T14:54:28Z",
+          "event": "push"
+        },
+        {
+          "id": 26762673203,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T14:53:24Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 26758227918,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T13:34:16Z",
+          "event": "pull_request"
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Raw aggregate (asOf 2026-06-11T13:14:57.647Z): 155 success / 56 skipped / 45 cancelled / 1 failure (total 257).",
+    "project-sync cancellation rate: 45/162 = 0.278.",
+    "Cancellations outside fpat-project-sync: 0.",
+    "Windowed (createdAt <= 2026-06-07T23:59:59.999Z): 154 success / 56 skipped / 45 cancelled / 1 failure (total 256)."
+  ],
+  "inferred": [
+    "Cancellation concentration on fpat-project-sync is consistent with the concurrency hypothesis; root cause is to be confirmed via run event/overlap analysis (audit C), not assumed here."
+  ],
+  "proven": [
+    "Per-workflow reliability tallies are reproducible from GitHub run history given a pinned asOf/--until."
+  ],
+  "notProven": [
+    "Root cause of cancellations (concurrency supported but not confirmed here).",
+    "Whether cancellations are harmful vs benign superseded re-runs (decomposed in the signal-quality audit).",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
