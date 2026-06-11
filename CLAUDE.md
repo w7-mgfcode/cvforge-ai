@@ -125,6 +125,7 @@ WISC strategies (Write · Isolate · Select · Compress) implemented as commands
 | `/commit`       | Write    | Atomic conventional commit; logs AI-context changes in a `Context:` section |
 | `/fpat-prime` | Select | Captures repo, issue, workflow, label, milestone, and Project v2 state |
 | `/fpat-continuation` | Select+Isolate | Read-only: produces a V1→V2 ship / negotiation / defer list with per-item 5-dimension scores |
+| `/fpat-plan-umbrella` | Write | Plans an approved initiative into a read-only umbrella + 5-epic creation package |
 | `/fpat-plan-issue` | Write | Plans one issue into a read-only 5-subtask package |
 | `/fpat-handoff` | Write+Compress | Writes an FPAT continuation checkpoint and pending Project status update |
 
