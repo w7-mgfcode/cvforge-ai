@@ -1,0 +1,47 @@
+{
+  "totalCount": 9,
+  "fields": [
+    { "id": "F_title", "name": "Title", "type": "ProjectV2Field" },
+    { "id": "F_assignees", "name": "Assignees", "type": "ProjectV2Field" },
+    {
+      "id": "F_status",
+      "name": "Status",
+      "type": "ProjectV2SingleSelectField",
+      "options": ["Backlog", "Ready", "In Progress", "In Review", "Done"]
+    },
+    {
+      "id": "F_type",
+      "name": "Type",
+      "type": "ProjectV2SingleSelectField",
+      "options": ["Umbrella", "Epic", "Sub-issue"]
+    },
+    {
+      "id": "F_phase",
+      "name": "Phase",
+      "type": "ProjectV2SingleSelectField",
+      "options": ["Foundation", "Parallel", "Release"]
+    },
+    {
+      "id": "F_area",
+      "name": "Area",
+      "type": "ProjectV2SingleSelectField",
+      "options": [
+        "claude-rules",
+        "claude-docs",
+        "claude-commands",
+        "claude-skills",
+        "github-workflows",
+        "github-projects",
+        "scripts"
+      ]
+    },
+    {
+      "id": "F_priority",
+      "name": "Priority",
+      "type": "ProjectV2SingleSelectField",
+      "options": ["P0", "P1", "P2"]
+    },
+    { "id": "F_score", "name": "Score", "type": "ProjectV2Field" },
+    { "id": "F_labels", "name": "Labels", "type": "ProjectV2Field" }
+  ]
+}

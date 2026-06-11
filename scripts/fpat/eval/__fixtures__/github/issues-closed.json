@@ -1,0 +1,48 @@
+[
+  {
+    "number": 1,
+    "title": "feat(workflow): adopt fixtureverse delivery system",
+    "createdAt": "2026-06-01T00:00:00Z",
+    "closedAt": "2026-06-05T00:00:00Z",
+    "labels": [{ "name": "type:umbrella" }, { "name": "flow-pack" }],
+    "milestone": null,
+    "state": "CLOSED"
+  },
+  {
+    "number": 2,
+    "title": "feat(workflow): epic with exact fan-out",
+    "createdAt": "2026-06-01T00:00:00Z",
+    "closedAt": "2026-06-03T12:00:00Z",
+    "labels": [
+      { "name": "type:epic" },
+      { "name": "phase:foundation" },
+      { "name": "area:scripts" },
+      { "name": "flow-pack" }
+    ],
+    "milestone": { "title": "M1 - Foundation" },
+    "state": "CLOSED"
+  },
+  {
+    "number": 3,
+    "title": "feat(workflow): epic with short fan-out",
+    "createdAt": "2026-06-02T00:00:00Z",
+    "closedAt": "2026-06-03T00:00:00Z",
+    "labels": [{ "name": "type:epic" }, { "name": "flow-pack" }],
+    "milestone": null,
+    "state": "CLOSED"
+  },
+  {
+    "number": 4,
+    "title": "feat(scripts): build fixture loader",
+    "createdAt": "2026-06-02T06:00:00Z",
+    "closedAt": "2026-06-02T18:00:00Z",
+    "labels": [
+      { "name": "type:sub-issue" },
+      { "name": "phase:foundation" },
+      { "name": "area:scripts" },
+      { "name": "flow-pack" }
+    ],
+    "milestone": { "title": "M1 - Foundation" },
+    "state": "CLOSED"
+  }
+]

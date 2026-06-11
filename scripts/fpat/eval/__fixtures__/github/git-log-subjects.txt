@@ -1,0 +1,4 @@
+feat(scripts): add fixture loader (#10)
+docs(claude-docs): document fixtures (#12)
+chore(fpat): bootstrap fixtureverse (#1)
+wip: tweak things
