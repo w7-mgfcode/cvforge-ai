@@ -85,6 +85,9 @@ node scripts/fpat/eval/audit-signal-quality.mjs
 
 # Domain 4 (independent; degraded-first — runs with or without project access)
 node scripts/fpat/eval/audit-board-consistency.mjs   # [--project 2] [--owner w7-mgfcode] [--limit 1000]
+
+# Cycle-0 manifest conformance vs ScorecardSchema (dev tool, not a gate; never fails on metric values)
+node scripts/fpat/eval/check-scorecard.mjs           # [--manifest <path>]
 ```
 
 ## 5. Offline fixtures (no GitHub access)
