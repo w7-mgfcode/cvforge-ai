@@ -1,0 +1,116 @@
+{
+  "domain": "project-sync-cancellation-analysis",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "One-time read-only overlap analysis of cancelled fpat-project-sync runs (#73). Mechanism under test: pending-queue collapse — .github/workflows/fpat-project-sync.yml serializes per issue with cancel-in-progress: false, so GitHub cancels only QUEUED runs, never in-progress ones. Run history is non-stationary and subject to retention; only asOf (and the optional --until window) makes the population reproducible. Not an eval domain: generic envelope, no schema/catalog entry."
+  },
+  "metrics": {
+    "until": "2026-06-08T23:59:59.999Z",
+    "limit": 1000,
+    "possiblyTruncated": false,
+    "summary": {
+      "runsAnalyzed": 10,
+      "cancelledTotal": 3,
+      "cancelRate": 0.3,
+      "withOverlap": 2,
+      "withSameEventOverlap": 2,
+      "superseded": 2,
+      "consistentWithQueueCollapse": 2,
+      "unexplained": [
+        {
+          "id": 104,
+          "event": "pull_request",
+          "window": {
+            "createdAt": "2026-06-02T09:00:00Z",
+            "updatedAt": "2026-06-02T09:01:00Z"
+          },
+          "overlappingSiblingIds": [],
+          "supersededById": null
+        }
+      ]
+    },
+    "verdict": "bounded-mixed",
+    "queuedMinutes": {
+      "count": 3,
+      "min": 0.33,
+      "max": 1,
+      "mean": 0.78,
+      "median": 1,
+      "p90": 1,
+      "unit": "minutes"
+    },
+    "cancelledRuns": [
+      {
+        "id": 102,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-01T10:01:00Z",
+          "updatedAt": "2026-06-01T10:02:00Z"
+        },
+        "queuedMinutes": 1,
+        "overlappingSiblingIds": [
+          101
+        ],
+        "overlappingSameEventIds": [
+          101
+        ],
+        "supersededById": 103,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 104,
+        "event": "pull_request",
+        "window": {
+          "createdAt": "2026-06-02T09:00:00Z",
+          "updatedAt": "2026-06-02T09:01:00Z"
+        },
+        "queuedMinutes": 1,
+        "overlappingSiblingIds": [],
+        "overlappingSameEventIds": [],
+        "supersededById": null,
+        "consistentWithQueueCollapse": false
+      },
+      {
+        "id": 120,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-02T14:00:00Z",
+          "updatedAt": "2026-06-02T14:00:20Z"
+        },
+        "queuedMinutes": 0.33,
+        "overlappingSiblingIds": [
+          121,
+          119
+        ],
+        "overlappingSameEventIds": [
+          121,
+          119
+        ],
+        "supersededById": 121,
+        "consistentWithQueueCollapse": true
+      }
+    ]
+  },
+  "findings": [
+    "Window (until <ts>): 3 cancelled of 10 runs (rate 0.3).",
+    "2/3 cancelled runs overlap a same-event sibling; 2/3 are superseded by a later same-event success.",
+    "2/3 cancelled runs are consistent with queue collapse (overlap AND supersession); 1 unexplained.",
+    "Verdict: bounded-mixed. Queued-window distribution (minutes): mean 0.78, max 1."
+  ],
+  "inferred": [
+    "Consistent-with-queue-collapse runs match the mechanism cancel-in-progress: false permits: rapid same-issue label events queue multiple runs in one concurrency group and GitHub collapses the wait queue. Short queued windows further support never-started cancellation.",
+    "Unexplained cancellations (no same-event overlap or no superseder) are NOT evidence against queue collapse elsewhere — they are individually unattributable from run data alone."
+  ],
+  "proven": [
+    "Overlap and supersession relations are exact set computations over the listed run windows (run ids in metrics.cancelledRuns).",
+    "The workflow has had cancel-in-progress: false since its original wiring (7feef2e) — cancellations cannot be in-progress kills by GitHub concurrency."
+  ],
+  "notProven": [
+    "Causation: the GitHub API exposes neither a run's concurrency group nor its triggering issue, and queue-cancelled runs have no logs — same-event overlap is a proxy, so the verdict is bounded, never established.",
+    "That any cancellation lost work (signal-quality measures supersession; this analysis does not re-judge it).",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
