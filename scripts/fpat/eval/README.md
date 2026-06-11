@@ -15,6 +15,11 @@ Metric catalog (every metric × schema location × source path × frozen cycle-0
 | `audit-signal-quality.mjs` | signal-quality (8) | **second stage** — consumes the two reports above | `docs/reports/<date>/signal-quality.json` |
 | `audit-board-consistency.mjs` | board-consistency (4) | independent — **degraded-first** (see §3) | `docs/reports/<date>/board-consistency.json` |
 
+One-time analyses (NOT eval domains — generic envelope, no `schema.mjs`/catalog entry):
+`analyze-project-sync-cancellation.mjs` (#73) — read-only overlap analysis of cancelled
+project-sync runs; verdict capped at *bounded* (concurrency group not API-exposed). Dated
+verdict: `docs/reports/2026-06-11/e3-cancellation-analysis/` (45/45 `bounded-consistent`).
+
 - **Throughput** — recomputes closed `flow-pack` issue / merged `flow-pack` PR counts vs a
   prior claim; cycle/merge-time distributions. Official baseline: **33 / 21**
   (see `docs/reports/2026-06-07/throughput-mismatch-analysis.md`).
@@ -91,6 +96,9 @@ node scripts/fpat/eval/audit-signal-quality.mjs
 # Domain 4 (independent; degraded-first — runs with or without project access)
 node scripts/fpat/eval/audit-board-consistency.mjs   # [--project 2] [--owner w7-mgfcode] [--limit 1000]
 
+# One-time E3 analysis (#73; read-only, pinned window recommended)
+node scripts/fpat/eval/analyze-project-sync-cancellation.mjs --until 2026-06-07
+
 # Cycle-0 manifest conformance vs ScorecardSchema (dev tool, not a gate; never fails on metric values)
 node scripts/fpat/eval/check-scorecard.mjs           # [--manifest <path>]
 ```
@@ -101,7 +109,7 @@ node scripts/fpat/eval/check-scorecard.mjs           # [--manifest <path>]
 offline: set `FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github` (or
 `.../github-degraded` for the board-consistency degraded path). Fixture-mode reports
 go to a temp dir (or `FPAT_EVAL_REPORT_DIR`) — never to real `docs/reports/`.
-`node scripts/fpat/eval/check-fixtures.mjs` runs all six fixture cases against the
+`node scripts/fpat/eval/check-fixtures.mjs` runs all seven fixture cases against the
 goldens in `__fixtures__/expected/` (`--update` regolds); it is a dev tool, not an
 audit and not a CI gate. **Fixture numbers are fiction** — never quote them as
 delivery data. Details: `__fixtures__/README.md`.
