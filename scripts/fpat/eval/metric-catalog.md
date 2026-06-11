@@ -15,9 +15,46 @@ baseline manifest, live numbers only in the dated reports. The **Caveat** column
 repeats the qualifiers recorded at freeze time (era-mixed, non-stationary,
 heuristic, degraded-null); keep them attached whenever a metric is quoted.
 
-**Maintenance:** rows mirror `scripts/fpat/eval/lib/schema.mjs` and the baseline
-manifest. Any change to either must update this catalog in the same change
-(lock-step contract formalized in #79; consistency-guard coverage in #80).
+**Maintenance:** rows mirror `scripts/fpat/eval/lib/schema.mjs`,
+`scripts/fpat/eval/lib/scorecard.mjs`, and the baseline manifest — see
+**Versioning & lock-step contract** below (consistency-guard coverage in #80).
+
+## Versioning & lock-step contract
+
+The scorecard contract is `SCORECARD_SCHEMA_VERSION` in
+`scripts/fpat/eval/lib/scorecard.mjs`; conformance against the frozen manifest
+is re-runnable via `node scripts/fpat/eval/check-scorecard.mjs`. Versioning
+never introduces thresholds — a `schemaVersion` bump changes the shape contract
+only. The stance (verbatim from `scripts/fpat/eval/README.md`) applies to every
+version unchanged:
+
+> Read-only, deterministic. Raw metrics only — no thresholds, no pass/fail, never a CI gate.
+> All audits exit `0` even on "bad" numbers; non-zero means a tooling error only.
+
+### When `schemaVersion` bumps
+
+- **Shape change — MAJOR bump** (`1.0.0` → `2.0.0`): removing, renaming, or
+  retyping a field; narrowing an enum; or tightening a constraint that an
+  existing frozen artifact could violate. The version literal in
+  `ScorecardSchema` moves with it, so older frozen artifacts deliberately stop
+  conforming to the *current* contract — they stay valid against the schema
+  version they declare (git history of `scorecard.mjs`). **Never edit a frozen
+  artifact to fit a new schema** — model the artifact as-is or bump.
+- **Additive nullable block — MINOR bump** (`1.0.0` → `1.1.0`): a new
+  `notMeasured` (nullish) block or optional field. Existing artifacts still
+  conform structurally because absent/null = "not measured at baseline", never
+  "zero problems"; widen the accepted version literal (e.g. to an enum of
+  supported versions) so already-frozen artifacts keep parsing.
+- **No bump:** comment- or doc-only edits, or refactors whose acceptance
+  behavior is identical (the frozen manifest parses byte-for-byte the same).
+
+### Lock-step rule
+
+Any change to `scripts/fpat/eval/lib/scorecard.mjs` or
+`scripts/fpat/eval/lib/schema.mjs` updates this catalog **in the same change**
+(rows, caveats, and the bump rules above when exercised) — and any catalog
+change that implies a different shape updates the schema in the same change. A
+schema PR without the matching catalog edit is incomplete by definition.
 
 ## Shared report envelope
 

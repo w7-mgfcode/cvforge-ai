@@ -8,6 +8,10 @@
 //
 // Null/absent on a measured block means "not measured at baseline", NEVER
 // "zero problems" (same degraded-first convention as schema.mjs).
+//
+// schemaVersion bump rules + catalog lock-step contract:
+// scripts/fpat/eval/metric-catalog.md ("Versioning & lock-step contract").
+// Any change to this module updates the catalog in the same change.
 import { z } from 'zod';
 
 import { DistributionSchema, DomainReportSchema } from './schema.mjs';
