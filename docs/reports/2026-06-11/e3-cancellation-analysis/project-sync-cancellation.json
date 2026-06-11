@@ -1,0 +1,1523 @@
+{
+  "domain": "project-sync-cancellation-analysis",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T19:22:22.343Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "One-time read-only overlap analysis of cancelled fpat-project-sync runs (#73). Mechanism under test: pending-queue collapse — .github/workflows/fpat-project-sync.yml serializes per issue with cancel-in-progress: false, so GitHub cancels only QUEUED runs, never in-progress ones. Run history is non-stationary and subject to retention; only asOf (and the optional --until window) makes the population reproducible. Not an eval domain: generic envelope, no schema/catalog entry."
+  },
+  "inputs": [
+    "gh run list --workflow fpat-project-sync.yml --limit 1000 --json databaseId,conclusion,status,createdAt,updatedAt,event",
+    ".github/workflows/fpat-project-sync.yml (concurrency block, read-only context)"
+  ],
+  "metrics": {
+    "asOf": "2026-06-11T19:22:22.343Z",
+    "until": "2026-06-07T23:59:59.999Z",
+    "limit": 1000,
+    "possiblyTruncated": false,
+    "summary": {
+      "runsAnalyzed": 162,
+      "cancelledTotal": 45,
+      "cancelRate": 0.278,
+      "withOverlap": 45,
+      "withSameEventOverlap": 45,
+      "superseded": 45,
+      "consistentWithQueueCollapse": 45,
+      "unexplained": []
+    },
+    "verdict": "bounded-consistent",
+    "queuedMinutes": {
+      "count": 45,
+      "min": 0,
+      "max": 0.03,
+      "mean": 0.02,
+      "median": 0.02,
+      "p90": 0.03,
+      "unit": "minutes"
+    },
+    "cancelledRuns": [
+      {
+        "id": 26988704085,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:17Z",
+          "updatedAt": "2026-06-05T00:54:19Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26988705288,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903,
+          26988703850,
+          26988703837
+        ],
+        "overlappingSameEventIds": [
+          26988705288,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903,
+          26988703850,
+          26988703837
+        ],
+        "supersededById": 26988704130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988703850,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:17Z",
+          "updatedAt": "2026-06-05T00:54:19Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26988705288,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703837
+        ],
+        "overlappingSameEventIds": [
+          26988705288,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703837
+        ],
+        "supersededById": 26988704130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988703837,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:17Z",
+          "updatedAt": "2026-06-05T00:54:18Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "overlappingSameEventIds": [
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "supersededById": 26988704130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988705288,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:19Z",
+          "updatedAt": "2026-06-05T00:54:21Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "overlappingSameEventIds": [
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705243,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "supersededById": 26988705552,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988705243,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:19Z",
+          "updatedAt": "2026-06-05T00:54:20Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "overlappingSameEventIds": [
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "supersededById": 26988705552,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988705100,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:19Z",
+          "updatedAt": "2026-06-05T00:54:21Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705243,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "overlappingSameEventIds": [
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705243,
+          26988704903,
+          26988704130,
+          26988704085,
+          26988703903,
+          26988703850
+        ],
+        "supersededById": 26988705552,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988706335,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:21Z",
+          "updatedAt": "2026-06-05T00:54:22Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988706752,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988706246,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:21Z",
+          "updatedAt": "2026-06-05T00:54:22Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988706752,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988706127,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:21Z",
+          "updatedAt": "2026-06-05T00:54:22Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706057,
+          26988705552,
+          26988705288,
+          26988705100,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988706752,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988706914,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:22Z",
+          "updatedAt": "2026-06-05T00:54:24Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26988708055,
+          26988707277,
+          26988707097,
+          26988707059,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988708055,
+          26988707277,
+          26988707097,
+          26988707059,
+          26988706752,
+          26988706365,
+          26988706335,
+          26988706246,
+          26988706127,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988707277,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988707097,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:23Z",
+          "updatedAt": "2026-06-05T00:54:24Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988708055,
+          26988707277,
+          26988707059,
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988708055,
+          26988707277,
+          26988707059,
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988708055,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988707059,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:23Z",
+          "updatedAt": "2026-06-05T00:54:23Z"
+        },
+        "queuedMinutes": 0,
+        "overlappingSiblingIds": [
+          26988707277,
+          26988707097,
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988707277,
+          26988707097,
+          26988706914,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26988708055,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988708369,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:25Z",
+          "updatedAt": "2026-06-05T00:54:26Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988708401,
+          26988708221,
+          26988708208,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988708401,
+          26988708221,
+          26988708208,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26991257638,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988708221,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:25Z",
+          "updatedAt": "2026-06-05T00:54:26Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988708401,
+          26988708369,
+          26988708208,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988708401,
+          26988708369,
+          26988708208,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26991257638,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26988708208,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T00:54:25Z",
+          "updatedAt": "2026-06-05T00:54:26Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26988708401,
+          26988708369,
+          26988708221,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "overlappingSameEventIds": [
+          26988708401,
+          26988708369,
+          26988708221,
+          26988708055,
+          26988707277,
+          26988706752,
+          26988706365,
+          26988706057,
+          26988705552,
+          26988704903,
+          26988704130,
+          26988703903
+        ],
+        "supersededById": 26991257638,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991257925,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:53Z",
+          "updatedAt": "2026-06-05T02:14:54Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991257976,
+          26991257693,
+          26991257680,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991257976,
+          26991257693,
+          26991257680,
+          26991257638
+        ],
+        "supersededById": 26991259309,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991257693,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:53Z",
+          "updatedAt": "2026-06-05T02:14:54Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991257976,
+          26991257925,
+          26991257680,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991257976,
+          26991257925,
+          26991257680,
+          26991257638
+        ],
+        "supersededById": 26991259309,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991257680,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:53Z",
+          "updatedAt": "2026-06-05T02:14:54Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991257976,
+          26991257925,
+          26991257693,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991257976,
+          26991257925,
+          26991257693,
+          26991257638
+        ],
+        "supersededById": 26991259309,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991259679,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:56Z",
+          "updatedAt": "2026-06-05T02:14:58Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991259893,
+          26991259630,
+          26991259413,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991259893,
+          26991259630,
+          26991259413,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991261462,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991259630,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:56Z",
+          "updatedAt": "2026-06-05T02:14:57Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991259893,
+          26991259679,
+          26991259413,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991259893,
+          26991259679,
+          26991259413,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991261462,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991259413,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:56Z",
+          "updatedAt": "2026-06-05T02:14:57Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991259893,
+          26991259679,
+          26991259630,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991259893,
+          26991259679,
+          26991259630,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991261462,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991261362,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:59Z",
+          "updatedAt": "2026-06-05T02:15:00Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991261462,
+          26991261160,
+          26991261015,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991261462,
+          26991261160,
+          26991261015,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991263621,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991261160,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:59Z",
+          "updatedAt": "2026-06-05T02:15:01Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991261462,
+          26991261362,
+          26991261015,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991261462,
+          26991261362,
+          26991261015,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991263621,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991261015,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:14:59Z",
+          "updatedAt": "2026-06-05T02:15:00Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991261462,
+          26991261362,
+          26991261160,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "overlappingSameEventIds": [
+          26991261462,
+          26991261362,
+          26991261160,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976,
+          26991257638
+        ],
+        "supersededById": 26991263621,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991263894,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:03Z",
+          "updatedAt": "2026-06-05T02:15:05Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263731,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263731,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976
+        ],
+        "supersededById": 26991265232,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991263731,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:03Z",
+          "updatedAt": "2026-06-05T02:15:05Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263894,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263894,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991259309,
+          26991257976
+        ],
+        "supersededById": 26991265232,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991264010,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:04Z",
+          "updatedAt": "2026-06-05T02:15:06Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991265670,
+          26991265663,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991263894,
+          26991263731,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265670,
+          26991265663,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991263894,
+          26991263731,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "supersededById": 26991265232,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991265670,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:06Z",
+          "updatedAt": "2026-06-05T02:15:07Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991265960,
+          26991265663,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265960,
+          26991265663,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "supersededById": 26991265960,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991265663,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:06Z",
+          "updatedAt": "2026-06-05T02:15:08Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26991265960,
+          26991265670,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265960,
+          26991265670,
+          26991265594,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "supersededById": 26991265960,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26991265594,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T02:15:06Z",
+          "updatedAt": "2026-06-05T02:15:07Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26991265960,
+          26991265670,
+          26991265663,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "overlappingSameEventIds": [
+          26991265960,
+          26991265670,
+          26991265663,
+          26991265232,
+          26991264572,
+          26991264010,
+          26991263621,
+          26991261462,
+          26991260985,
+          26991259893,
+          26991257976
+        ],
+        "supersededById": 26991265960,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994228227,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:06Z",
+          "updatedAt": "2026-06-05T03:51:08Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26994228450,
+          26994228435,
+          26994228216,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994228450,
+          26994228435,
+          26994228216,
+          26994228207
+        ],
+        "supersededById": 26994228450,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994228216,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:06Z",
+          "updatedAt": "2026-06-05T03:51:08Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26994228450,
+          26994228435,
+          26994228227,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994228450,
+          26994228435,
+          26994228227,
+          26994228207
+        ],
+        "supersededById": 26994228450,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994228435,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:07Z",
+          "updatedAt": "2026-06-05T03:51:08Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994228450,
+          26994228227,
+          26994228216,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994228450,
+          26994228227,
+          26994228216,
+          26994228207
+        ],
+        "supersededById": 26994229727,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994229644,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:09Z",
+          "updatedAt": "2026-06-05T03:51:10Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994229727,
+          26994229586,
+          26994229505,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994229727,
+          26994229586,
+          26994229505,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994231688,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994229586,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:09Z",
+          "updatedAt": "2026-06-05T03:51:10Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994229727,
+          26994229644,
+          26994229505,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994229727,
+          26994229644,
+          26994229505,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994231688,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994229505,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:09Z",
+          "updatedAt": "2026-06-05T03:51:10Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994229727,
+          26994229644,
+          26994229586,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994229727,
+          26994229644,
+          26994229586,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994231688,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994231635,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:13Z",
+          "updatedAt": "2026-06-05T03:51:15Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26994231688,
+          26994231524,
+          26994231483,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994231688,
+          26994231524,
+          26994231483,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994233130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994231524,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:13Z",
+          "updatedAt": "2026-06-05T03:51:14Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994231688,
+          26994231635,
+          26994231483,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994231688,
+          26994231635,
+          26994231483,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994233130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994231483,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:13Z",
+          "updatedAt": "2026-06-05T03:51:14Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994231688,
+          26994231635,
+          26994231524,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "overlappingSameEventIds": [
+          26994231688,
+          26994231635,
+          26994231524,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450,
+          26994228207
+        ],
+        "supersededById": 26994233130,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994233335,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:16Z",
+          "updatedAt": "2026-06-05T03:51:18Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26994234384,
+          26994233531,
+          26994233429,
+          26994233226,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234384,
+          26994233531,
+          26994233429,
+          26994233226,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450
+        ],
+        "supersededById": 26994233531,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994233226,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:16Z",
+          "updatedAt": "2026-06-05T03:51:18Z"
+        },
+        "queuedMinutes": 0.03,
+        "overlappingSiblingIds": [
+          26994234384,
+          26994233531,
+          26994233429,
+          26994233335,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234384,
+          26994233531,
+          26994233429,
+          26994233335,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994229368,
+          26994228450
+        ],
+        "supersededById": 26994233531,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994233429,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:17Z",
+          "updatedAt": "2026-06-05T03:51:18Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994234384,
+          26994233531,
+          26994233335,
+          26994233226,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234384,
+          26994233531,
+          26994233335,
+          26994233226,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "supersededById": 26994234384,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994234715,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:19Z",
+          "updatedAt": "2026-06-05T03:51:20Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994234878,
+          26994234680,
+          26994234597,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234878,
+          26994234680,
+          26994234597,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "supersededById": 27000146343,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994234680,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:19Z",
+          "updatedAt": "2026-06-05T03:51:20Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994234878,
+          26994234715,
+          26994234597,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234878,
+          26994234715,
+          26994234597,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "supersededById": 27000146343,
+        "consistentWithQueueCollapse": true
+      },
+      {
+        "id": 26994234597,
+        "event": "issues",
+        "window": {
+          "createdAt": "2026-06-05T03:51:19Z",
+          "updatedAt": "2026-06-05T03:51:20Z"
+        },
+        "queuedMinutes": 0.02,
+        "overlappingSiblingIds": [
+          26994234878,
+          26994234715,
+          26994234680,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "overlappingSameEventIds": [
+          26994234878,
+          26994234715,
+          26994234680,
+          26994234384,
+          26994233531,
+          26994233130,
+          26994231688,
+          26994231370,
+          26994229727,
+          26994228450
+        ],
+        "supersededById": 27000146343,
+        "consistentWithQueueCollapse": true
+      }
+    ]
+  },
+  "findings": [
+    "Window (until 2026-06-07T23:59:59.999Z): 45 cancelled of 162 runs (rate 0.278).",
+    "45/45 cancelled runs overlap a same-event sibling; 45/45 are superseded by a later same-event success.",
+    "45/45 cancelled runs are consistent with queue collapse (overlap AND supersession); 0 unexplained.",
+    "Verdict: bounded-consistent. Queued-window distribution (minutes): mean 0.02, max 0.03."
+  ],
+  "inferred": [
+    "Consistent-with-queue-collapse runs match the mechanism cancel-in-progress: false permits: rapid same-issue label events queue multiple runs in one concurrency group and GitHub collapses the wait queue. Short queued windows further support never-started cancellation.",
+    "Unexplained cancellations (no same-event overlap or no superseder) are NOT evidence against queue collapse elsewhere — they are individually unattributable from run data alone."
+  ],
+  "proven": [
+    "Overlap and supersession relations are exact set computations over the listed run windows (run ids in metrics.cancelledRuns).",
+    "The workflow has had cancel-in-progress: false since its original wiring (7feef2e) — cancellations cannot be in-progress kills by GitHub concurrency."
+  ],
+  "notProven": [
+    "Causation: the GitHub API exposes neither a run's concurrency group nor its triggering issue, and queue-cancelled runs have no logs — same-event overlap is a proxy, so the verdict is bounded, never established.",
+    "That any cancellation lost work (signal-quality measures supersession; this analysis does not re-judge it).",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
