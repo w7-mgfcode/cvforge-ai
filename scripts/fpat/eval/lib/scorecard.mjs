@@ -22,8 +22,9 @@ const notMeasured = (schema) => schema.nullish();
 export const OfficialBaselineSchema = z.object({
   closedFlowPackIssues: z.number().int().nonnegative(),
   mergedFlowPackPRs: z.number().int().nonnegative(),
+  // Legitimately exceeds 1 (frozen cycle-0 value: 1.57) — unbounded ratio.
   issueToPrRatio: z.number().nullable(),
-  byTypeLabel: z.record(z.string(), z.number().int()),
+  byTypeLabel: z.record(z.string(), z.number().int().nonnegative()),
   asOf: z.string(),
   status: z.string(),
   source: z.string(),
@@ -48,28 +49,28 @@ export const FrozenPlanningAccuracySchema = z.object({
   branchNaming: z.object({
     totalMergedPRs: z.number().int().nonnegative(),
     compliant: z.number().int().nonnegative(),
-    complianceRate: z.number().nullable(),
-    violationPRs: z.array(z.number().int()),
+    complianceRate: z.number().min(0).max(1).nullable(),
+    violationPRs: z.array(z.number().int().positive()),
   }),
   commitFormat: z.object({
     totalCommits: z.number().int().nonnegative(),
     compliant: z.number().int().nonnegative(),
-    complianceRate: z.number().nullable(),
+    complianceRate: z.number().min(0).max(1).nullable(),
     caveat: z.string(), // ERA-MIXED qualifier travels with the value
   }),
   epicFanOut: z.object({
     epicsChecked: z.number().int().nonnegative(),
     exactlyFive: z.number().int().nonnegative(),
     perEpic: z.array(z.object({
-      epic: z.number().int(),
-      subIssueCount: z.number().int().nullable(),
+      epic: z.number().int().positive(),
+      subIssueCount: z.number().int().nonnegative().nullable(),
     })),
   }),
   prLinkage: z.object({
     totalMergedPRs: z.number().int().nonnegative(),
     withClosingKeyword: z.number().int().nonnegative(),
-    complianceRate: z.number().nullable(),
-    violationPRs: z.array(z.number().int()),
+    complianceRate: z.number().min(0).max(1).nullable(),
+    violationPRs: z.array(z.number().int().positive()),
   }),
   source: z.string(),
 });
@@ -82,7 +83,7 @@ export const FrozenWorkflowTallySchema = z.object({
   skipped: z.number().int().nonnegative(),
   cancelled: z.number().int().nonnegative(),
   failure: z.number().int().nonnegative(),
-  cancelRate: z.number().nullable(),
+  cancelRate: z.number().min(0).max(1).nullable(),
 });
 
 export const FrozenWorkflowReliabilitySchema = z.object({
@@ -94,7 +95,7 @@ export const FrozenWorkflowReliabilitySchema = z.object({
   projectSyncCancellation: z.object({
     cancelled: z.number().int().nonnegative(),
     total: z.number().int().nonnegative(),
-    rate: z.number().nullable(),
+    rate: z.number().min(0).max(1).nullable(),
   }),
   caveat: z.string(), // NON-STATIONARY qualifier travels with the values
   source: z.string(),
@@ -106,14 +107,14 @@ export const FrozenSignalQualitySchema = z.object({
     fpatLookingMissingFlowPack: z.object({
       issueCount: z.number().int().nonnegative(),
       prCount: z.number().int().nonnegative(),
-      issueNumbers: z.array(z.number().int()),
-      prNumbers: z.array(z.number().int()),
+      issueNumbers: z.array(z.number().int().positive()),
+      prNumbers: z.array(z.number().int().positive()),
       caveat: z.string(), // HEURISTIC qualifier travels with the candidates
     }),
     flowPackMissingTaxonomy: z.object({
       issueCount: z.number().int().nonnegative(),
       prCount: z.number().int().nonnegative(),
-      issueNumbers: z.array(z.number().int()),
+      issueNumbers: z.array(z.number().int().positive()),
     }),
   }),
   runNoise: z.object({
@@ -141,7 +142,7 @@ export const FrozenBoardConsistencySchema = z.object({
     probeError: z.string().nullable(),
   }),
   board: notMeasured(z.object({
-    number: z.number().int(),
+    number: z.number().int().positive(),
     title: z.string(),
     itemCount: z.number().int().nonnegative(),
   })),
@@ -153,7 +154,7 @@ export const FrozenBoardConsistencySchema = z.object({
     flowPackTotal: z.number().int().nonnegative(),
     onBoard: z.number().int().nonnegative(),
     flowPackNotOnBoard: z.array(z.object({
-      number: z.number().int().nullable(),
+      number: z.number().int().positive().nullable(), // null for DraftIssues
       kind: z.string(),
     })),
     boardItemsNotFlowPackCount: z.number().int().nonnegative(),
@@ -172,7 +173,7 @@ export const FrozenBoardConsistencySchema = z.object({
   })),
   scoreGate: notMeasured(z.object({
     epicsChecked: z.number().int().nonnegative(),
-    missingScoreEpics: z.array(z.number().int()),
+    missingScoreEpics: z.array(z.number().int().positive()),
     belowGateOffBacklogCount: z.number().int().nonnegative(),
   })),
   source: z.string(),
@@ -184,8 +185,8 @@ export const LabelGapDecisionsSchema = z.object({
   decision: z.string(),
   decidedOn: z.string(),
   detail: z.object({
-    historicalGapPRs: z.array(z.number().int()),
-    disposableFixtureIssues: z.array(z.number().int()),
+    historicalGapPRs: z.array(z.number().int().positive()),
+    disposableFixtureIssues: z.array(z.number().int().positive()),
     areaTaxonomyDrift: z.string(),
   }),
   effect: z.string(),
