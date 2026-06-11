@@ -75,15 +75,29 @@
     },
     "labelFieldSync": {
       "itemsChecked": 8,
+      "byKind": {
+        "Issue": {
+          "itemsChecked": 6,
+          "mismatchCount": 1,
+          "missingFieldValueCount": 1
+        },
+        "PullRequest": {
+          "itemsChecked": 2,
+          "mismatchCount": 1,
+          "missingFieldValueCount": 3
+        }
+      },
       "mismatches": [
         {
           "number": 4,
+          "kind": "Issue",
           "dimension": "phase",
           "label": "phase:foundation",
           "fieldValue": "Parallel"
         },
         {
           "number": 14,
+          "kind": "PullRequest",
           "dimension": "phase",
           "label": "phase:foundation",
           "fieldValue": "Parallel"
@@ -92,21 +106,25 @@
       "missingFieldValues": [
         {
           "number": 5,
+          "kind": "Issue",
           "dimension": "type",
           "label": "type:sub-issue"
         },
         {
           "number": 10,
+          "kind": "PullRequest",
           "dimension": "type",
           "label": "type:sub-issue"
         },
         {
           "number": 10,
+          "kind": "PullRequest",
           "dimension": "phase",
           "label": "phase:foundation"
         },
         {
           "number": 10,
+          "kind": "PullRequest",
           "dimension": "area",
           "label": "area:scripts"
         }
@@ -155,12 +173,13 @@
     "Board \"Fixtureverse Delivery\" (#2, public): 9 items.",
     "Fields: 1 missing, 1 with option drift.",
     "Membership: 6/8 flow-pack items on board; 2 missing; 2 board items without flow-pack.",
-    "Label↔field sync: 2 mismatches, 4 labeled-but-unset field values across 8 items.",
+    "Label↔field sync: 2 mismatches, 4 labeled-but-unset field values across 8 items (Issue: 1 mismatched, 1 unset, 6 checked; PullRequest: 1 mismatched, 3 unset, 2 checked).",
     "Status coherence: 2 closed-not-Done, 1 Done-but-open (legal under one-directional sync; measured).",
     "Score gate signal: 1/2 epics missing Score; 1 below 40 while off Backlog."
   ],
   "inferred": [
     "Labeled-but-unset field values predate fpat-project-sync.yml or missed its triggers — candidates for a manual workflow_dispatch re-sync, not auto-fixed here.",
+    "PullRequest-side sync gaps are structural, not re-sync candidates — fpat-project-sync.yml triggers on issue events only; the per-kind counts are the data for the parked PR-event-sync decision (measured here, decided nowhere).",
     "closed-not-Done items reflect the deliberate one-directional sync (issue state never drives Status automatically)."
   ],
   "proven": [
