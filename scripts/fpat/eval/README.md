@@ -20,6 +20,13 @@ One-time analyses (NOT eval domains — generic envelope, no `schema.mjs`/catalo
 project-sync runs; verdict capped at *bounded* (concurrency group not API-exposed). Dated
 verdict: `docs/reports/2026-06-11/e3-cancellation-analysis/` (45/45 `bounded-consistent`).
 
+**Cycle-1 measurement set (E5, #117–#120):** `docs/reports/2026-06-11/cycle-1/` — the five
+audit reports re-run with identical commands (`FPAT_EVAL_REPORT_DIR` isolates them from the
+frozen cycle-0 sources in the parent date dir), plus `effectiveness-readout.md` (the first
+legal windowed-vs-baseline comparison; no improvement verdict at n=1),
+`conformance-evidence.md` (envelope parse + 8-rule compliance map), and
+`closeout-checklist.md` (umbrella-#70 close sequence).
+
 - **Throughput** — recomputes closed `flow-pack` issue / merged `flow-pack` PR counts vs a
   prior claim; cycle/merge-time distributions. Official baseline: **33 / 21**
   (see `docs/reports/2026-06-07/throughput-mismatch-analysis.md`).

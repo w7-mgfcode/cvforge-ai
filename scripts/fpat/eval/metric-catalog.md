@@ -10,6 +10,11 @@ Stance (verbatim from `scripts/fpat/eval/README.md`):
 > Read-only, deterministic. Raw metrics only — no thresholds, no pass/fail, never a CI gate.
 > All audits exit `0` even on "bad" numbers; non-zero means a tooling error only.
 
+Cycle-1 note: the first re-measurement set lives in `docs/reports/2026-06-11/cycle-1/`
+(five reports + readout + evidence, E5 #117–#119). The catalog's frozen reference stays
+**cycle-0** — cycle-1 values are dated report data, compared only via the readout under
+the baseline manifest's `comparisonRules`.
+
 This catalog carries **references, not values**: frozen numbers live only in the
 baseline manifest, live numbers only in the dated reports. The **Caveat** column
 repeats the qualifiers recorded at freeze time (era-mixed, non-stationary,
