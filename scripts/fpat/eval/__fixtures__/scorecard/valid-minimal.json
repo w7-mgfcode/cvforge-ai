@@ -1,0 +1,41 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2031-01-01T00:00:00.000Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "SYNTHETIC FIXTURE — minimal scorecard (notMeasured convention)",
+    "note": "Every number in this file is FICTION (see __fixtures__/README.md). This manifest exercises the notMeasured convention end-to-end: some optional blocks are explicit null, others are absent entirely — both mean 'not measured at baseline', NEVER 'zero problems'. Only the always-required blocks (officialBaseline, comparisonRules) carry values."
+  },
+  "inputs": [],
+  "metrics": {
+    "officialBaseline": {
+      "closedFlowPackIssues": 0,
+      "mergedFlowPackPRs": 0,
+      "issueToPrRatio": null,
+      "byTypeLabel": {},
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "status": "SYNTHETIC — empty fictional baseline (0/0, null ratio); never a benchmark",
+      "source": "fiction — no source report exists"
+    },
+    "historicalEnvelope": null,
+    "cycleTimes": null,
+    "signalQuality": null,
+    "parkedDecisions": null,
+    "comparisonRules": [
+      "SYNTHETIC — fiction; null/absent blocks mean 'not measured', never 'zero problems'.",
+      "Fixture numbers are fiction (scripts/fpat/eval/__fixtures__/README.md) — never quote them as delivery data."
+    ]
+  },
+  "findings": [
+    "SYNTHETIC: minimal scorecard fixture — officialBaseline + comparisonRules only; planningAccuracy/workflowReliability/boardConsistency/labelGapDecisions absent, historicalEnvelope/cycleTimes/signalQuality/parkedDecisions explicit null."
+  ],
+  "inferred": [],
+  "proven": [
+    "Only that ScorecardSchema accepts a minimal manifest where notMeasured blocks are null or absent."
+  ],
+  "notProven": [
+    "Anything about real FPAT delivery — every value here is fiction."
+  ],
+  "confidence": "low"
+}

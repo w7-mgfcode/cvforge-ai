@@ -29,6 +29,7 @@ reports as real FPAT delivery data (the official baseline lives in
 | `github/git-log-subjects.txt` | planning-accuracy commit-format |
 | `github/project-{view,fields,items}.json` | board-consistency (live path) |
 | `github-degraded/` | board-consistency degraded path (intentionally empty — see its README) |
+| `scorecard/valid-{full,minimal}.json` | `check-scorecard.mjs --manifest` (scorecard contract cases; check-fixtures wiring: #108) |
 | `expected/*.json` | goldens for `check-fixtures.mjs`, stored **normalized** |
 
 ## Deliberate drift baked into the dataset
@@ -44,6 +45,24 @@ Blocked), off-board flow-pack PRs (#12/#13), label↔field mismatches on both it
 (Issue #4 phase, board-only PR #14 phase), unset synced fields (#5/#10),
 closed-not-Done (#3/#10), Done-but-open (#5), an epic
 missing Score (#2), an epic below the 40 gate off Backlog (#3), and a DraftIssue.
+
+## Scorecard manifests (`scorecard/`)
+
+Synthetic manifests for the `lib/scorecard.mjs` contract (#74) — **every number is
+fiction**, same rule as the rest of the fixtureverse; never quote them as delivery
+data (the only real manifest is `docs/reports/2026-06-11/baseline-manifest.json`).
+
+- `valid-full.json` — every metric block populated with deliberately ugly-but-legal
+  values (cancelRate 0.94, complianceRate 0, ratio 2250): `check-scorecard.mjs`
+  must exit 0 on all of them, because the contract carries no thresholds.
+- `valid-minimal.json` — only the always-required blocks; the `notMeasured` blocks
+  are a mix of explicit `null` and absent, both meaning "not measured at baseline",
+  never "zero problems".
+
+```bash
+node scripts/fpat/eval/check-scorecard.mjs --manifest scripts/fpat/eval/__fixtures__/scorecard/valid-full.json
+node scripts/fpat/eval/check-scorecard.mjs --manifest scripts/fpat/eval/__fixtures__/scorecard/valid-minimal.json
+```
 
 ## Commands
 
