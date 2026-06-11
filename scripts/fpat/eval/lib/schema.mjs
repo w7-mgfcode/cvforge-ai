@@ -196,3 +196,90 @@ export const SignalQualityReportSchema = DomainReportSchema.extend({
   domain: z.literal('signal-quality'),
   metrics: SignalQualityMetricsSchema,
 });
+
+// ---------------------------------------------------------------------------
+// Domain 4 — board-consistency (Projects v2). Degraded-first: every board-derived
+// block is nullable; null means "not measured" (no project access), NEVER "zero
+// problems". Raw metrics only — the 40 score gate is reported, not enforced.
+// ---------------------------------------------------------------------------
+
+const BoardItemRefSchema = z.object({
+  number: z.number().int().nullable(), // null for DraftIssues (no repo number)
+  title: z.string(),
+  kind: z.string(), // Issue | PullRequest | DraftIssue
+});
+
+export const BoardConsistencyMetricsSchema = z.object({
+  access: z.object({
+    tokenSource: z.enum(['gh-auth', 'env:FPAT_PROJECT_TOKEN', 'none']),
+    degraded: z.boolean(),
+    probeError: z.string().nullable(),
+  }),
+  board: z.object({
+    number: z.number().int(),
+    title: z.string(),
+    owner: z.string(),
+    visibility: z.enum(['public', 'private']),
+    itemCount: z.number().int().nonnegative(),
+    possiblyTruncated: z.boolean(),
+    url: z.string(),
+  }).nullable(),
+  fields: z.object({
+    present: z.array(z.string()),
+    missing: z.array(z.string()),
+    optionDrift: z.array(z.object({
+      field: z.string(),
+      missingOptions: z.array(z.string()),
+    })),
+  }).nullable(),
+  membership: z.object({
+    flowPackTotal: z.number().int().nonnegative(),
+    onBoard: z.number().int().nonnegative(),
+    flowPackNotOnBoard: z.array(BoardItemRefSchema),
+    boardItemsNotFlowPack: z.array(BoardItemRefSchema),
+  }).nullable(),
+  labelFieldSync: z.object({
+    itemsChecked: z.number().int().nonnegative(),
+    mismatches: z.array(z.object({
+      number: z.number().int(),
+      dimension: z.enum(['type', 'phase', 'area']),
+      label: z.string(),
+      fieldValue: z.string(),
+    })),
+    missingFieldValues: z.array(z.object({
+      number: z.number().int(),
+      dimension: z.enum(['type', 'phase', 'area']),
+      label: z.string(),
+    })),
+  }).nullable(),
+  statusCoherence: z.object({
+    itemsChecked: z.number().int().nonnegative(),
+    closedNotDone: z.array(z.object({
+      number: z.number().int(),
+      title: z.string(),
+      status: z.string().nullable(),
+    })),
+    doneButOpen: z.array(z.object({
+      number: z.number().int(),
+      title: z.string(),
+    })),
+  }).nullable(),
+  scoreGate: z.object({
+    epicsChecked: z.number().int().nonnegative(),
+    missingScore: z.array(z.object({
+      number: z.number().int().nullable(),
+      title: z.string(),
+    })),
+    belowGateOffBacklog: z.array(z.object({
+      number: z.number().int().nullable(),
+      title: z.string(),
+      score: z.number(),
+      status: z.string().nullable(),
+    })),
+  }).nullable(),
+});
+
+export const BoardConsistencyReportSchema = DomainReportSchema.extend({
+  domain: z.literal('board-consistency'),
+  metrics: BoardConsistencyMetricsSchema,
+});
