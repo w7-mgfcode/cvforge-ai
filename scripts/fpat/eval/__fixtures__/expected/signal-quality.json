@@ -69,7 +69,7 @@
       }
     },
     "runNoise": {
-      "cancelledSuperseded": 1,
+      "cancelledSuperseded": 2,
       "cancelledNotSuperseded": 1,
       "skippedSuperseded": 1,
       "skippedNotSuperseded": 1,
@@ -100,7 +100,7 @@
   "findings": [
     "Label coverage: 1 FPAT-looking issues + 1 FPAT-looking PRs lack the flow-pack label (heuristic candidates).",
     "Taxonomy gaps on flow-pack items: 2 issues + 2 PRs missing type:/phase:/area: labels.",
-    "Run noise: cancelled 1 superseded vs 1 not; skipped 1 superseded vs 1 not.",
+    "Run noise: cancelled 2 superseded vs 1 not; skipped 1 superseded vs 1 not.",
     "Gate false negatives (merged despite contracts): branch 1, linkage 2, commit 1."
   ],
   "inferred": [

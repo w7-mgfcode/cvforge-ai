@@ -13,14 +13,14 @@
     "raw": {
       "perWorkflow": {
         "fpat-project-sync": {
-          "total": 8,
-          "success": 3,
+          "total": 11,
+          "success": 5,
           "skipped": 2,
-          "cancelled": 2,
+          "cancelled": 3,
           "failure": 1,
           "other": 0,
-          "cancelRate": 0.25,
-          "avgDurationHours": 0.05
+          "cancelRate": 0.273,
+          "avgDurationHours": 0.06
         },
         "fpat-blocked-sweep": {
           "total": 2,
@@ -54,26 +54,26 @@
         }
       },
       "aggregate": {
-        "total": 15,
-        "success": 9,
+        "total": 18,
+        "success": 11,
         "skipped": 2,
-        "cancelled": 2,
+        "cancelled": 3,
         "failure": 2,
         "other": 0,
-        "cancelRate": 0.133,
+        "cancelRate": 0.167,
         "avgDurationHours": 0.05
       }
     },
     "windowed": {
       "perWorkflow": {
         "fpat-project-sync": {
-          "total": 7,
-          "success": 2,
+          "total": 10,
+          "success": 4,
           "skipped": 2,
-          "cancelled": 2,
+          "cancelled": 3,
           "failure": 1,
           "other": 0,
-          "cancelRate": 0.286,
+          "cancelRate": 0.3,
           "avgDurationHours": 0.05
         },
         "fpat-blocked-sweep": {
@@ -108,20 +108,20 @@
         }
       },
       "aggregate": {
-        "total": 14,
-        "success": 8,
+        "total": 17,
+        "success": 10,
         "skipped": 2,
-        "cancelled": 2,
+        "cancelled": 3,
         "failure": 2,
         "other": 0,
-        "cancelRate": 0.143,
-        "avgDurationHours": 0.04
+        "cancelRate": 0.176,
+        "avgDurationHours": 0.05
       }
     },
     "projectSyncCancellation": {
-      "cancelled": 2,
-      "total": 8,
-      "rate": 0.25
+      "cancelled": 3,
+      "total": 11,
+      "rate": 0.273
     },
     "runsTimeline": {
       "fpat-project-sync": [
@@ -135,6 +135,24 @@
           "id": 107,
           "conclusion": "failure",
           "createdAt": "2026-06-03T10:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 121,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T14:00:10Z",
+          "event": "issues"
+        },
+        {
+          "id": 120,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-02T14:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 119,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T13:59:50Z",
           "event": "issues"
         },
         {
@@ -225,10 +243,10 @@
     }
   },
   "findings": [
-    "Raw aggregate (asOf <ts>): 9 success / 2 skipped / 2 cancelled / 2 failure (total 15).",
-    "project-sync cancellation rate: 2/8 = 0.25.",
+    "Raw aggregate (asOf <ts>): 11 success / 2 skipped / 3 cancelled / 2 failure (total 18).",
+    "project-sync cancellation rate: 3/11 = 0.273.",
     "Cancellations outside fpat-project-sync: 0.",
-    "Windowed (createdAt <= <ts>): 8 success / 2 skipped / 2 cancelled / 2 failure (total 14)."
+    "Windowed (createdAt <= <ts>): 10 success / 2 skipped / 3 cancelled / 2 failure (total 17)."
   ],
   "inferred": [
     "Cancellation concentration on fpat-project-sync is consistent with the concurrency hypothesis; root cause is to be confirmed via run event/overlap analysis (audit C), not assumed here."
