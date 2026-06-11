@@ -1,0 +1,215 @@
+{
+  "domain": "planning-accuracy",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T20:27:21.359Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Compliance is measured over ALL merged PRs and all commits on the main ref (not only flow-pack items); each violation is flagged with flow-pack membership. Contracts: .claude/rules/flow-pack-agent-team/{branch-naming,commit-format}.md + the exactly-5 fan-out rule. Raw data only — compliance rates are never gates."
+  },
+  "inputs": [
+    "gh pr list --state all --json number,title,state,labels,headRefName,body,createdAt,mergedAt",
+    "gh issue list --state all --json number,title,state,labels",
+    "git log --pretty=format:%s origin/main",
+    "gh api graphql (subIssues.totalCount per type:epic issue) [best-effort]"
+  ],
+  "metrics": {
+    "branchNaming": {
+      "totalMergedPRs": 52,
+      "compliant": 43,
+      "complianceRate": 0.827,
+      "violations": [
+        {
+          "pr": 69,
+          "headRefName": "feat/claude-commands-fpat-plan-umbrella",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 68,
+          "headRefName": "chore/fpat-baseline-manifest",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 67,
+          "headRefName": "chore/fpat-eval-fixtures",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 66,
+          "headRefName": "chore/fpat-board-consistency-audit",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 65,
+          "headRefName": "docs/vendor-onboarding-package",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 64,
+          "headRefName": "chore/fpat-phase-2-eval-suite",
+          "flowPackLabeled": false
+        },
+        {
+          "pr": 63,
+          "headRefName": "fix/print-62-pdf-export-content",
+          "flowPackLabeled": false
+        },
+        {
+          "pr": 61,
+          "headRefName": "docs/claude-docs-fpat-release-archive",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 24,
+          "headRefName": "fix/vercel-output-directory-20",
+          "flowPackLabeled": false
+        }
+      ]
+    },
+    "commitFormat": {
+      "totalCommits": 60,
+      "compliant": 53,
+      "complianceRate": 0.883,
+      "violations": [
+        "Merge pull request #23 from w7-mgfcode/feat/github-workflows-17-rollup-gate-enforcement",
+        "Merge pull request #24 from w7-mgfcode/fix/vercel-output-directory-20",
+        "Merge pull request #22 from w7-mgfcode/feat/github-projects-21-delivery-metadata-hygiene",
+        "Merge pull request #12 from w7-mgfcode/chore/scripts-2-fpat-foundation",
+        "feat(scripts): make bootstrap-board.sh dry-run existence-aware",
+        "fix: keep A4 print canvas unscaled",
+        "feat: production-ready release of CVForge AI Studio"
+      ]
+    },
+    "epicFanOut": {
+      "epicsChecked": 11,
+      "exactlyFive": 9,
+      "perEpic": [
+        {
+          "epic": 75,
+          "title": "docs(claude-docs): cycle-1 effectiveness readout + umbrella closeout",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 74,
+          "title": "test(scripts): scorecard durable validator + offline fixtures",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 73,
+          "title": "test(github-workflows): project-sync cancellation analysis (45/162)",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 72,
+          "title": "feat(scripts): board-consistency item-kind split (issue vs PR)",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 71,
+          "title": "feat(scripts): eval metric catalog + scorecard schema contract",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 29,
+          "title": "test(github-workflows): rollup-gate live verification (DISPOSABLE)",
+          "subIssueCount": 1
+        },
+        {
+          "epic": 6,
+          "title": "test(workflow): agent-team execution + dogfood release gate",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 5,
+          "title": "feat(workflow): continuation-discipline roadmap (V1→V2)",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 4,
+          "title": "feat(workflow): issue → 5-subtask planning pipeline + scoring",
+          "subIssueCount": 5
+        },
+        {
+          "epic": 3,
+          "title": "feat(workflow): decomposition + Projects v2 automation",
+          "subIssueCount": 6
+        },
+        {
+          "epic": 2,
+          "title": "feat(workflow): fpat foundation — namespace, conventions, prime, CI",
+          "subIssueCount": 5
+        }
+      ]
+    },
+    "prLinkage": {
+      "totalMergedPRs": 52,
+      "withClosingKeyword": 43,
+      "complianceRate": 0.827,
+      "violations": [
+        {
+          "pr": 103,
+          "title": "fix(scripts): fail fast on bare --until/--limit in cancellation analysis (#97)",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 69,
+          "title": "feat(claude-commands): add FPAT umbrella planning command",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 68,
+          "title": "chore(fpat): freeze Umbrella 2 cycle-0 baseline manifest",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 67,
+          "title": "chore(fpat): add offline eval fixtures and checker",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 66,
+          "title": "chore(fpat): add board-consistency audit",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 65,
+          "title": "docs(claude-docs): package vendor-onboarding docs",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 64,
+          "title": "chore(fpat): add phase 2 evaluation audits",
+          "flowPackLabeled": false
+        },
+        {
+          "pr": 61,
+          "title": "docs(claude-docs): FPAT umbrella #1 release archive note",
+          "flowPackLabeled": true
+        },
+        {
+          "pr": 14,
+          "title": "feat(scripts): make bootstrap-board.sh dry-run existence-aware (#13)",
+          "flowPackLabeled": false
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Branch naming: 43/52 merged PRs conform; 9 violations.",
+    "Commit format: 53/60 main-ref subjects conform; 7 violations.",
+    "Epic fan-out: 9/11 type:epic issues have exactly 5 sub-issues.",
+    "PR linkage: 43/52 merged PRs carry a closing keyword; 9 violations."
+  ],
+  "inferred": [
+    "Sub-issue counts come from the best-effort hierarchy API; null means the count was unavailable, not zero.",
+    "Commit subjects predating the FPAT conventions are counted as violations — the rate mixes eras."
+  ],
+  "proven": [
+    "Branch/commit/linkage/fan-out compliance is measurable deterministically from durable git + GitHub state."
+  ],
+  "notProven": [
+    "Intent behind any violation; whether a violation caused downstream harm.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "high"
+}

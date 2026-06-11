@@ -1,0 +1,68 @@
+{
+  "domain": "throughput",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T20:27:15.735Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "PROXY BOUNDARY: scope = all CLOSED issues carrying the flow-pack label, used as a Phase-1 proxy for \"Umbrella #1\". This is an explicit assumption, not a verified umbrella subtree."
+  },
+  "inputs": [
+    "gh issue list --state closed --label flow-pack --json number,title,createdAt,closedAt,labels,milestone,state",
+    "gh pr list --state merged --json number,title,createdAt,mergedAt,headRefName,labels,milestone",
+    "(sub-issue counts deferred)"
+  ],
+  "metrics": {
+    "closedIssues": 57,
+    "mergedPRs": 47,
+    "issueToPrRatio": 1.21,
+    "byTypeLabel": {
+      "sub-issue": 47,
+      "epic": 9,
+      "umbrella": 1
+    },
+    "issueCycleTimeHours": {
+      "count": 57,
+      "min": 0.06,
+      "max": 87.17,
+      "mean": 8.82,
+      "median": 0.64,
+      "p90": 9.93,
+      "unit": "hours"
+    },
+    "prMergeTimeHours": {
+      "count": 47,
+      "min": 0,
+      "max": 2.3,
+      "mean": 0.15,
+      "median": 0.02,
+      "p90": 0.2,
+      "unit": "hours"
+    },
+    "epicSubIssueCounts": [],
+    "baselineRecompute": {
+      "priorClaimedClosedIssues": 37,
+      "priorClaimedMergedPRs": 25,
+      "recomputedClosedIssues": 57,
+      "recomputedMergedPRs": 47,
+      "matchesPriorClaim": false
+    }
+  },
+  "findings": [
+    "Recomputed 57 closed flow-pack issues and 47 merged flow-pack PRs.",
+    "Median issue cycle time 0.64h; median PR merge time 0.02h."
+  ],
+  "inferred": [
+    "The exact Umbrella #1 subtree boundary is NOT proven by this run; \"all-flow-pack\" is a proxy.",
+    "Sub-issue counts deferred (not computed in this run)."
+  ],
+  "proven": [
+    "Delivery volume and timing for flow-pack work can be recomputed deterministically from GitHub state."
+  ],
+  "notProven": [
+    "Whether FPAT IMPROVED delivery — this is a single baseline (n=1); no comparison cohort exists.",
+    "Causes of any timing outliers; root causes are not established here.",
+    "The precise Umbrella #1 boundary (board/hierarchy scope intentionally not solved in Phase-1)."
+  ],
+  "confidence": "medium"
+}

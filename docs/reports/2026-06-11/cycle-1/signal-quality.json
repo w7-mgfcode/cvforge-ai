@@ -1,0 +1,383 @@
+{
+  "domain": "signal-quality",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T20:27:48.185Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Second-stage audit decomposing the 33↔37 baseline gap and gate effectiveness. \"FPAT-looking\" membership is a title/branch heuristic — candidates need human confirmation and are never auto-labeled. The Phase-1 flow-pack filter is not adjusted."
+  },
+  "inputs": [
+    "docs/reports/2026-06-11/cycle-1/planning-accuracy.json",
+    "docs/reports/2026-06-11/cycle-1/workflow-reliability.json",
+    "gh issue list --state all --json number,title,state,labels",
+    "gh pr list --state all --json number,title,state,labels,headRefName,body,createdAt,mergedAt"
+  ],
+  "metrics": {
+    "labelCoverage": {
+      "fpatLookingMissingFlowPack": {
+        "issues": [
+          {
+            "number": 30,
+            "title": "test(github-workflows): open child for rollup-gate test (DISPOSABLE)"
+          },
+          {
+            "number": 29,
+            "title": "test(github-workflows): rollup-gate live verification (DISPOSABLE)"
+          }
+        ],
+        "prs": [
+          {
+            "number": 64,
+            "title": "chore(fpat): add phase 2 evaluation audits",
+            "headRefName": "chore/fpat-phase-2-eval-suite"
+          },
+          {
+            "number": 14,
+            "title": "feat(scripts): make bootstrap-board.sh dry-run existence-aware (#13)",
+            "headRefName": "feat/scripts-13-dryrun-existence-aware"
+          },
+          {
+            "number": 12,
+            "title": "chore(scripts): land fpat foundation + context-engineering layer (#2)",
+            "headRefName": "chore/scripts-2-fpat-foundation"
+          }
+        ],
+        "issueCount": 2,
+        "prCount": 3
+      },
+      "flowPackMissingTaxonomy": {
+        "issues": [
+          {
+            "number": 70,
+            "title": "feat(workflow): FPAT workflow automation evaluation & effectiveness measurement system",
+            "missing": [
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 13,
+            "title": "feat(scripts): make bootstrap-board.sh dry-run existence-aware",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 11,
+            "title": "docs(claude-docs): sync indexes + Context block, close E1 acceptance",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 10,
+            "title": "test(scripts): confirm CI-replacement + bootstrap idempotency",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 9,
+            "title": "test(scripts): verify rule frontmatter paths + /fpat-prime",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 8,
+            "title": "ci(github-workflows): make fpat-validate.yml green (pin Node 20)",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 7,
+            "title": "chore(scripts): land fpat foundation on a branch + open PR",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 6,
+            "title": "test(workflow): agent-team execution + dogfood release gate",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 5,
+            "title": "feat(workflow): continuation-discipline roadmap (V1→V2)",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 4,
+            "title": "feat(workflow): issue → 5-subtask planning pipeline + scoring",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 3,
+            "title": "feat(workflow): decomposition + Projects v2 automation",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 2,
+            "title": "feat(workflow): fpat foundation — namespace, conventions, prime, CI",
+            "missing": [
+              "area:"
+            ]
+          },
+          {
+            "number": 1,
+            "title": "feat(workflow): adopt flow-pack + agent-team delivery system",
+            "missing": [
+              "phase:",
+              "area:"
+            ]
+          }
+        ],
+        "prs": [
+          {
+            "number": 69,
+            "title": "feat(claude-commands): add FPAT umbrella planning command",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 68,
+            "title": "chore(fpat): freeze Umbrella 2 cycle-0 baseline manifest",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 67,
+            "title": "chore(fpat): add offline eval fixtures and checker",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 66,
+            "title": "chore(fpat): add board-consistency audit",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 65,
+            "title": "docs(claude-docs): package vendor-onboarding docs",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 61,
+            "title": "docs(claude-docs): FPAT umbrella #1 release archive note",
+            "missing": [
+              "type:",
+              "phase:"
+            ]
+          }
+        ],
+        "issueCount": 13,
+        "prCount": 6
+      }
+    },
+    "runNoise": {
+      "cancelledSuperseded": 137,
+      "cancelledNotSuperseded": 0,
+      "skippedSuperseded": 49,
+      "skippedNotSuperseded": 27,
+      "notSupersededExamples": [
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26791348684,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:48:46Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26791247342,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:45:48Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26791131970,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:42:32Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26790937853,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:37:01Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26790906082,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:36:06Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26790900317,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T00:35:56Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26774519631,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:40:00Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26774456033,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:38:42Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26774405626,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:37:43Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26772853505,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:07:33Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26772780677,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:06:07Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26772769610,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:05:55Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26772687870,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T18:04:19Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26771925068,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T17:49:31Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26771881461,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T17:48:37Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26767523558,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T16:22:35Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26767512189,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T16:22:22Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26766623967,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T16:05:14Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26766445520,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T16:01:53Z",
+          "conclusion": "skipped"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 26766398867,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T16:01:01Z",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    "gateFalseNegatives": {
+      "mergedBranchNamingViolations": 9,
+      "mergedLinkageViolations": 9,
+      "mainCommitFormatViolations": 7,
+      "note": "Each count is contract-violating work that merged to main despite the existing gates (fpat-validate et al.) — i.e. false negatives of the current automation, sourced from the planning-accuracy report. Includes pre-FPAT-era items; see that report for the lists."
+    },
+    "sources": {
+      "planningReport": "docs/reports/2026-06-11/cycle-1/planning-accuracy.json",
+      "reliabilityReport": "docs/reports/2026-06-11/cycle-1/workflow-reliability.json"
+    }
+  },
+  "findings": [
+    "Label coverage: 2 FPAT-looking issues + 3 FPAT-looking PRs lack the flow-pack label (heuristic candidates).",
+    "Taxonomy gaps on flow-pack items: 13 issues + 6 PRs missing type:/phase:/area: labels.",
+    "Run noise: cancelled 137 superseded vs 0 not; skipped 49 superseded vs 27 not.",
+    "Gate false negatives (merged despite contracts): branch 9, linkage 9, commit 7."
+  ],
+  "inferred": [
+    "Every fpatLookingMissingFlowPack candidate is heuristic — whether it SHOULD carry flow-pack needs human confirmation.",
+    "A superseded cancelled run is benign-LOOKING noise; supersession by workflow+event is an approximation of same-trigger re-runs."
+  ],
+  "proven": [
+    "Label coverage and gate effectiveness are quantifiable from durable GitHub state plus the stage-1 reports.",
+    "The 33↔37 baseline gap decomposes into noise vs missing-label vs definitional categories (see throughput-mismatch-analysis.md)."
+  ],
+  "notProven": [
+    "That any flagged FPAT-looking item should have carried flow-pack (heuristic, needs human confirmation).",
+    "Root cause of non-superseded cancellations/skips.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "low"
+}
