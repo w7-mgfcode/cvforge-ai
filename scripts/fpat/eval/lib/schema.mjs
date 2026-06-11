@@ -209,6 +209,14 @@ const BoardItemRefSchema = z.object({
   kind: z.string(), // Issue | PullRequest | DraftIssue
 });
 
+// Per-kind labelFieldSync tally (#72/#87). Both kinds are always emitted (zeros
+// when a kind has no items) so consumers get a deterministic shape.
+const BoardKindTallySchema = z.object({
+  itemsChecked: z.number().int().nonnegative(),
+  mismatchCount: z.number().int().nonnegative(),
+  missingFieldValueCount: z.number().int().nonnegative(),
+});
+
 export const BoardConsistencyMetricsSchema = z.object({
   access: z.object({
     tokenSource: z.enum(['gh-auth', 'env:FPAT_PROJECT_TOKEN', 'none']),
@@ -240,14 +248,23 @@ export const BoardConsistencyMetricsSchema = z.object({
   }).nullable(),
   labelFieldSync: z.object({
     itemsChecked: z.number().int().nonnegative(),
+    // Per-kind split (#72/#87) — additive OPTIONAL: pre-split reports (frozen
+    // cycle-0) lack these fields and must keep parsing; envelope stays 1.0.0.
+    // DraftIssues are excluded before the sync loop, so kinds are exactly these two.
+    byKind: z.object({
+      Issue: BoardKindTallySchema,
+      PullRequest: BoardKindTallySchema,
+    }).optional(),
     mismatches: z.array(z.object({
       number: z.number().int(),
+      kind: z.enum(['Issue', 'PullRequest']).optional(), // additive (#87)
       dimension: z.enum(['type', 'phase', 'area']),
       label: z.string(),
       fieldValue: z.string(),
     })),
     missingFieldValues: z.array(z.object({
       number: z.number().int(),
+      kind: z.enum(['Issue', 'PullRequest']).optional(), // additive (#87)
       dimension: z.enum(['type', 'phase', 'area']),
       label: z.string(),
     })),

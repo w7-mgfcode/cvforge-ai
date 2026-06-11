@@ -102,6 +102,12 @@ const itemRef = (it) => ({
   kind: it.content?.type ?? 'DraftIssue',
 });
 
+// One-line per-kind summary for findings/console, e.g.
+// "Issue: 1 mismatched, 1 unset, 6 checked; PullRequest: 1 mismatched, 3 unset, 2 checked".
+const kindNote = (byKind) => Object.entries(byKind)
+  .map(([k, t]) => `${k}: ${t.mismatchCount} mismatched, ${t.missingFieldValueCount} unset, ${t.itemsChecked} checked`)
+  .join('; ');
+
 async function main() {
   const projectNumber = Number(arg('project', 2));
   const owner = arg('owner', 'w7-mgfcode');
@@ -170,24 +176,39 @@ async function main() {
     };
 
     // 4. label ↔ field sync (only where the label exists — sync never clears fields)
+    // Per-kind split (#72/#87): each entry carries its content `kind`, and `byKind`
+    // tallies Issue vs PullRequest separately — fpat-project-sync.yml triggers on
+    // issue events only, so the PR-side share of this population is the measured
+    // precondition for the parked PR-event-sync decision (data, never the decision).
     const mismatches = [];
     const missingFieldValues = [];
     let itemsChecked = 0;
+    const byKind = {
+      Issue: { itemsChecked: 0, mismatchCount: 0, missingFieldValueCount: 0 },
+      PullRequest: { itemsChecked: 0, mismatchCount: 0, missingFieldValueCount: 0 },
+    };
     for (const it of items) {
       const number = it.content?.number;
       if (number == null) continue; // DraftIssue — no labels to sync from
+      const kind = it.content.type; // numbered content is always Issue | PullRequest
       itemsChecked += 1;
+      byKind[kind].itemsChecked += 1;
       for (const dimension of ['type', 'phase', 'area']) {
         const label = (it.labels || []).find((n) => n.startsWith(`${dimension}:`));
         if (!label) continue;
         const expected = LABEL_TO_OPTION[dimension][label.slice(dimension.length + 1)];
         if (!expected) continue; // unknown suffix — taxonomy drift is signal-quality's domain
         const fieldValue = it[dimension];
-        if (fieldValue == null) missingFieldValues.push({ number, dimension, label });
-        else if (fieldValue !== expected) mismatches.push({ number, dimension, label, fieldValue });
+        if (fieldValue == null) {
+          missingFieldValues.push({ number, kind, dimension, label });
+          byKind[kind].missingFieldValueCount += 1;
+        } else if (fieldValue !== expected) {
+          mismatches.push({ number, kind, dimension, label, fieldValue });
+          byKind[kind].mismatchCount += 1;
+        }
       }
     }
-    labelFieldSync = { itemsChecked, mismatches, missingFieldValues };
+    labelFieldSync = { itemsChecked, byKind, mismatches, missingFieldValues };
 
     // 5. status coherence (one-directional sync means drift here is legal — measured, not judged)
     const closedNotDone = [];
@@ -254,7 +275,7 @@ async function main() {
           `Board "${board.title}" (#${projectNumber}, ${board.visibility}): ${board.itemCount} items.`,
           `Fields: ${fields.missing.length} missing, ${fields.optionDrift.length} with option drift.`,
           `Membership: ${membership.onBoard}/${membership.flowPackTotal} flow-pack items on board; ${membership.flowPackNotOnBoard.length} missing; ${membership.boardItemsNotFlowPack.length} board items without flow-pack.`,
-          `Label↔field sync: ${labelFieldSync.mismatches.length} mismatches, ${labelFieldSync.missingFieldValues.length} labeled-but-unset field values across ${labelFieldSync.itemsChecked} items.`,
+          `Label↔field sync: ${labelFieldSync.mismatches.length} mismatches, ${labelFieldSync.missingFieldValues.length} labeled-but-unset field values across ${labelFieldSync.itemsChecked} items (${kindNote(labelFieldSync.byKind)}).`,
           `Status coherence: ${statusCoherence.closedNotDone.length} closed-not-Done, ${statusCoherence.doneButOpen.length} Done-but-open (legal under one-directional sync; measured).`,
           `Score gate signal: ${scoreGate.missingScore.length}/${scoreGate.epicsChecked} epics missing Score; ${scoreGate.belowGateOffBacklog.length} below ${SHIP_GATE} while off Backlog.`,
         ],
@@ -262,6 +283,7 @@ async function main() {
       ? []
       : [
           'Labeled-but-unset field values predate fpat-project-sync.yml or missed its triggers — candidates for a manual workflow_dispatch re-sync, not auto-fixed here.',
+          'PullRequest-side sync gaps are structural, not re-sync candidates — fpat-project-sync.yml triggers on issue events only; the per-kind counts are the data for the parked PR-event-sync decision (measured here, decided nowhere).',
           'closed-not-Done items reflect the deliberate one-directional sync (issue state never drives Status automatically).',
         ],
     proven: access.degraded
@@ -297,7 +319,7 @@ async function main() {
     console.log(`  board: "${board.title}" #${projectNumber} ${board.visibility}, ${board.itemCount} items`);
     console.log(`  fields: missing ${fields.missing.length}, option drift ${fields.optionDrift.length}`);
     console.log(`  membership: ${membership.onBoard}/${membership.flowPackTotal} on board, ${membership.flowPackNotOnBoard.length} missing, ${membership.boardItemsNotFlowPack.length} non-flow-pack on board`);
-    console.log(`  label↔field: ${labelFieldSync.mismatches.length} mismatches, ${labelFieldSync.missingFieldValues.length} unset`);
+    console.log(`  label↔field: ${labelFieldSync.mismatches.length} mismatches, ${labelFieldSync.missingFieldValues.length} unset (${kindNote(labelFieldSync.byKind)})`);
     console.log(`  status: ${statusCoherence.closedNotDone.length} closed-not-Done, ${statusCoherence.doneButOpen.length} Done-but-open`);
     console.log(`  score: ${scoreGate.missingScore.length}/${scoreGate.epicsChecked} epics missing Score, ${scoreGate.belowGateOffBacklog.length} below ${SHIP_GATE} off Backlog`);
   }
