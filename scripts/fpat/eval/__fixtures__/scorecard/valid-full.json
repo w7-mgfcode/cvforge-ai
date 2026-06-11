@@ -1,0 +1,239 @@
+{
+  "domain": "baseline-manifest",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2031-01-01T00:00:00.000Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "SYNTHETIC FIXTURE — fictional cycle-0 freeze of the fixtureverse mini-repo",
+    "note": "Every number in this file is FICTION (see __fixtures__/README.md). Values are deliberately ugly-but-legal (ratio 2250, cancelRate 0.94, complianceRate 0, an envelope smaller than the baseline it envelopes) to prove the no-thresholds contract: ScorecardSchema must accept all of them — exit 0, never a metric-value failure."
+  },
+  "inputs": [
+    "scripts/fpat/eval/__fixtures__/scorecard/valid-full.json (self — synthetic, no source reports exist)"
+  ],
+  "metrics": {
+    "officialBaseline": {
+      "closedFlowPackIssues": 9000,
+      "mergedFlowPackPRs": 4,
+      "issueToPrRatio": 2250,
+      "byTypeLabel": {
+        "sub-issue": 8994,
+        "epic": 5,
+        "umbrella": 1
+      },
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "status": "SYNTHETIC — fixture-only pseudo-baseline; never a benchmark",
+      "source": "fiction — no source report exists"
+    },
+    "historicalEnvelope": {
+      "closedIssuesAllLabels": 9007,
+      "mergedPRsAllLabels": 0,
+      "matchesOfficialBaseline": false,
+      "status": "SYNTHETIC — deliberately incoherent vs officialBaseline (envelope PRs 0 < baseline PRs 4): legal, because values are data, not gates",
+      "source": "fiction — no source report exists"
+    },
+    "cycleTimes": {
+      "issueCycleTimeHours": {
+        "count": 9000,
+        "min": 0,
+        "max": 87600.5,
+        "mean": 9001.77,
+        "median": 0.01,
+        "p90": 80000,
+        "unit": "hours"
+      },
+      "prMergeTimeHours": {
+        "count": 0,
+        "min": null,
+        "max": null,
+        "mean": null,
+        "median": null,
+        "p90": null,
+        "unit": "hours"
+      },
+      "source": "fiction — no source report exists"
+    },
+    "planningAccuracy": {
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "branchNaming": {
+        "totalMergedPRs": 4,
+        "compliant": 0,
+        "complianceRate": 0,
+        "violationPRs": [11, 12, 13, 14]
+      },
+      "commitFormat": {
+        "totalCommits": 40,
+        "compliant": 0,
+        "complianceRate": 0,
+        "caveat": "SYNTHETIC + ERA-MIXED — fictional zero-compliance rate; legal because rates are data, not gates"
+      },
+      "epicFanOut": {
+        "epicsChecked": 3,
+        "exactlyFive": 0,
+        "perEpic": [
+          { "epic": 2, "subIssueCount": 0 },
+          { "epic": 3, "subIssueCount": 6 },
+          { "epic": 6, "subIssueCount": null }
+        ]
+      },
+      "prLinkage": {
+        "totalMergedPRs": 4,
+        "withClosingKeyword": 0,
+        "complianceRate": 0,
+        "violationPRs": [11, 12, 13, 14]
+      },
+      "source": "fiction — no source report exists"
+    },
+    "workflowReliability": {
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "until": null,
+      "rawAggregate": {
+        "total": 100,
+        "success": 3,
+        "skipped": 2,
+        "cancelled": 94,
+        "failure": 1,
+        "cancelRate": 0.94
+      },
+      "windowedAggregate": null,
+      "perWorkflowRaw": {
+        "fpat-project-sync": {
+          "total": 100,
+          "success": 3,
+          "skipped": 2,
+          "cancelled": 94,
+          "failure": 1,
+          "cancelRate": 0.94
+        }
+      },
+      "projectSyncCancellation": {
+        "cancelled": 94,
+        "total": 100,
+        "rate": 0.94
+      },
+      "caveat": "SYNTHETIC + NON-STATIONARY — fictional 0.94 cancel rate; legal because the schema carries no thresholds",
+      "source": "fiction — no source report exists"
+    },
+    "signalQuality": {
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "labelCoverage": {
+        "fpatLookingMissingFlowPack": {
+          "issueCount": 2,
+          "prCount": 2,
+          "issueNumbers": [6, 1],
+          "prNumbers": [11, 13],
+          "caveat": "SYNTHETIC + HEURISTIC — fictional candidates; never auto-acted on"
+        },
+        "flowPackMissingTaxonomy": {
+          "issueCount": 2,
+          "prCount": 2,
+          "issueNumbers": [1, 3]
+        }
+      },
+      "runNoise": {
+        "cancelledSuperseded": 93,
+        "cancelledNotSuperseded": 1,
+        "skippedSuperseded": 0,
+        "skippedNotSuperseded": 2
+      },
+      "gateFalseNegatives": {
+        "mergedBranchNamingViolations": 4,
+        "mergedLinkageViolations": 4,
+        "mainCommitFormatViolations": 40
+      },
+      "source": "fiction — no source report exists"
+    },
+    "boardConsistency": {
+      "asOf": "2031-01-01T00:00:00.000Z",
+      "access": {
+        "tokenSource": "env:FPAT_PROJECT_TOKEN",
+        "degraded": false,
+        "probeError": null
+      },
+      "board": {
+        "number": 2,
+        "title": "Fixtureverse Delivery Board",
+        "itemCount": 14
+      },
+      "fields": {
+        "missingCount": 1,
+        "optionDriftCount": 1
+      },
+      "membership": {
+        "flowPackTotal": 14,
+        "onBoard": 12,
+        "flowPackNotOnBoard": [
+          { "number": 12, "kind": "PullRequest" },
+          { "number": null, "kind": "DraftIssue" }
+        ],
+        "boardItemsNotFlowPackCount": 1
+      },
+      "labelFieldSync": {
+        "itemsChecked": 12,
+        "mismatchCount": 2,
+        "missingFieldValueCount": 55000,
+        "caveat": "SYNTHETIC — fictional extreme count proving large numbers are legal data"
+      },
+      "statusCoherence": {
+        "itemsChecked": 12,
+        "closedNotDoneCount": 2,
+        "doneButOpenCount": 1,
+        "caveat": "SYNTHETIC — closed-not-Done is legal one-directional sync; numbers are fiction"
+      },
+      "scoreGate": {
+        "epicsChecked": 3,
+        "missingScoreEpics": [2],
+        "belowGateOffBacklogCount": 1
+      },
+      "source": "fiction — no source report exists"
+    },
+    "labelGapDecisions": {
+      "decision": "SYNTHETIC — fictional copy of the no-retro-labeling stance (drift measured, never manually fixed)",
+      "decidedOn": "2031-01-01",
+      "detail": {
+        "historicalGapPRs": [12, 13],
+        "disposableFixtureIssues": [6],
+        "areaTaxonomyDrift": "fiction — left as measured signal"
+      },
+      "effect": "fiction — the synthetic 9000/4 pseudo-baseline is preserved",
+      "refs": [
+        "scripts/fpat/eval/__fixtures__/README.md (everything in here is synthetic)"
+      ]
+    },
+    "parkedDecisions": [
+      {
+        "id": "fixture-parked-scalar",
+        "status": "PARKED — synthetic",
+        "frozenBeforeValue": {
+          "metric": "boardConsistency.labelFieldSync.missingFieldValueCount",
+          "value": 55000
+        },
+        "rule": "fiction — if approved, date the change and compare pre/post separately"
+      },
+      {
+        "id": "fixture-parked-list",
+        "status": "PARKED — synthetic",
+        "frozenBeforeValue": {
+          "metric": "boardConsistency.scoreGate.missingScoreEpics",
+          "value": [2]
+        },
+        "rule": "fiction — heterogeneous frozenBeforeValue (a list) exercised on purpose"
+      }
+    ],
+    "comparisonRules": [
+      "SYNTHETIC — never compare fixture numbers to any real report; they describe the fictional fixtureverse mini-repo.",
+      "Fixture numbers are fiction (scripts/fpat/eval/__fixtures__/README.md) — never quote them as delivery data."
+    ]
+  },
+  "findings": [
+    "SYNTHETIC: full-population scorecard fixture — every metric block present, every value fiction.",
+    "SYNTHETIC: ugly-but-legal values (cancelRate 0.94, complianceRate 0, ratio 2250, count 55000) parse with exit 0 — the contract carries no thresholds."
+  ],
+  "inferred": [],
+  "proven": [
+    "Only that ScorecardSchema accepts a fully-populated manifest regardless of metric values."
+  ],
+  "notProven": [
+    "Anything about real FPAT delivery — every value here is fiction."
+  ],
+  "confidence": "low"
+}
