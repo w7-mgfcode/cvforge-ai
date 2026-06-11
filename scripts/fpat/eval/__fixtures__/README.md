@@ -38,8 +38,9 @@ never triggered: branch/commit/linkage violations (PR #11, `wip: tweak things`),
 non-exactly-5 and null fan-outs, an FPAT-looking unlabeled issue/PR (#6/#11), taxonomy
 gaps (#1/#3, PRs #12/#13), all four supersession quadrants, `--until` windowing (run
 108 is outside the cutoff), a missing field (Estimate), option drift (Status lacks
-Blocked), off-board flow-pack PRs (#12/#13), a label↔field mismatch (item #4 phase),
-unset synced fields (#5/#10), closed-not-Done (#3/#10), Done-but-open (#5), an epic
+Blocked), off-board flow-pack PRs (#12/#13), label↔field mismatches on both item kinds
+(Issue #4 phase, board-only PR #14 phase), unset synced fields (#5/#10),
+closed-not-Done (#3/#10), Done-but-open (#5), an epic
 missing Score (#2), an epic below the 40 gate off Backlog (#3), and a DraftIssue.
 
 ## Commands
