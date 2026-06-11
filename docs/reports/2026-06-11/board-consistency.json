@@ -1,0 +1,498 @@
+{
+  "domain": "board-consistency",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T14:09:47.984Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Domain-4 board↔issue consistency for Projects v2 board #2 (w7-mgfcode). Read-only; raw metrics, never a gate. Membership is defined by the CURRENT flow-pack label (the 2026-06-11 no-mutation decision on historical gaps is honored by construction). null board blocks mean \"not measured\", never \"zero problems\"."
+  },
+  "inputs": [
+    "gh project view 2 --owner w7-mgfcode --format json (probe)",
+    "gh project field-list 2 --owner w7-mgfcode --format json",
+    "gh project item-list 2 --owner w7-mgfcode --format json --limit 1000",
+    "gh issue list --state all --json number,title,state,labels",
+    "gh pr list --state all --json number,title,state,labels,headRefName,body,createdAt,mergedAt"
+  ],
+  "metrics": {
+    "access": {
+      "tokenSource": "gh-auth",
+      "degraded": false,
+      "probeError": null
+    },
+    "board": {
+      "number": 2,
+      "title": "CVForge AI — WorkflowCV Studio Roadmap",
+      "owner": "w7-mgfcode",
+      "visibility": "public",
+      "itemCount": 53,
+      "possiblyTruncated": false,
+      "url": "https://github.com/users/w7-mgfcode/projects/2"
+    },
+    "fields": {
+      "present": [
+        "Title",
+        "Assignees",
+        "Status",
+        "Labels",
+        "Linked pull requests",
+        "Milestone",
+        "Repository",
+        "Reviewers",
+        "Parent issue",
+        "Sub-issues progress",
+        "Created",
+        "Updated",
+        "Closed",
+        "Type",
+        "Phase",
+        "Area",
+        "Priority",
+        "Score",
+        "Estimate"
+      ],
+      "missing": [],
+      "optionDrift": []
+    },
+    "membership": {
+      "flowPackTotal": 55,
+      "onBoard": 53,
+      "flowPackNotOnBoard": [
+        {
+          "number": 23,
+          "title": "feat(github-workflows): enforce rollup gate on epic/umbrella close (#17)",
+          "kind": "PullRequest"
+        },
+        {
+          "number": 22,
+          "title": "feat(github-projects): delivery metadata hygiene — templates, CODEOWNERS, PR template, backfill (#21)",
+          "kind": "PullRequest"
+        }
+      ],
+      "boardItemsNotFlowPack": []
+    },
+    "labelFieldSync": {
+      "itemsChecked": 53,
+      "mismatches": [],
+      "missingFieldValues": [
+        {
+          "number": 26,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 26,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 26,
+          "dimension": "area",
+          "label": "area:github-workflows"
+        },
+        {
+          "number": 27,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 27,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 27,
+          "dimension": "area",
+          "label": "area:github-workflows"
+        },
+        {
+          "number": 28,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 28,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 28,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 36,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 36,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 36,
+          "dimension": "area",
+          "label": "area:claude-commands"
+        },
+        {
+          "number": 37,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 37,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 37,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 38,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 38,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 38,
+          "dimension": "area",
+          "label": "area:claude-skills"
+        },
+        {
+          "number": 39,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 39,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 39,
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 40,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 40,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 40,
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 46,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 46,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 46,
+          "dimension": "area",
+          "label": "area:claude-commands"
+        },
+        {
+          "number": 47,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 47,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 47,
+          "dimension": "area",
+          "label": "area:claude-skills"
+        },
+        {
+          "number": 48,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 48,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 48,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 49,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 49,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 49,
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 50,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 50,
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 50,
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 56,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 56,
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 56,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 57,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 57,
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 57,
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 58,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 58,
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 58,
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 59,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 59,
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 59,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 60,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 60,
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 60,
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 61,
+          "dimension": "area",
+          "label": "area:claude-docs"
+        }
+      ]
+    },
+    "statusCoherence": {
+      "itemsChecked": 53,
+      "closedNotDone": [
+        {
+          "number": 26,
+          "title": "feat(github-workflows): wire fpat-blocked-sweep.yml (#18)",
+          "status": null
+        },
+        {
+          "number": 27,
+          "title": "feat(github-workflows): wire fpat-project-sync.yml (#16)",
+          "status": null
+        },
+        {
+          "number": 28,
+          "title": "docs(claude-docs): board name/visibility, automation, views checklist (#19)",
+          "status": null
+        },
+        {
+          "number": 36,
+          "title": "feat(claude-commands): lock /fpat-plan-issue contract (7-step + 8-section) (#31)",
+          "status": null
+        },
+        {
+          "number": 37,
+          "title": "docs(claude-docs): package + subtask templates + critic-checklist (#32)",
+          "status": null
+        },
+        {
+          "number": 38,
+          "title": "feat(claude-skills): flow-pack-agent-team-scoring rubric skill (#33)",
+          "status": null
+        },
+        {
+          "number": 39,
+          "title": "test(scripts): schema-check package = 5 subtasks x 8 sections (#34)",
+          "status": null
+        },
+        {
+          "number": 40,
+          "title": "chore(github-projects): gated package to sub-issue creation (#35)",
+          "status": null
+        },
+        {
+          "number": 46,
+          "title": "feat(claude-commands): lock /fpat-continuation contract (#41)",
+          "status": null
+        },
+        {
+          "number": 47,
+          "title": "feat(claude-skills): cross-link scoring skill <-> /fpat-continuation (#42)",
+          "status": null
+        },
+        {
+          "number": 48,
+          "title": "docs(claude-docs): V2 ship-list + defer-list templates (#43)",
+          "status": null
+        },
+        {
+          "number": 49,
+          "title": "test(scripts): negotiation-band (36-39) surfaces for human decision (#44)",
+          "status": null
+        },
+        {
+          "number": 50,
+          "title": "chore(github-projects): gate approved-V2 feed into umbrella #1 ## Decomposition (#45)",
+          "status": null
+        },
+        {
+          "number": 56,
+          "title": "docs(claude-docs): release preflight — resolve /fpat-continuation drift (#51)",
+          "status": null
+        },
+        {
+          "number": 57,
+          "title": "test(scripts): preflight consistency guard wired into CI (#52)",
+          "status": null
+        },
+        {
+          "number": 58,
+          "title": "test(scripts): dogfood /studio A4 print-preview across the 3 templates (#53)",
+          "status": null
+        },
+        {
+          "number": 59,
+          "title": "docs(claude-docs): dogfood report artifact under dated path (#54)",
+          "status": null
+        },
+        {
+          "number": 60,
+          "title": "chore(github-projects): umbrella closeout verification checklist (#55)",
+          "status": null
+        },
+        {
+          "number": 61,
+          "title": "docs(claude-docs): FPAT umbrella #1 release archive note",
+          "status": null
+        },
+        {
+          "number": 65,
+          "title": "docs(claude-docs): package vendor-onboarding docs",
+          "status": null
+        }
+      ],
+      "doneButOpen": []
+    },
+    "scoreGate": {
+      "epicsChecked": 5,
+      "missingScore": [
+        {
+          "number": 2,
+          "title": "feat(workflow): fpat foundation — namespace, conventions, prime, CI"
+        },
+        {
+          "number": 3,
+          "title": "feat(workflow): decomposition + Projects v2 automation"
+        }
+      ],
+      "belowGateOffBacklog": []
+    }
+  },
+  "findings": [
+    "Board \"CVForge AI — WorkflowCV Studio Roadmap\" (#2, public): 53 items.",
+    "Fields: 0 missing, 0 with option drift.",
+    "Membership: 53/55 flow-pack items on board; 2 missing; 0 board items without flow-pack.",
+    "Label↔field sync: 0 mismatches, 55 labeled-but-unset field values across 53 items.",
+    "Status coherence: 20 closed-not-Done, 0 Done-but-open (legal under one-directional sync; measured).",
+    "Score gate signal: 2/5 epics missing Score; 0 below 40 while off Backlog."
+  ],
+  "inferred": [
+    "Labeled-but-unset field values predate fpat-project-sync.yml or missed its triggers — candidates for a manual workflow_dispatch re-sync, not auto-fixed here.",
+    "closed-not-Done items reflect the deliberate one-directional sync (issue state never drives Status automatically)."
+  ],
+  "proven": [
+    "Board metadata, field catalog, and item field values are durable Projects v2 state readable via gh project (read-only).",
+    "Membership and sync findings are exact set comparisons, not heuristics."
+  ],
+  "notProven": [
+    "WHY any field value drifted (sync-trigger history is non-stationary; only current state is read).",
+    "That closed-not-Done items are errors — one-directional sync makes manual Status updates the designed mechanism.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
