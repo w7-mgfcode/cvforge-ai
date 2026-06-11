@@ -13,6 +13,11 @@
 // Goldens are stored NORMALIZED (volatile fields stripped): generatedAt, inputs
 // (signal-quality embeds temp report paths), metrics.asOf, metrics.sources, and
 // ISO timestamps inside findings strings (workflow-reliability embeds asOf there).
+//
+// Scorecard cases (#74/#108) additionally drive check-scorecard.mjs against the
+// synthetic manifests in __fixtures__/scorecard/, asserting an EXPECTED exit code
+// and diffing the normalized stdout/stderr (absolute fixture paths replaced with
+// '<fixtures>') against goldens. Same MISMATCH/--update semantics as audit cases.
 
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync } from 'node:fs';
@@ -74,6 +79,37 @@ const CASES = [
   },
 ];
 
+// Scorecard conformance cases (#74/#108): each runs check-scorecard.mjs
+// --manifest against a synthetic manifest and must finish with expectExit.
+// expectExit is asserted even on --update, so a regold can never silently
+// flip an accept case into a reject case (or vice versa).
+const SCORECARD_CASES = [
+  { name: 'scorecard.valid-full', manifest: 'scorecard/valid-full.json', expectExit: 0 },
+  { name: 'scorecard.valid-minimal', manifest: 'scorecard/valid-minimal.json', expectExit: 0 },
+];
+
+const streamLines = (s) =>
+  String(s ?? '').replaceAll(FIXTURES, '<fixtures>').trim().split('\n').filter(Boolean);
+
+function runScorecardCase(c) {
+  let exitCode = 0;
+  let stdout = '';
+  let stderr = '';
+  try {
+    stdout = execFileSync(
+      'node',
+      [join(EVAL_DIR, 'check-scorecard.mjs'), '--manifest', join(FIXTURES, c.manifest)],
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
+    );
+  } catch (err) {
+    if (typeof err.status !== 'number') throw err; // spawn failure = tooling error
+    exitCode = err.status;
+    stdout = String(err.stdout ?? '');
+    stderr = String(err.stderr ?? '');
+  }
+  return { exitCode, stdout: streamLines(stdout), stderr: streamLines(stderr) };
+}
+
 function main() {
   const outRoot = mkdtempSync(join(tmpdir(), 'fpat-fixture-check-'));
   let mismatches = 0;
@@ -114,13 +150,42 @@ function main() {
     }
   }
 
+  for (const c of SCORECARD_CASES) {
+    const actual = runScorecardCase(c);
+    const goldenPath = join(EXPECTED, `${c.name}.json`);
+
+    if (UPDATE) {
+      if (actual.exitCode !== c.expectExit) {
+        throw new Error(
+          `${c.name}: exit ${actual.exitCode}, expected ${c.expectExit} — refusing to regold an exit-code flip`,
+        );
+      }
+      writeFileSync(goldenPath, JSON.stringify(actual, null, 2) + '\n', 'utf8');
+      console.log(`[check-fixtures] regolded ${c.name}`);
+      continue;
+    }
+
+    const golden = JSON.parse(readFileSync(goldenPath, 'utf8'));
+    if (isDeepStrictEqual(actual, golden)) {
+      console.log(`[check-fixtures] PASS ${c.name}`);
+    } else {
+      mismatches += 1;
+      const actualPath = join(outRoot, `${c.name}.actual.json`);
+      writeFileSync(actualPath, JSON.stringify(actual, null, 2) + '\n', 'utf8');
+      console.error(`[check-fixtures] MISMATCH ${c.name}`);
+      console.error(`  expected: ${goldenPath}`);
+      console.error(`  actual:   ${actualPath} (normalized exitCode/stdout/stderr capture)`);
+    }
+  }
+
+  const total = CASES.length + SCORECARD_CASES.length;
   if (UPDATE) {
     console.log('[check-fixtures] goldens updated — inspect the diff before committing.');
   } else if (mismatches) {
-    console.error(`[check-fixtures] ${mismatches}/${CASES.length} mismatched`);
+    console.error(`[check-fixtures] ${mismatches}/${total} mismatched`);
     process.exit(1);
   } else {
-    console.log(`[check-fixtures] all ${CASES.length} fixture runs match goldens`);
+    console.log(`[check-fixtures] all ${total} fixture runs match goldens`);
   }
 }
 
