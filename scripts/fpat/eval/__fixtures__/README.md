@@ -24,7 +24,7 @@ reports as real FPAT delivery data (the official baseline lives in
 | Path | Consumed by |
 |---|---|
 | `github/issues-{all,closed}.json`, `prs-{all,merged}.json` | throughput, planning-accuracy, signal-quality, board-consistency |
-| `github/runs-fpat-*.json` | workflow-reliability (→ signal-quality supersession) |
+| `github/runs-fpat-*.json` | workflow-reliability (→ signal-quality supersession); `runs-fpat-project-sync.json` also feeds the #73 cancellation analysis |
 | `github/subissue-counts.json` | throughput `--with-subissues`, planning-accuracy fan-out (`6` absent → `null` branch) |
 | `github/git-log-subjects.txt` | planning-accuracy commit-format |
 | `github/project-{view,fields,items}.json` | board-consistency (live path) |
@@ -56,7 +56,7 @@ FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github \
 FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github-degraded \
   node scripts/fpat/eval/audit-board-consistency.mjs
 
-# All six fixture runs vs goldens (dev tool, exit 1 on mismatch):
+# All seven fixture runs vs goldens (dev tool, exit 1 on mismatch):
 node scripts/fpat/eval/check-fixtures.mjs
 
 # Regold after an INTENTIONAL audit change (inspect the diff before committing):
