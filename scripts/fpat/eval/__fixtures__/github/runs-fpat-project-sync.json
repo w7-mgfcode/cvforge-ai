@@ -1,0 +1,66 @@
+[
+  {
+    "databaseId": 108,
+    "conclusion": "success",
+    "status": "completed",
+    "createdAt": "2026-06-09T12:00:00Z",
+    "updatedAt": "2026-06-09T12:05:00Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 107,
+    "conclusion": "failure",
+    "status": "completed",
+    "createdAt": "2026-06-03T10:00:00Z",
+    "updatedAt": "2026-06-03T10:05:00Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 104,
+    "conclusion": "cancelled",
+    "status": "completed",
+    "createdAt": "2026-06-02T09:00:00Z",
+    "updatedAt": "2026-06-02T09:01:00Z",
+    "event": "pull_request"
+  },
+  {
+    "databaseId": 103,
+    "conclusion": "success",
+    "status": "completed",
+    "createdAt": "2026-06-01T10:05:00Z",
+    "updatedAt": "2026-06-01T10:10:00Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 102,
+    "conclusion": "cancelled",
+    "status": "completed",
+    "createdAt": "2026-06-01T10:01:00Z",
+    "updatedAt": "2026-06-01T10:02:00Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 101,
+    "conclusion": "success",
+    "status": "completed",
+    "createdAt": "2026-06-01T10:00:00Z",
+    "updatedAt": "2026-06-01T10:06:00Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 106,
+    "conclusion": "skipped",
+    "status": "completed",
+    "createdAt": "2026-06-01T09:00:00Z",
+    "updatedAt": "2026-06-01T09:00:30Z",
+    "event": "issues"
+  },
+  {
+    "databaseId": 105,
+    "conclusion": "skipped",
+    "status": "completed",
+    "createdAt": "2026-06-01T08:00:00Z",
+    "updatedAt": "2026-06-01T08:00:30Z",
+    "event": "pull_request"
+  }
+]

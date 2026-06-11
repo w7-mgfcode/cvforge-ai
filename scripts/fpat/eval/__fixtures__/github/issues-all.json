@@ -1,0 +1,59 @@
+[
+  {
+    "number": 1,
+    "title": "feat(workflow): adopt fixtureverse delivery system",
+    "state": "CLOSED",
+    "labels": [{ "name": "type:umbrella" }, { "name": "flow-pack" }]
+  },
+  {
+    "number": 2,
+    "title": "feat(workflow): epic with exact fan-out",
+    "state": "CLOSED",
+    "labels": [
+      { "name": "type:epic" },
+      { "name": "phase:foundation" },
+      { "name": "area:scripts" },
+      { "name": "flow-pack" }
+    ]
+  },
+  {
+    "number": 3,
+    "title": "feat(workflow): epic with short fan-out",
+    "state": "CLOSED",
+    "labels": [{ "name": "type:epic" }, { "name": "flow-pack" }]
+  },
+  {
+    "number": 4,
+    "title": "feat(scripts): build fixture loader",
+    "state": "CLOSED",
+    "labels": [
+      { "name": "type:sub-issue" },
+      { "name": "phase:foundation" },
+      { "name": "area:scripts" },
+      { "name": "flow-pack" }
+    ]
+  },
+  {
+    "number": 5,
+    "title": "docs(claude-docs): document fixtures",
+    "state": "OPEN",
+    "labels": [
+      { "name": "type:sub-issue" },
+      { "name": "phase:parallel" },
+      { "name": "area:claude-docs" },
+      { "name": "flow-pack" }
+    ]
+  },
+  {
+    "number": 6,
+    "title": "test(github-workflows): rollup-gate probe (DISPOSABLE)",
+    "state": "CLOSED",
+    "labels": [{ "name": "type:epic" }]
+  },
+  {
+    "number": 7,
+    "title": "bug: preview flicker on zoom",
+    "state": "OPEN",
+    "labels": [{ "name": "bug" }]
+  }
+]

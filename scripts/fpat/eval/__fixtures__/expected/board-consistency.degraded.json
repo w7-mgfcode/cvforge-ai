@@ -1,0 +1,39 @@
+{
+  "domain": "board-consistency",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Domain-4 board↔issue consistency for Projects v2 board #2 (w7-mgfcode). Read-only; raw metrics, never a gate. Membership is defined by the CURRENT flow-pack label (the 2026-06-11 no-mutation decision on historical gaps is honored by construction). null board blocks mean \"not measured\", never \"zero problems\". DEGRADED RUN: no Projects v2 read access (no `project` scope, no FPAT_PROJECT_TOKEN); board blocks are null = not measured."
+  },
+  "metrics": {
+    "access": {
+      "tokenSource": "none",
+      "degraded": true,
+      "probeError": "fixture not found or invalid: project-view.json"
+    },
+    "board": null,
+    "fields": null,
+    "membership": null,
+    "labelFieldSync": null,
+    "statusCoherence": null,
+    "scoreGate": null
+  },
+  "findings": [
+    "Board unreadable — all six board checks not measured (see access.probeError)."
+  ],
+  "inferred": [],
+  "proven": [
+    "The degraded path itself: the audit runs, reports access state, and exits 0 without project access."
+  ],
+  "notProven": [
+    "Board metadata/visibility vs board-spec (not measured — no access).",
+    "Field catalog and option integrity (not measured).",
+    "flow-pack ↔ board membership (not measured).",
+    "Label ↔ Type/Phase/Area field sync (not measured).",
+    "Status ↔ issue-state coherence (not measured).",
+    "Epic Score ship-gate signal (not measured).",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "low"
+}

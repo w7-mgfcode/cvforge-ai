@@ -1,0 +1,47 @@
+[
+  {
+    "number": 10,
+    "title": "feat(scripts): add fixture loader (#4)",
+    "state": "MERGED",
+    "labels": [
+      { "name": "flow-pack" },
+      { "name": "type:sub-issue" },
+      { "name": "phase:foundation" },
+      { "name": "area:scripts" }
+    ],
+    "headRefName": "feat/scripts-4-fixture-loader",
+    "body": "Adds the fixture loader behind FPAT_EVAL_FIXTURES.\n\nCloses #4",
+    "createdAt": "2026-06-02T06:00:00Z",
+    "mergedAt": "2026-06-02T18:00:00Z"
+  },
+  {
+    "number": 11,
+    "title": "chore(scripts): land fixture foundation (#2)",
+    "state": "MERGED",
+    "labels": [],
+    "headRefName": "fixture-foundation",
+    "body": "Lands the foundation in one bundle. Refs #2",
+    "createdAt": "2026-06-01T08:00:00Z",
+    "mergedAt": "2026-06-01T20:00:00Z"
+  },
+  {
+    "number": 12,
+    "title": "docs(claude-docs): document fixtures (#5)",
+    "state": "MERGED",
+    "labels": [{ "name": "flow-pack" }],
+    "headRefName": "docs/claude-docs-5-fixture-docs",
+    "body": "Documentation only. Refs #5 only.",
+    "createdAt": "2026-06-03T00:00:00Z",
+    "mergedAt": "2026-06-03T06:00:00Z"
+  },
+  {
+    "number": 13,
+    "title": "feat(scripts): wip follow-up",
+    "state": "OPEN",
+    "labels": [{ "name": "flow-pack" }],
+    "headRefName": "feat/scripts-6-wip",
+    "body": "Draft. Closes #6",
+    "createdAt": "2026-06-04T00:00:00Z",
+    "mergedAt": null
+  }
+]

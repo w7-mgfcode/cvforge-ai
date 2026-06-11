@@ -1,0 +1,123 @@
+{
+  "totalCount": 8,
+  "items": [
+    {
+      "id": "PVTI_fx_1",
+      "title": "feat(workflow): adopt fixtureverse delivery system",
+      "labels": ["type:umbrella", "flow-pack"],
+      "type": "Umbrella",
+      "status": "Done",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 1,
+        "title": "feat(workflow): adopt fixtureverse delivery system",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/1"
+      }
+    },
+    {
+      "id": "PVTI_fx_2",
+      "title": "feat(workflow): epic with exact fan-out",
+      "labels": ["type:epic", "phase:foundation", "area:scripts", "flow-pack"],
+      "type": "Epic",
+      "phase": "Foundation",
+      "area": "scripts",
+      "status": "Done",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 2,
+        "title": "feat(workflow): epic with exact fan-out",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/2"
+      }
+    },
+    {
+      "id": "PVTI_fx_3",
+      "title": "feat(workflow): epic with short fan-out",
+      "labels": ["type:epic", "flow-pack"],
+      "type": "Epic",
+      "status": "In Progress",
+      "score": 35,
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 3,
+        "title": "feat(workflow): epic with short fan-out",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/3"
+      }
+    },
+    {
+      "id": "PVTI_fx_4",
+      "title": "feat(scripts): build fixture loader",
+      "labels": ["type:sub-issue", "phase:foundation", "area:scripts", "flow-pack"],
+      "type": "Sub-issue",
+      "phase": "Parallel",
+      "area": "scripts",
+      "status": "Done",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 4,
+        "title": "feat(scripts): build fixture loader",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/4"
+      }
+    },
+    {
+      "id": "PVTI_fx_5",
+      "title": "docs(claude-docs): document fixtures",
+      "labels": ["type:sub-issue", "phase:parallel", "area:claude-docs", "flow-pack"],
+      "phase": "Parallel",
+      "area": "claude-docs",
+      "status": "Done",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 5,
+        "title": "docs(claude-docs): document fixtures",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/5"
+      }
+    },
+    {
+      "id": "PVTI_fx_10",
+      "title": "feat(scripts): add fixture loader (#4)",
+      "labels": ["flow-pack", "type:sub-issue", "phase:foundation", "area:scripts"],
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "PullRequest",
+        "number": 10,
+        "title": "feat(scripts): add fixture loader (#4)",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/pull/10"
+      }
+    },
+    {
+      "id": "PVTI_fx_7",
+      "title": "bug: preview flicker on zoom",
+      "labels": ["bug"],
+      "status": "Backlog",
+      "repository": "https://github.com/w7-mgfcode/cvforge-ai",
+      "content": {
+        "type": "Issue",
+        "number": 7,
+        "title": "bug: preview flicker on zoom",
+        "repository": "w7-mgfcode/cvforge-ai",
+        "url": "https://github.com/w7-mgfcode/cvforge-ai/issues/7"
+      }
+    },
+    {
+      "id": "PVTI_fx_draft",
+      "title": "Draft: spike fixture ideas",
+      "status": "Backlog",
+      "content": {
+        "type": "DraftIssue",
+        "title": "Draft: spike fixture ideas",
+        "body": "Synthetic draft item — exercises the no-number board path."
+      }
+    }
+  ]
+}

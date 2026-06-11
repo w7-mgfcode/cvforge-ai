@@ -17,6 +17,8 @@
 // Exit code: 0 on success (even if compliance is "low"); non-zero only on tooling error.
 
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { listAllIssues, listAllPRs, subIssueCount } from './lib/gh.mjs';
 import { writeReport } from './lib/report.mjs';
 import { PlanningAccuracyReportSchema } from './lib/schema.mjs';
@@ -50,8 +52,12 @@ async function main() {
     .filter((p) => !BRANCH_RE.test(p.headRefName || ''))
     .map((p) => ({ pr: p.number, headRefName: p.headRefName || '', flowPackLabeled: hasLabel(p, 'flow-pack') }));
 
-  // 2. Commit format (squash-merge subjects on main)
-  const subjects = execFileSync('git', ['log', '--pretty=format:%s', ref], { encoding: 'utf8' })
+  // 2. Commit format (squash-merge subjects on main).
+  // Fixture mode reads a canned subject list instead of the local git history.
+  const fixturesDir = (process.env.FPAT_EVAL_FIXTURES || '').trim();
+  const subjects = (fixturesDir
+    ? readFileSync(join(fixturesDir, 'git-log-subjects.txt'), 'utf8')
+    : execFileSync('git', ['log', '--pretty=format:%s', ref], { encoding: 'utf8' }))
     .split('\n').filter(Boolean);
   const commitViolations = subjects.filter((s) => !COMMIT_RE.test(s));
 

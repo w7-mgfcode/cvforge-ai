@@ -1,0 +1,170 @@
+{
+  "domain": "board-consistency",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Domain-4 board↔issue consistency for Projects v2 board #2 (w7-mgfcode). Read-only; raw metrics, never a gate. Membership is defined by the CURRENT flow-pack label (the 2026-06-11 no-mutation decision on historical gaps is honored by construction). null board blocks mean \"not measured\", never \"zero problems\"."
+  },
+  "metrics": {
+    "access": {
+      "tokenSource": "gh-auth",
+      "degraded": false,
+      "probeError": null
+    },
+    "board": {
+      "number": 2,
+      "title": "Fixtureverse Delivery",
+      "owner": "w7-mgfcode",
+      "visibility": "public",
+      "itemCount": 8,
+      "possiblyTruncated": false,
+      "url": "https://github.com/users/w7-mgfcode/projects/2"
+    },
+    "fields": {
+      "present": [
+        "Title",
+        "Assignees",
+        "Status",
+        "Type",
+        "Phase",
+        "Area",
+        "Priority",
+        "Score",
+        "Labels"
+      ],
+      "missing": [
+        "Estimate"
+      ],
+      "optionDrift": [
+        {
+          "field": "Status",
+          "missingOptions": [
+            "Blocked"
+          ]
+        }
+      ]
+    },
+    "membership": {
+      "flowPackTotal": 8,
+      "onBoard": 6,
+      "flowPackNotOnBoard": [
+        {
+          "number": 12,
+          "title": "docs(claude-docs): document fixtures (#5)",
+          "kind": "PullRequest"
+        },
+        {
+          "number": 13,
+          "title": "feat(scripts): wip follow-up",
+          "kind": "PullRequest"
+        }
+      ],
+      "boardItemsNotFlowPack": [
+        {
+          "number": 7,
+          "title": "bug: preview flicker on zoom",
+          "kind": "Issue"
+        },
+        {
+          "number": null,
+          "title": "Draft: spike fixture ideas",
+          "kind": "DraftIssue"
+        }
+      ]
+    },
+    "labelFieldSync": {
+      "itemsChecked": 7,
+      "mismatches": [
+        {
+          "number": 4,
+          "dimension": "phase",
+          "label": "phase:foundation",
+          "fieldValue": "Parallel"
+        }
+      ],
+      "missingFieldValues": [
+        {
+          "number": 5,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 10,
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 10,
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 10,
+          "dimension": "area",
+          "label": "area:scripts"
+        }
+      ]
+    },
+    "statusCoherence": {
+      "itemsChecked": 7,
+      "closedNotDone": [
+        {
+          "number": 3,
+          "title": "feat(workflow): epic with short fan-out",
+          "status": "In Progress"
+        },
+        {
+          "number": 10,
+          "title": "feat(scripts): add fixture loader (#4)",
+          "status": null
+        }
+      ],
+      "doneButOpen": [
+        {
+          "number": 5,
+          "title": "docs(claude-docs): document fixtures"
+        }
+      ]
+    },
+    "scoreGate": {
+      "epicsChecked": 2,
+      "missingScore": [
+        {
+          "number": 2,
+          "title": "feat(workflow): epic with exact fan-out"
+        }
+      ],
+      "belowGateOffBacklog": [
+        {
+          "number": 3,
+          "title": "feat(workflow): epic with short fan-out",
+          "score": 35,
+          "status": "In Progress"
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Board \"Fixtureverse Delivery\" (#2, public): 8 items.",
+    "Fields: 1 missing, 1 with option drift.",
+    "Membership: 6/8 flow-pack items on board; 2 missing; 2 board items without flow-pack.",
+    "Label↔field sync: 1 mismatches, 4 labeled-but-unset field values across 7 items.",
+    "Status coherence: 2 closed-not-Done, 1 Done-but-open (legal under one-directional sync; measured).",
+    "Score gate signal: 1/2 epics missing Score; 1 below 40 while off Backlog."
+  ],
+  "inferred": [
+    "Labeled-but-unset field values predate fpat-project-sync.yml or missed its triggers — candidates for a manual workflow_dispatch re-sync, not auto-fixed here.",
+    "closed-not-Done items reflect the deliberate one-directional sync (issue state never drives Status automatically)."
+  ],
+  "proven": [
+    "Board metadata, field catalog, and item field values are durable Projects v2 state readable via gh project (read-only).",
+    "Membership and sync findings are exact set comparisons, not heuristics."
+  ],
+  "notProven": [
+    "WHY any field value drifted (sync-trigger history is non-stationary; only current state is read).",
+    "That closed-not-Done items are errors — one-directional sync makes manual Status updates the designed mechanism.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}

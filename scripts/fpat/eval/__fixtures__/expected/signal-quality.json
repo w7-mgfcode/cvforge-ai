@@ -1,0 +1,120 @@
+{
+  "domain": "signal-quality",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Second-stage audit decomposing the 33↔37 baseline gap and gate effectiveness. \"FPAT-looking\" membership is a title/branch heuristic — candidates need human confirmation and are never auto-labeled. The Phase-1 flow-pack filter is not adjusted."
+  },
+  "metrics": {
+    "labelCoverage": {
+      "fpatLookingMissingFlowPack": {
+        "issues": [
+          {
+            "number": 6,
+            "title": "test(github-workflows): rollup-gate probe (DISPOSABLE)"
+          }
+        ],
+        "prs": [
+          {
+            "number": 11,
+            "title": "chore(scripts): land fixture foundation (#2)",
+            "headRefName": "fixture-foundation"
+          }
+        ],
+        "issueCount": 1,
+        "prCount": 1
+      },
+      "flowPackMissingTaxonomy": {
+        "issues": [
+          {
+            "number": 1,
+            "title": "feat(workflow): adopt fixtureverse delivery system",
+            "missing": [
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 3,
+            "title": "feat(workflow): epic with short fan-out",
+            "missing": [
+              "phase:",
+              "area:"
+            ]
+          }
+        ],
+        "prs": [
+          {
+            "number": 12,
+            "title": "docs(claude-docs): document fixtures (#5)",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          },
+          {
+            "number": 13,
+            "title": "feat(scripts): wip follow-up",
+            "missing": [
+              "type:",
+              "phase:",
+              "area:"
+            ]
+          }
+        ],
+        "issueCount": 2,
+        "prCount": 2
+      }
+    },
+    "runNoise": {
+      "cancelledSuperseded": 1,
+      "cancelledNotSuperseded": 1,
+      "skippedSuperseded": 1,
+      "skippedNotSuperseded": 1,
+      "notSupersededExamples": [
+        {
+          "workflow": "fpat-project-sync",
+          "id": 104,
+          "event": "pull_request",
+          "createdAt": "2026-06-02T09:00:00Z",
+          "conclusion": "cancelled"
+        },
+        {
+          "workflow": "fpat-project-sync",
+          "id": 105,
+          "event": "pull_request",
+          "createdAt": "2026-06-01T08:00:00Z",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    "gateFalseNegatives": {
+      "mergedBranchNamingViolations": 1,
+      "mergedLinkageViolations": 2,
+      "mainCommitFormatViolations": 1,
+      "note": "Each count is contract-violating work that merged to main despite the existing gates (fpat-validate et al.) — i.e. false negatives of the current automation, sourced from the planning-accuracy report. Includes pre-FPAT-era items; see that report for the lists."
+    }
+  },
+  "findings": [
+    "Label coverage: 1 FPAT-looking issues + 1 FPAT-looking PRs lack the flow-pack label (heuristic candidates).",
+    "Taxonomy gaps on flow-pack items: 2 issues + 2 PRs missing type:/phase:/area: labels.",
+    "Run noise: cancelled 1 superseded vs 1 not; skipped 1 superseded vs 1 not.",
+    "Gate false negatives (merged despite contracts): branch 1, linkage 2, commit 1."
+  ],
+  "inferred": [
+    "Every fpatLookingMissingFlowPack candidate is heuristic — whether it SHOULD carry flow-pack needs human confirmation.",
+    "A superseded cancelled run is benign-LOOKING noise; supersession by workflow+event is an approximation of same-trigger re-runs."
+  ],
+  "proven": [
+    "Label coverage and gate effectiveness are quantifiable from durable GitHub state plus the stage-1 reports.",
+    "The 33↔37 baseline gap decomposes into noise vs missing-label vs definitional categories (see throughput-mismatch-analysis.md)."
+  ],
+  "notProven": [
+    "That any flagged FPAT-looking item should have carried flow-pack (heuristic, needs human confirmation).",
+    "Root cause of non-superseded cancellations/skips.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "low"
+}

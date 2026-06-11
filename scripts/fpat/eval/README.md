@@ -85,7 +85,18 @@ node scripts/fpat/eval/audit-signal-quality.mjs
 node scripts/fpat/eval/audit-board-consistency.mjs   # [--project 2] [--owner w7-mgfcode] [--limit 1000]
 ```
 
-## 5. How to interpret results
+## 5. Offline fixtures (no GitHub access)
+
+`__fixtures__/` holds a synthetic dataset that runs every audit deterministically
+offline: set `FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github` (or
+`.../github-degraded` for the board-consistency degraded path). Fixture-mode reports
+go to a temp dir (or `FPAT_EVAL_REPORT_DIR`) — never to real `docs/reports/`.
+`node scripts/fpat/eval/check-fixtures.mjs` runs all six fixture cases against the
+goldens in `__fixtures__/expected/` (`--update` regolds); it is a dev tool, not an
+audit and not a CI gate. **Fixture numbers are fiction** — never quote them as
+delivery data. Details: `__fixtures__/README.md`.
+
+## 6. How to interpret results
 
 - Counts/rates are **data, not verdicts** — a "low" compliance rate is a measured signal to
   discuss, never a failure.

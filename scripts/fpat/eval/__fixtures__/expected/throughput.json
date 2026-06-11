@@ -1,0 +1,73 @@
+{
+  "domain": "throughput",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "PROXY BOUNDARY: scope = all CLOSED issues carrying the flow-pack label, used as a Phase-1 proxy for \"Umbrella #1\". This is an explicit assumption, not a verified umbrella subtree."
+  },
+  "metrics": {
+    "closedIssues": 4,
+    "mergedPRs": 2,
+    "issueToPrRatio": 2,
+    "byTypeLabel": {
+      "umbrella": 1,
+      "epic": 2,
+      "sub-issue": 1
+    },
+    "issueCycleTimeHours": {
+      "count": 4,
+      "min": 12,
+      "max": 96,
+      "mean": 48,
+      "median": 42,
+      "p90": 60,
+      "unit": "hours"
+    },
+    "prMergeTimeHours": {
+      "count": 2,
+      "min": 6,
+      "max": 12,
+      "mean": 9,
+      "median": 9,
+      "p90": 6,
+      "unit": "hours"
+    },
+    "epicSubIssueCounts": [
+      {
+        "epic": 2,
+        "title": "feat(workflow): epic with exact fan-out",
+        "subIssueCount": 5
+      },
+      {
+        "epic": 3,
+        "title": "feat(workflow): epic with short fan-out",
+        "subIssueCount": 3
+      }
+    ],
+    "baselineRecompute": {
+      "priorClaimedClosedIssues": 33,
+      "priorClaimedMergedPRs": 21,
+      "recomputedClosedIssues": 4,
+      "recomputedMergedPRs": 2,
+      "matchesPriorClaim": false
+    }
+  },
+  "findings": [
+    "Recomputed 4 closed flow-pack issues and 2 merged flow-pack PRs.",
+    "Median issue cycle time 42h; median PR merge time 9h."
+  ],
+  "inferred": [
+    "The exact Umbrella #1 subtree boundary is NOT proven by this run; \"all-flow-pack\" is a proxy.",
+    "Per-epic sub-issue counts via hierarchy API (best-effort, may be incomplete)."
+  ],
+  "proven": [
+    "Delivery volume and timing for flow-pack work can be recomputed deterministically from GitHub state."
+  ],
+  "notProven": [
+    "Whether FPAT IMPROVED delivery — this is a single baseline (n=1); no comparison cohort exists.",
+    "Causes of any timing outliers; root causes are not established here.",
+    "The precise Umbrella #1 boundary (board/hierarchy scope intentionally not solved in Phase-1)."
+  ],
+  "confidence": "medium"
+}

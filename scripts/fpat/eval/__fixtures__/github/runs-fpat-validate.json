@@ -1,0 +1,26 @@
+[
+  {
+    "databaseId": 403,
+    "conclusion": "success",
+    "status": "completed",
+    "createdAt": "2026-06-02T12:00:00Z",
+    "updatedAt": "2026-06-02T12:04:00Z",
+    "event": "pull_request"
+  },
+  {
+    "databaseId": 402,
+    "conclusion": "failure",
+    "status": "completed",
+    "createdAt": "2026-06-01T09:30:00Z",
+    "updatedAt": "2026-06-01T09:33:00Z",
+    "event": "pull_request"
+  },
+  {
+    "databaseId": 401,
+    "conclusion": "success",
+    "status": "completed",
+    "createdAt": "2026-06-01T08:30:00Z",
+    "updatedAt": "2026-06-01T08:34:00Z",
+    "event": "pull_request"
+  }
+]

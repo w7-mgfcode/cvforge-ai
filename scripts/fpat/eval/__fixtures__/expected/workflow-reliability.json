@@ -1,0 +1,245 @@
+{
+  "domain": "workflow-reliability",
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Per-workflow run reliability for the four FPAT workflows (fpat-project-sync, fpat-blocked-sweep, fpat-rollup-gate, fpat-validate). Run history is non-stationary — only the asOf timestamp (and the optional --until window) makes a tally reproducible. The historical 56/14/30 figure is a stale point-in-time snapshot, never a benchmark."
+  },
+  "metrics": {
+    "until": "2026-06-08T23:59:59.999Z",
+    "limitPerWorkflow": 1000,
+    "possiblyTruncated": [],
+    "raw": {
+      "perWorkflow": {
+        "fpat-project-sync": {
+          "total": 8,
+          "success": 3,
+          "skipped": 2,
+          "cancelled": 2,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0.25,
+          "avgDurationHours": 0.05
+        },
+        "fpat-blocked-sweep": {
+          "total": 2,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.03
+        },
+        "fpat-rollup-gate": {
+          "total": 2,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.02
+        },
+        "fpat-validate": {
+          "total": 3,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.06
+        }
+      },
+      "aggregate": {
+        "total": 15,
+        "success": 9,
+        "skipped": 2,
+        "cancelled": 2,
+        "failure": 2,
+        "other": 0,
+        "cancelRate": 0.133,
+        "avgDurationHours": 0.05
+      }
+    },
+    "windowed": {
+      "perWorkflow": {
+        "fpat-project-sync": {
+          "total": 7,
+          "success": 2,
+          "skipped": 2,
+          "cancelled": 2,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0.286,
+          "avgDurationHours": 0.05
+        },
+        "fpat-blocked-sweep": {
+          "total": 2,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.03
+        },
+        "fpat-rollup-gate": {
+          "total": 2,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 0,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.02
+        },
+        "fpat-validate": {
+          "total": 3,
+          "success": 2,
+          "skipped": 0,
+          "cancelled": 0,
+          "failure": 1,
+          "other": 0,
+          "cancelRate": 0,
+          "avgDurationHours": 0.06
+        }
+      },
+      "aggregate": {
+        "total": 14,
+        "success": 8,
+        "skipped": 2,
+        "cancelled": 2,
+        "failure": 2,
+        "other": 0,
+        "cancelRate": 0.143,
+        "avgDurationHours": 0.04
+      }
+    },
+    "projectSyncCancellation": {
+      "cancelled": 2,
+      "total": 8,
+      "rate": 0.25
+    },
+    "runsTimeline": {
+      "fpat-project-sync": [
+        {
+          "id": 108,
+          "conclusion": "success",
+          "createdAt": "2026-06-09T12:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 107,
+          "conclusion": "failure",
+          "createdAt": "2026-06-03T10:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 104,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-02T09:00:00Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 103,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T10:05:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 102,
+          "conclusion": "cancelled",
+          "createdAt": "2026-06-01T10:01:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 101,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T10:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 106,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T09:00:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 105,
+          "conclusion": "skipped",
+          "createdAt": "2026-06-01T08:00:00Z",
+          "event": "pull_request"
+        }
+      ],
+      "fpat-blocked-sweep": [
+        {
+          "id": 202,
+          "conclusion": "success",
+          "createdAt": "2026-06-08T07:17:00Z",
+          "event": "schedule"
+        },
+        {
+          "id": 201,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T07:17:00Z",
+          "event": "schedule"
+        }
+      ],
+      "fpat-rollup-gate": [
+        {
+          "id": 302,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:30:00Z",
+          "event": "issues"
+        },
+        {
+          "id": 301,
+          "conclusion": "success",
+          "createdAt": "2026-06-04T22:28:00Z",
+          "event": "issues"
+        }
+      ],
+      "fpat-validate": [
+        {
+          "id": 403,
+          "conclusion": "success",
+          "createdAt": "2026-06-02T12:00:00Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 402,
+          "conclusion": "failure",
+          "createdAt": "2026-06-01T09:30:00Z",
+          "event": "pull_request"
+        },
+        {
+          "id": 401,
+          "conclusion": "success",
+          "createdAt": "2026-06-01T08:30:00Z",
+          "event": "pull_request"
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Raw aggregate (asOf <ts>): 9 success / 2 skipped / 2 cancelled / 2 failure (total 15).",
+    "project-sync cancellation rate: 2/8 = 0.25.",
+    "Cancellations outside fpat-project-sync: 0.",
+    "Windowed (createdAt <= <ts>): 8 success / 2 skipped / 2 cancelled / 2 failure (total 14)."
+  ],
+  "inferred": [
+    "Cancellation concentration on fpat-project-sync is consistent with the concurrency hypothesis; root cause is to be confirmed via run event/overlap analysis (audit C), not assumed here."
+  ],
+  "proven": [
+    "Per-workflow reliability tallies are reproducible from GitHub run history given a pinned asOf/--until."
+  ],
+  "notProven": [
+    "Root cause of cancellations (concurrency supported but not confirmed here).",
+    "Whether cancellations are harmful vs benign superseded re-runs (decomposed in the signal-quality audit).",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
