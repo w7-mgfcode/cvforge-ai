@@ -1,0 +1,770 @@
+{
+  "domain": "board-consistency",
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-11T18:32:10.242Z",
+  "scope": {
+    "label": "flow-pack",
+    "umbrella": "all-flow-pack",
+    "note": "Domain-4 board↔issue consistency for Projects v2 board #2 (w7-mgfcode). Read-only; raw metrics, never a gate. Membership is defined by the CURRENT flow-pack label (the 2026-06-11 no-mutation decision on historical gaps is honored by construction). null board blocks mean \"not measured\", never \"zero problems\"."
+  },
+  "inputs": [
+    "gh project view 2 --owner w7-mgfcode --format json (probe)",
+    "gh project field-list 2 --owner w7-mgfcode --format json",
+    "gh project item-list 2 --owner w7-mgfcode --format json --limit 1000",
+    "gh issue list --state all --json number,title,state,labels",
+    "gh pr list --state all --json number,title,state,labels,headRefName,body,createdAt,mergedAt"
+  ],
+  "metrics": {
+    "access": {
+      "tokenSource": "gh-auth",
+      "degraded": false,
+      "probeError": null
+    },
+    "board": {
+      "number": 2,
+      "title": "CVForge AI — WorkflowCV Studio Roadmap",
+      "owner": "w7-mgfcode",
+      "visibility": "public",
+      "itemCount": 81,
+      "possiblyTruncated": false,
+      "url": "https://github.com/users/w7-mgfcode/projects/2"
+    },
+    "fields": {
+      "present": [
+        "Title",
+        "Assignees",
+        "Status",
+        "Labels",
+        "Linked pull requests",
+        "Milestone",
+        "Repository",
+        "Reviewers",
+        "Parent issue",
+        "Sub-issues progress",
+        "Created",
+        "Updated",
+        "Closed",
+        "Type",
+        "Phase",
+        "Area",
+        "Priority",
+        "Score",
+        "Estimate"
+      ],
+      "missing": [],
+      "optionDrift": []
+    },
+    "membership": {
+      "flowPackTotal": 83,
+      "onBoard": 81,
+      "flowPackNotOnBoard": [
+        {
+          "number": 23,
+          "title": "feat(github-workflows): enforce rollup gate on epic/umbrella close (#17)",
+          "kind": "PullRequest"
+        },
+        {
+          "number": 22,
+          "title": "feat(github-projects): delivery metadata hygiene — templates, CODEOWNERS, PR template, backfill (#21)",
+          "kind": "PullRequest"
+        }
+      ],
+      "boardItemsNotFlowPack": []
+    },
+    "labelFieldSync": {
+      "itemsChecked": 81,
+      "byKind": {
+        "Issue": {
+          "itemsChecked": 49,
+          "mismatchCount": 0,
+          "missingFieldValueCount": 0
+        },
+        "PullRequest": {
+          "itemsChecked": 32,
+          "mismatchCount": 0,
+          "missingFieldValueCount": 79
+        }
+      },
+      "mismatches": [],
+      "missingFieldValues": [
+        {
+          "number": 26,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 26,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 26,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:github-workflows"
+        },
+        {
+          "number": 27,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 27,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 27,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:github-workflows"
+        },
+        {
+          "number": 28,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 28,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 28,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 36,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 36,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 36,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-commands"
+        },
+        {
+          "number": 37,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 37,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 37,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 38,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 38,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 38,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-skills"
+        },
+        {
+          "number": 39,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 39,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 39,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 40,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 40,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 40,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 46,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 46,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 46,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-commands"
+        },
+        {
+          "number": 47,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 47,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 47,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-skills"
+        },
+        {
+          "number": 48,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 48,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 48,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 49,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 49,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 49,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 50,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 50,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 50,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 56,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 56,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 56,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 57,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 57,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 57,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 58,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 58,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 58,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 59,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 59,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 59,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 60,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 60,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:release"
+        },
+        {
+          "number": 60,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:github-projects"
+        },
+        {
+          "number": 61,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:claude-docs"
+        },
+        {
+          "number": 81,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 81,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 81,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 82,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 82,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 82,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 83,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 83,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 83,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 84,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 84,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 84,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 85,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 85,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:foundation"
+        },
+        {
+          "number": 85,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 91,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 91,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 91,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 92,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 92,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 92,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        },
+        {
+          "number": 93,
+          "kind": "PullRequest",
+          "dimension": "type",
+          "label": "type:sub-issue"
+        },
+        {
+          "number": 93,
+          "kind": "PullRequest",
+          "dimension": "phase",
+          "label": "phase:parallel"
+        },
+        {
+          "number": 93,
+          "kind": "PullRequest",
+          "dimension": "area",
+          "label": "area:scripts"
+        }
+      ]
+    },
+    "statusCoherence": {
+      "itemsChecked": 81,
+      "closedNotDone": [
+        {
+          "number": 26,
+          "title": "feat(github-workflows): wire fpat-blocked-sweep.yml (#18)",
+          "status": null
+        },
+        {
+          "number": 27,
+          "title": "feat(github-workflows): wire fpat-project-sync.yml (#16)",
+          "status": null
+        },
+        {
+          "number": 28,
+          "title": "docs(claude-docs): board name/visibility, automation, views checklist (#19)",
+          "status": null
+        },
+        {
+          "number": 36,
+          "title": "feat(claude-commands): lock /fpat-plan-issue contract (7-step + 8-section) (#31)",
+          "status": null
+        },
+        {
+          "number": 37,
+          "title": "docs(claude-docs): package + subtask templates + critic-checklist (#32)",
+          "status": null
+        },
+        {
+          "number": 38,
+          "title": "feat(claude-skills): flow-pack-agent-team-scoring rubric skill (#33)",
+          "status": null
+        },
+        {
+          "number": 39,
+          "title": "test(scripts): schema-check package = 5 subtasks x 8 sections (#34)",
+          "status": null
+        },
+        {
+          "number": 40,
+          "title": "chore(github-projects): gated package to sub-issue creation (#35)",
+          "status": null
+        },
+        {
+          "number": 46,
+          "title": "feat(claude-commands): lock /fpat-continuation contract (#41)",
+          "status": null
+        },
+        {
+          "number": 47,
+          "title": "feat(claude-skills): cross-link scoring skill <-> /fpat-continuation (#42)",
+          "status": null
+        },
+        {
+          "number": 48,
+          "title": "docs(claude-docs): V2 ship-list + defer-list templates (#43)",
+          "status": null
+        },
+        {
+          "number": 49,
+          "title": "test(scripts): negotiation-band (36-39) surfaces for human decision (#44)",
+          "status": null
+        },
+        {
+          "number": 50,
+          "title": "chore(github-projects): gate approved-V2 feed into umbrella #1 ## Decomposition (#45)",
+          "status": null
+        },
+        {
+          "number": 56,
+          "title": "docs(claude-docs): release preflight — resolve /fpat-continuation drift (#51)",
+          "status": null
+        },
+        {
+          "number": 57,
+          "title": "test(scripts): preflight consistency guard wired into CI (#52)",
+          "status": null
+        },
+        {
+          "number": 58,
+          "title": "test(scripts): dogfood /studio A4 print-preview across the 3 templates (#53)",
+          "status": null
+        },
+        {
+          "number": 59,
+          "title": "docs(claude-docs): dogfood report artifact under dated path (#54)",
+          "status": null
+        },
+        {
+          "number": 60,
+          "title": "chore(github-projects): umbrella closeout verification checklist (#55)",
+          "status": null
+        },
+        {
+          "number": 61,
+          "title": "docs(claude-docs): FPAT umbrella #1 release archive note",
+          "status": null
+        },
+        {
+          "number": 65,
+          "title": "docs(claude-docs): package vendor-onboarding docs",
+          "status": null
+        },
+        {
+          "number": 66,
+          "title": "chore(fpat): add board-consistency audit",
+          "status": null
+        },
+        {
+          "number": 67,
+          "title": "chore(fpat): add offline eval fixtures and checker",
+          "status": null
+        },
+        {
+          "number": 68,
+          "title": "chore(fpat): freeze Umbrella 2 cycle-0 baseline manifest",
+          "status": null
+        },
+        {
+          "number": 69,
+          "title": "feat(claude-commands): add FPAT umbrella planning command",
+          "status": null
+        },
+        {
+          "number": 81,
+          "title": "docs(scripts): metric catalog of the 5 eval domains with source paths (#76)",
+          "status": null
+        },
+        {
+          "number": 82,
+          "title": "feat(scripts): scorecard Zod schema module (lib/scorecard.mjs) (#77)",
+          "status": null
+        },
+        {
+          "number": 83,
+          "title": "feat(scripts): cycle-0 manifest conformance check (real artifact only) (#78)",
+          "status": null
+        },
+        {
+          "number": 84,
+          "title": "docs(scripts): schemaVersion + catalog lock-step contract (data-not-gates) (#79)",
+          "status": null
+        },
+        {
+          "number": 85,
+          "title": "chore(scripts): sync indexes + close E1 acceptance (#80)",
+          "status": null
+        },
+        {
+          "number": 91,
+          "title": "test(scripts): fixture PR-kind mismatch coverage for labelFieldSync (#86)",
+          "status": null
+        },
+        {
+          "number": 92,
+          "title": "feat(scripts): per-kind labelFieldSync split (audit + schema + catalog lock-step) (#87)",
+          "status": null
+        },
+        {
+          "number": 93,
+          "title": "test(scripts): regold board-consistency goldens for the per-kind split (#88)",
+          "status": null
+        }
+      ],
+      "doneButOpen": []
+    },
+    "scoreGate": {
+      "epicsChecked": 10,
+      "missingScore": [
+        {
+          "number": 2,
+          "title": "feat(workflow): fpat foundation — namespace, conventions, prime, CI"
+        },
+        {
+          "number": 3,
+          "title": "feat(workflow): decomposition + Projects v2 automation"
+        }
+      ],
+      "belowGateOffBacklog": []
+    }
+  },
+  "findings": [
+    "Board \"CVForge AI — WorkflowCV Studio Roadmap\" (#2, public): 81 items.",
+    "Fields: 0 missing, 0 with option drift.",
+    "Membership: 81/83 flow-pack items on board; 2 missing; 0 board items without flow-pack.",
+    "Label↔field sync: 0 mismatches, 79 labeled-but-unset field values across 81 items (Issue: 0 mismatched, 0 unset, 49 checked; PullRequest: 0 mismatched, 79 unset, 32 checked).",
+    "Status coherence: 32 closed-not-Done, 0 Done-but-open (legal under one-directional sync; measured).",
+    "Score gate signal: 2/10 epics missing Score; 0 below 40 while off Backlog."
+  ],
+  "inferred": [
+    "Labeled-but-unset field values predate fpat-project-sync.yml or missed its triggers — candidates for a manual workflow_dispatch re-sync, not auto-fixed here.",
+    "PullRequest-side sync gaps are structural, not re-sync candidates — fpat-project-sync.yml triggers on issue events only; the per-kind counts are the data for the parked PR-event-sync decision (measured here, decided nowhere).",
+    "closed-not-Done items reflect the deliberate one-directional sync (issue state never drives Status automatically)."
+  ],
+  "proven": [
+    "Board metadata, field catalog, and item field values are durable Projects v2 state readable via gh project (read-only).",
+    "Membership and sync findings are exact set comparisons, not heuristics."
+  ],
+  "notProven": [
+    "WHY any field value drifted (sync-trigger history is non-stationary; only current state is read).",
+    "That closed-not-Done items are errors — one-directional sync makes manual Status updates the designed mechanism.",
+    "Whether FPAT IMPROVED delivery — single baseline (n=1), no comparison cohort."
+  ],
+  "confidence": "medium"
+}
