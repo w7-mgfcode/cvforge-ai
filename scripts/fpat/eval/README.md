@@ -109,10 +109,16 @@ node scripts/fpat/eval/check-scorecard.mjs           # [--manifest <path>]
 offline: set `FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github` (or
 `.../github-degraded` for the board-consistency degraded path). Fixture-mode reports
 go to a temp dir (or `FPAT_EVAL_REPORT_DIR`) — never to real `docs/reports/`.
-`node scripts/fpat/eval/check-fixtures.mjs` runs all seven fixture cases against the
-goldens in `__fixtures__/expected/` (`--update` regolds); it is a dev tool, not an
-audit and not a CI gate. **Fixture numbers are fiction** — never quote them as
-delivery data. Details: `__fixtures__/README.md`.
+`node scripts/fpat/eval/check-fixtures.mjs` runs all twelve fixture cases — 7 audit
+runs plus 5 scorecard-conformance cases (#74) — against the goldens in
+`__fixtures__/expected/` (`--update` regolds); it is a dev tool, not an audit and
+not a CI gate. The scorecard cases drive `check-scorecard.mjs --manifest` against
+`__fixtures__/scorecard/`: 2 valid manifests must be ACCEPTED (exit 0 even on
+deliberately ugly metric values — the contract carries no thresholds, so no number
+can fail it) and 3 invalid manifests must be REJECTED on pinned Zod issue paths
+(non-zero only on contract/tooling error, never on metric values). **Fixture
+numbers are fiction** — never quote them as delivery data. Details:
+`__fixtures__/README.md`.
 
 ## 6. How to interpret results
 

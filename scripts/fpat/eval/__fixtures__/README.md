@@ -29,7 +29,7 @@ reports as real FPAT delivery data (the official baseline lives in
 | `github/git-log-subjects.txt` | planning-accuracy commit-format |
 | `github/project-{view,fields,items}.json` | board-consistency (live path) |
 | `github-degraded/` | board-consistency degraded path (intentionally empty — see its README) |
-| `scorecard/valid-{full,minimal}.json` | `check-scorecard.mjs --manifest` (scorecard contract cases; check-fixtures wiring: #108) |
+| `scorecard/*.json` | `check-scorecard.mjs --manifest` via the check-fixtures scorecard cases (2 valid + 3 invalid; #107–#109) |
 | `expected/*.json` | goldens for `check-fixtures.mjs`, stored **normalized** |
 
 ## Deliberate drift baked into the dataset
@@ -58,10 +58,19 @@ data (the only real manifest is `docs/reports/2026-06-11/baseline-manifest.json`
 - `valid-minimal.json` — only the always-required blocks; the `notMeasured` blocks
   are a mix of explicit `null` and absent, both meaning "not measured at baseline",
   never "zero problems".
+- `invalid-{schema-version,missing-baseline,out-of-range-rate}.json` — INVALID ON
+  PURPOSE, each failing on exactly one contract point (wrong `schemaVersion`
+  literal; missing `officialBaseline`, the only always-required block;
+  `cancelRate: 1.5` outside `[0,1]`). `check-scorecard.mjs` must exit 1 on each.
+  Range bounds are CONTRACT, not thresholds: 0.94 is legal data, 1.5 is not a rate.
+
+These five mirror the epic #74 acceptance criteria: the suite is a **dev tool,
+never a CI gate**, and exits 0 on "bad" metric values — non-zero means a
+contract/tooling error only, never a measured number.
 
 ```bash
 node scripts/fpat/eval/check-scorecard.mjs --manifest scripts/fpat/eval/__fixtures__/scorecard/valid-full.json
-node scripts/fpat/eval/check-scorecard.mjs --manifest scripts/fpat/eval/__fixtures__/scorecard/valid-minimal.json
+node scripts/fpat/eval/check-scorecard.mjs --manifest scripts/fpat/eval/__fixtures__/scorecard/invalid-out-of-range-rate.json  # exit 1
 ```
 
 ## Commands
@@ -75,7 +84,7 @@ FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github \
 FPAT_EVAL_FIXTURES=scripts/fpat/eval/__fixtures__/github-degraded \
   node scripts/fpat/eval/audit-board-consistency.mjs
 
-# All seven fixture runs vs goldens (dev tool, exit 1 on mismatch):
+# All twelve fixture runs vs goldens — 7 audit + 5 scorecard (dev tool, exit 1 on mismatch):
 node scripts/fpat/eval/check-fixtures.mjs
 
 # Regold after an INTENTIONAL audit change (inspect the diff before committing):
@@ -89,3 +98,9 @@ node scripts/fpat/eval/check-fixtures.mjs --update
 `metrics.sources`, and ISO timestamps inside `findings` strings
 (workflow-reliability embeds `asOf` there). Goldens are stored already-normalized,
 so they are comparison artifacts, not schema-complete reports.
+
+Scorecard-case goldens capture `{exitCode, stdout, stderr}` with absolute fixture
+paths replaced by `<fixtures>` and Zod issue messages by `<zod-message>` — issue
+PATHS are the stable contract; message wording may drift across zod upgrades
+(`^4.4.3` is semver-ranged). `--update` refuses an exit-code flip, so a regold can
+never silently turn an accept case into a reject case (or vice versa).
