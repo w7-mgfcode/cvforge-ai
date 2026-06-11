@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "stdout": [
+    "[check-scorecard] OK — <fixtures>/scorecard/valid-full.json conforms (domain: baseline-manifest, schemaVersion: 1.0.0, metric blocks: 10)"
+  ],
+  "stderr": []
+}
