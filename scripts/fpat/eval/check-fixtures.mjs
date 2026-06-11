@@ -58,6 +58,13 @@ const CASES = [
   { name: 'signal-quality', script: 'audit-signal-quality.mjs', args: [] },
   { name: 'board-consistency', script: 'audit-board-consistency.mjs', args: [] },
   {
+    // One-time E3 analysis (#73), not a sixth eval domain — pinned to the same
+    // cutoff as workflow-reliability so the windowing branch is exercised.
+    name: 'project-sync-cancellation',
+    script: 'analyze-project-sync-cancellation.mjs',
+    args: ['--until', '2026-06-08'],
+  },
+  {
     name: 'board-consistency.degraded',
     script: 'audit-board-consistency.mjs',
     args: [],
