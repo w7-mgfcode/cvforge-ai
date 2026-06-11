@@ -23,7 +23,7 @@ flowchart TD
 
 ## Summary
 
-Maps one multi-week initiative into a phased, GitHub-native issue tree. Foundation is the single blocking gate; Parallel epics run concurrently after it; Release is the final close gate. Sub-issues are the only executable units — all commits and PRs close a sub-issue, never an epic directly.
+Maps one multi-week initiative into a phased, GitHub-native issue tree. Foundation is the single blocking gate; Parallel epics run concurrently after it; Release is the final close gate. Sub-issues are the only executable units — all commits and PRs close a sub-issue, never an epic directly. The umbrella + epic layer is proposed by `/fpat-plan-umbrella` (read-only, approval-gated package); each epic's five sub-issues come later from `/fpat-plan-issue <epic-number>` — never all 25 at once.
 
 ---
 

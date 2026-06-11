@@ -32,6 +32,20 @@ For CVForge AI, the first dogfood umbrella is `feat(workflow): adopt flow-pack +
 - Parallel: independent epics that start after Foundation.
 - Release: one release gate that closes only after Parallel epics close.
 
+## Planning Command Flow
+
+The hierarchy is planned and created top-down, one approval-gated layer at a time:
+
+1. `/fpat-continuation "<initiative>"` — scores what ships (read-only).
+2. `/fpat-plan-umbrella "<approved initiative>"` — proposes 1 umbrella + 5 epics (1 Foundation,
+   3 Parallel, 1 Release) as a read-only creation package
+   (`.claude/commands/fpat-plan-umbrella.md`).
+3. User approval — create the umbrella + epic issues only, never sub-issues.
+4. `/fpat-plan-issue <epic-number>` — decomposes one epic into exactly five sub-issues, epic by
+   epic, each behind its own approval.
+
+The full `1 + 5 + 25` tree is never created in one step.
+
 ## Sub-Issue Contract
 
 Sub-issues are executable units with:
