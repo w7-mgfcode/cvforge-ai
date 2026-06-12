@@ -55,7 +55,7 @@ export function ExportImportControls({
         <div
           role="alert"
           data-import-error={importError.kind}
-          className="flex items-center space-x-1.5 max-w-sm px-2 py-1 bg-red-950/20 border border-red-900/60 rounded text-[11px] text-red-300 print:hidden"
+          className="flex min-w-0 items-center space-x-1.5 max-w-sm px-2 py-1 bg-red-950/20 border border-red-900/60 rounded text-[11px] text-red-300 print:hidden"
         >
           <AlertCircle className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
           <span className="truncate font-sans" title={importError.message}>
