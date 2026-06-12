@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { sampleCV } from '@/data/sample-cv';
+import { loadDocument } from '@/lib/storage';
 import { CVDocument, CVContent, CVDesignConfig } from '@/schemas/cv.schema';
 import { renderActiveTemplate } from '@/lib/template-engine';
 import { LivePreviewCanvas } from '@/components/canvas/LivePreviewCanvas';
@@ -31,7 +32,24 @@ type CopilotUpdateValue = string | CVContent['employmentTimeline'];
 export default function StudioPage() {
   // Centralized CVDocument State
   const [cvData, setCvData] = useState<CVDocument>(sampleCV);
-  
+
+  // Persistence hydration flag — saves must never run before this is true
+  // (a pre-hydration save would clobber a stored document with sampleCV).
+  // Read by the autosave gate landing in #141; the disable goes with it.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [hydrated, setHydrated] = useState(false);
+
+  // One-shot post-mount hydration. The page is statically pre-rendered with
+  // sampleCV (output: 'export'), so storage is read only inside this effect —
+  // a render-time read would cause a hydration mismatch.
+  useEffect(() => {
+    const result = loadDocument();
+    if (result.source === 'storage') {
+      setCvData(result.doc);
+    }
+    setHydrated(true);
+  }, []);
+
   // Navigation States
   const [activeWorkflow, setActiveWorkflow] = useState<'editor' | 'lab' | 'hud'>('editor');
   const [editorTab, setEditorTab] = useState<'identity' | 'timeline'>('identity');
