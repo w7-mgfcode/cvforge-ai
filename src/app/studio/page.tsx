@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { sampleCV } from '@/data/sample-cv';
-import { loadDocument } from '@/lib/storage';
+import { loadDocument, saveDocument } from '@/lib/storage';
 import { CVDocument, CVContent, CVDesignConfig } from '@/schemas/cv.schema';
 import { renderActiveTemplate } from '@/lib/template-engine';
 import { LivePreviewCanvas } from '@/components/canvas/LivePreviewCanvas';
@@ -29,14 +29,16 @@ import Link from 'next/link';
 type CopilotUpdateField = keyof CVContent['candidateIdentity'] | 'employmentTimeline';
 type CopilotUpdateValue = string | CVContent['employmentTimeline'];
 
+// Mid-band of the researched 500ms–1s window (epic #131). Coalesces
+// continuous typing into at most one storage write per window.
+const AUTOSAVE_DEBOUNCE_MS = 750;
+
 export default function StudioPage() {
   // Centralized CVDocument State
   const [cvData, setCvData] = useState<CVDocument>(sampleCV);
 
   // Persistence hydration flag — saves must never run before this is true
-  // (a pre-hydration save would clobber a stored document with sampleCV).
-  // Read by the autosave gate landing in #141; the disable goes with it.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // (a pre-hydration save would clobber a stored document with sampleCV)
   const [hydrated, setHydrated] = useState(false);
 
   // One-shot post-mount hydration. The page is statically pre-rendered with
@@ -49,6 +51,20 @@ export default function StudioPage() {
     }
     setHydrated(true);
   }, []);
+
+  // Debounced autosave: persist cvData one debounce window after the last
+  // change, gated by hydration. Cleanup cancels the pending timer on every
+  // cvData change and on unmount, so continuous typing coalesces into at
+  // most one write per window and no write outlives the page.
+  useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      saveDocument(cvData);
+    }, AUTOSAVE_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [cvData, hydrated]);
 
   // Navigation States
   const [activeWorkflow, setActiveWorkflow] = useState<'editor' | 'lab' | 'hud'>('editor');
