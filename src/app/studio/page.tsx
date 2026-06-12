@@ -15,6 +15,7 @@ import { ParserGraphView } from '@/components/template-lab/ParserGraphView';
 import { SaveStateBadge } from '@/components/persistence/SaveStateBadge';
 import { ExportImportControls } from '@/components/persistence/ExportImportControls';
 import { ResetToSampleControl } from '@/components/persistence/ResetToSampleControl';
+import { StorageWarningBanner } from '@/components/persistence/StorageWarningBanner';
 import { auditDocumentData } from '@/lib/print-validator';
 import { 
   Layout, 
@@ -488,6 +489,8 @@ export default function StudioPage() {
         )}
 
       </div>
+
+      <StorageWarningBanner />
     </div>
   );
 }
