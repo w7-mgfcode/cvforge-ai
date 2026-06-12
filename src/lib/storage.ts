@@ -97,6 +97,58 @@ function getStorage(): Storage | null {
 }
 
 /**
+ * Listener registry + last published state. Plain data at module scope —
+ * no storage access happens until a public function runs.
+ */
+const saveStateListeners = new Set<SaveStateListener>();
+let currentSaveState: SaveState = 'idle';
+
+/** Cached availability verdict: null until the first probe runs. */
+let storageAvailability: boolean | null = null;
+
+function publishSaveState(state: SaveState): void {
+  currentSaveState = state;
+  // forEach, not for...of — the project tsconfig targets ES5 and Set
+  // iteration would require downlevelIteration.
+  saveStateListeners.forEach((listener) => {
+    try {
+      listener(state);
+    } catch {
+      // A throwing listener must never break the save/clear path.
+    }
+  });
+}
+
+/**
+ * One-time availability probe (round-trip write/remove — private mode can
+ * expose localStorage with a zero quota, where only a real write fails).
+ * On first failure the module flips into flagged no-op mode and publishes
+ * `unavailable`. Runs inside functions only, never at module scope.
+ */
+function probeStorageAvailability(): boolean {
+  if (storageAvailability !== null) {
+    return storageAvailability;
+  }
+  const storage = getStorage();
+  if (storage) {
+    try {
+      const probeKey = `${STORAGE_KEY}.probe`;
+      storage.setItem(probeKey, '1');
+      storage.removeItem(probeKey);
+      storageAvailability = true;
+    } catch {
+      storageAvailability = false;
+    }
+  } else {
+    storageAvailability = false;
+  }
+  if (!storageAvailability) {
+    publishSaveState('unavailable');
+  }
+  return storageAvailability;
+}
+
+/**
  * Preserve a payload that failed validation under {@link BACKUP_KEY} so the
  * fallback never silently destroys user data. Best-effort: a failing backup
  * write (e.g. quota) must not block the fallback itself.
@@ -120,7 +172,7 @@ function preserveCorruptPayload(storage: Storage, raw: string): void {
  */
 export function loadDocument(): LoadResult {
   const storage = getStorage();
-  if (!storage) {
+  if (!probeStorageAvailability() || !storage) {
     return { doc: sampleCV, source: 'fallback', storageAvailable: false };
   }
 
@@ -194,7 +246,7 @@ function readStoredSavedAt(storage: Storage): string | null {
  */
 export function saveDocument(doc: CVDocument): SaveResult {
   const storage = getStorage();
-  if (!storage) {
+  if (!probeStorageAvailability() || !storage) {
     return { status: 'unavailable' };
   }
 
@@ -203,17 +255,21 @@ export function saveDocument(doc: CVDocument): SaveResult {
   if (storedSavedAt !== null) {
     const storedMs = Date.parse(storedSavedAt);
     if (!Number.isNaN(storedMs) && storedMs > Date.parse(savedAt)) {
+      // Not a failure — the stored document is simply newer. No transition.
       return { status: 'skipped-newer', storedSavedAt };
     }
   }
 
+  publishSaveState('saving');
   const envelope: StorageEnvelope = { schemaVersion: SCHEMA_VERSION, savedAt, doc };
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(envelope));
   } catch {
     // QuotaExceededError shapes differ across browsers — catch broadly.
+    publishSaveState('error');
     return { status: 'unavailable' };
   }
+  publishSaveState('saved');
   return { status: 'saved', savedAt };
 }
 
@@ -223,7 +279,7 @@ export function saveDocument(doc: CVDocument): SaveResult {
  */
 export function clearDocument(): void {
   const storage = getStorage();
-  if (!storage) {
+  if (!probeStorageAvailability() || !storage) {
     return;
   }
   try {
@@ -236,15 +292,28 @@ export function clearDocument(): void {
   } catch {
     // Blocked storage — nothing to clear.
   }
+  publishSaveState('idle');
 }
 
 /**
- * Subscribe to {@link SaveState} transitions emitted by the save/clear paths.
+ * Subscribe to {@link SaveState} transitions emitted by the save/clear paths
+ * and the availability probe.
+ *
+ * The listener is invoked synchronously with the current state on subscribe
+ * (so consumers need no separate getter), then on every transition. Returns
+ * an unsubscribe function; after it runs the listener is never called again.
  *
  * This is the only seam UI save-status surfaces may bind to — consumers must
  * never reach into this module's internals.
  */
 export function subscribeSaveState(listener: SaveStateListener): Unsubscribe {
-  void listener;
-  throw new Error('Not implemented — lands with #138.');
+  saveStateListeners.add(listener);
+  try {
+    listener(currentSaveState);
+  } catch {
+    // A throwing listener must not break subscription setup.
+  }
+  return () => {
+    saveStateListeners.delete(listener);
+  };
 }
