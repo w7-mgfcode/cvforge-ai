@@ -14,6 +14,7 @@ import { CopilotDiffPanel } from '@/components/ai-assistant/CopilotDiffPanel';
 import { ParserGraphView } from '@/components/template-lab/ParserGraphView';
 import { SaveStateBadge } from '@/components/persistence/SaveStateBadge';
 import { ExportImportControls } from '@/components/persistence/ExportImportControls';
+import { ResetToSampleControl } from '@/components/persistence/ResetToSampleControl';
 import { auditDocumentData } from '@/lib/print-validator';
 import { 
   Layout, 
@@ -338,6 +339,7 @@ export default function StudioPage() {
                   <span>Dimensions: 210mm x 297mm</span>
                 </div>
                 <div className="flex items-center space-x-2">
+                  <ResetToSampleControl onReset={() => setCvData(sampleCV)} />
                   <ExportImportControls onExport={handleExport} onImportFile={handleImportFile} />
                   <button
                     onClick={() => window.print()}
