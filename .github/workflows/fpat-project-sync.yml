@@ -1,28 +1,39 @@
 name: FPAT Project Sync
 
-# Syncs an FPAT issue's taxonomy LABELS onto its CVForge AI Delivery board fields:
+# Syncs an FPAT issue's or pull request's taxonomy LABELS onto its CVForge AI Delivery
+# board fields:
 #   type:*  -> Type      phase:* -> Phase      area:*  -> Area
-# One-directional (board-spec.md V1): issue labels drive board fields, never the reverse.
-# It never closes or edits issues, and deliberately does NOT touch Status or Score
-# (Status transitions are out of scope for #16). Field and option IDs are resolved at
+# One-directional (board-spec.md V1): issue/PR labels drive board fields, never the reverse.
+# It never closes or edits issues/PRs, and deliberately does NOT touch Status, Score,
+# Priority, or Estimate (Status transitions are out of scope for #16; see also the
+# 2026-06-12 PR-event extension decision, #127). Field and option IDs are resolved at
 # runtime from the live project by name, so there are no hardcoded "magic" option IDs.
 
 on:
   issues:
     types: [opened, labeled, unlabeled, reopened]
+  # PR-side extension (#127): native auto-add already puts `flow-pack` PRs on the board,
+  # but only issue events synced fields, leaving PR items field-less (the structural gap
+  # measured by audit-board-consistency.mjs byKind). Same one-directional, label-driven
+  # contract as issues. Fork PRs lack the FPAT_PROJECT_TOKEN secret and fail the explicit
+  # token guard below — acceptable for this single-maintainer repo.
+  pull_request:
+    types: [opened, labeled, unlabeled, reopened]
   workflow_dispatch:
     inputs:
       issue_number:
-        description: "Issue number to (re)sync onto the board."
+        description: "Issue or PR number to (re)sync onto the board."
         required: true
 
 permissions:
   contents: read
-  issues: read # default GITHUB_TOKEN reads the issue's labels; the PAT writes the board.
+  issues: read # default GITHUB_TOKEN reads issue/PR labels; the PAT writes the board.
+  pull-requests: read
 
 concurrency:
-  # Serialize per issue so rapid label changes cannot race on the same board item.
-  group: fpat-project-sync-${{ github.event.issue.number || github.event.inputs.issue_number }}
+  # Serialize per issue/PR so rapid label changes cannot race on the same board item.
+  # Issue and PR numbers share one space in a repo, so the number alone is a safe key.
+  group: fpat-project-sync-${{ github.event.issue.number || github.event.pull_request.number || github.event.inputs.issue_number }}
   cancel-in-progress: false
 
 jobs:
@@ -34,7 +45,7 @@ jobs:
         env:
           FPAT_PROJECT_TOKEN: ${{ secrets.FPAT_PROJECT_TOKEN }}
         with:
-          # `github` (default token) reads the issue; a separate PAT-authenticated client writes
+          # `github` (default token) reads the issue/PR; a separate PAT-authenticated client writes
           # the board, because Projects v2 is unreadable/unwritable by the default GITHUB_TOKEN.
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -85,25 +96,33 @@ jobs:
             const TYPE_NAMES = { umbrella: 'Umbrella', epic: 'Epic', 'sub-issue': 'Sub-issue' };
             const PHASE_NAMES = { foundation: 'Foundation', parallel: 'Parallel', release: 'Release' };
 
+            // Issues and PRs share one number space; either event shape (or the dispatch
+            // input, which accepts both kinds) resolves to a single number.
             const issueNumber = Number(
-              context.payload.issue?.number ?? context.payload.inputs?.issue_number
+              context.payload.issue?.number ??
+                context.payload.pull_request?.number ??
+                context.payload.inputs?.issue_number
             );
             if (!issueNumber) {
-              core.setFailed('No issue number on the event payload or dispatch input.');
+              core.setFailed('No issue/PR number on the event payload or dispatch input.');
               return;
             }
 
-            // Re-fetch the issue's current labels + node id (default token). Re-reading instead of
-            // trusting a possibly-stale event payload makes concurrent label edits converge.
+            // Re-fetch current labels + node id (default token). Re-reading instead of trusting
+            // a possibly-stale event payload makes concurrent label edits converge. The issues
+            // endpoint serves BOTH kinds: for a PR number it returns the PullRequest node id
+            // (PR_…, exactly what addProjectV2ItemById needs) plus the shared labels, so issues
+            // and PRs use one identical read+map+write path with no duplicated logic.
             const { data: issue } = await github.rest.issues.get({
               owner: OWNER, repo: REPO, issue_number: issueNumber,
             });
+            const kind = issue.pull_request ? 'PR' : 'issue';
             const labels = (issue.labels ?? []).map((l) => (typeof l === 'string' ? l : l.name));
             const contentId = issue.node_id;
 
-            // One-directional board scope: only sync issues that belong on the FPAT board.
+            // One-directional board scope: only sync issues/PRs that belong on the FPAT board.
             if (!labels.includes('flow-pack') && !labels.includes('agent-team')) {
-              core.info(`#${issueNumber} has no flow-pack/agent-team label; not a board issue. Skipping.`);
+              core.info(`${kind} #${issueNumber} has no flow-pack/agent-team label; not a board item. Skipping.`);
               return;
             }
 
@@ -153,8 +172,8 @@ jobs:
               return;
             }
 
-            // Ensure the issue is on the board. addProjectV2ItemById is idempotent: it returns the
-            // existing item when already present, so this satisfies "auto-added with fields
+            // Ensure the issue/PR is on the board. addProjectV2ItemById is idempotent: it returns
+            // the existing item when already present, so this satisfies "auto-added with fields
             // populated" even if native auto-add has not run yet, without ever duplicating items.
             const added = await projGraphql(
               `mutation($projectId: ID!, $contentId: ID!) {
@@ -197,7 +216,7 @@ jobs:
             }
 
             const summary = applied.length
-              ? `Synced #${issueNumber}: ${applied.join(', ')}.`
-              : `#${issueNumber}: no type:/phase:/area: labels to sync.`;
+              ? `Synced ${kind} #${issueNumber}: ${applied.join(', ')}.`
+              : `${kind} #${issueNumber}: no type:/phase:/area: labels to sync.`;
             core.info(summary);
             await core.summary.addRaw(`**FPAT Project Sync** — ${summary}`).write();
