@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { sampleCV } from '@/data/sample-cv';
-import { loadDocument, saveDocument } from '@/lib/storage';
+import { loadDocument, saveDocument, type SaveResult } from '@/lib/storage';
 import { CVDocument, CVContent, CVDesignConfig } from '@/schemas/cv.schema';
 import { renderActiveTemplate } from '@/lib/template-engine';
 import { LivePreviewCanvas } from '@/components/canvas/LivePreviewCanvas';
@@ -58,6 +58,37 @@ export default function StudioPage() {
   const pendingDocRef = useRef<CVDocument | null>(null);
   const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Latest save outcome, kept for epic #133's trust surfaces to consume.
+  const lastSaveResultRef = useRef<SaveResult | null>(null);
+
+  // One skipped-newer re-hydration per conflict episode, reset by the next
+  // successful save — without this guard, storage that keeps winning (e.g.
+  // a poisoned future savedAt) would re-hydrate in a loop.
+  const conflictRehydratedRef = useRef(false);
+
+  // Applied to every saveDocument() result (debounce and flush paths). On
+  // skipped-newer — a strictly newer write exists, e.g. from another tab —
+  // re-hydrate from storage once so the newer document is never silently
+  // clobbered; after the single retry, keep the local document. An
+  // 'unavailable' result needs no reaction: editing stays fully functional
+  // in memory and the storage module already published the save state.
+  // Touches only refs and the stable setCvData, so the identity is stable
+  // and the once-mounted flush listener can close over it safely.
+  const handleSaveResult = useCallback((result: SaveResult) => {
+    lastSaveResultRef.current = result;
+    if (result.status === 'saved') {
+      conflictRehydratedRef.current = false;
+      return;
+    }
+    if (result.status === 'skipped-newer' && !conflictRehydratedRef.current) {
+      conflictRehydratedRef.current = true;
+      const loaded = loadDocument();
+      if (loaded.source === 'storage') {
+        setCvData(loaded.doc);
+      }
+    }
+  }, []);
+
   // Debounced autosave: persist cvData one debounce window after the last
   // change, gated by hydration. Cleanup cancels the pending timer on every
   // cvData change and on unmount, so continuous typing coalesces into at
@@ -70,11 +101,11 @@ export default function StudioPage() {
     const timer = setTimeout(() => {
       pendingDocRef.current = null;
       flushTimerRef.current = null;
-      saveDocument(cvData);
+      handleSaveResult(saveDocument(cvData));
     }, AUTOSAVE_DEBOUNCE_MS);
     flushTimerRef.current = timer;
     return () => clearTimeout(timer);
-  }, [cvData, hydrated]);
+  }, [cvData, hydrated, handleSaveResult]);
 
   // Flush the pending save the moment the tab is hidden or the page is
   // unloading/entering bfcache. The timer is cancelled before the write so
@@ -91,7 +122,7 @@ export default function StudioPage() {
       }
       const doc = pendingDocRef.current;
       pendingDocRef.current = null;
-      saveDocument(doc);
+      handleSaveResult(saveDocument(doc));
     };
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
@@ -104,7 +135,7 @@ export default function StudioPage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('pagehide', flushPendingSave);
     };
-  }, []);
+  }, [handleSaveResult]);
 
   // Navigation States
   const [activeWorkflow, setActiveWorkflow] = useState<'editor' | 'lab' | 'hud'>('editor');
