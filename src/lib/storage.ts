@@ -1,4 +1,6 @@
-import type { CVDocument } from '@/schemas/cv.schema';
+import { z } from 'zod';
+import { CVDocumentSchema, type CVDocument } from '@/schemas/cv.schema';
+import { sampleCV } from '@/data/sample-cv';
 
 /**
  * Versioned client-side persistence contract for the studio's CVDocument.
@@ -71,15 +73,88 @@ export type SaveStateListener = (state: SaveState) => void;
 export type Unsubscribe = () => void;
 
 /**
+ * Envelope shell — the inner doc is validated separately with
+ * `CVDocumentSchema.safeParse` so a future v2 migration can hook in between
+ * the version check and the document check.
+ */
+const EnvelopeShellSchema = z.object({
+  schemaVersion: z.literal(SCHEMA_VERSION),
+  savedAt: z.string(),
+  doc: z.unknown()
+});
+
+/**
+ * Resolve localStorage inside a function body (never at module scope —
+ * static export pre-renders at build time). Returns null when storage is
+ * missing or property access itself throws (e.g. blocked storage).
+ */
+function getStorage(): Storage | null {
+  try {
+    return globalThis.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Preserve a payload that failed validation under {@link BACKUP_KEY} so the
+ * fallback never silently destroys user data. Best-effort: a failing backup
+ * write (e.g. quota) must not block the fallback itself.
+ */
+function preserveCorruptPayload(storage: Storage, raw: string): void {
+  try {
+    storage.setItem(BACKUP_KEY, raw);
+  } catch {
+    // Quota or blocked write — the fallback still proceeds.
+  }
+}
+
+/**
  * Read and validate the stored envelope.
  *
  * Any failure — missing key, invalid JSON, wrong envelope shape, wrong
  * `schemaVersion`, or a doc failing `CVDocumentSchema.safeParse` — resolves
  * to the sample-CV fallback without throwing. A corrupt payload is preserved
- * under {@link BACKUP_KEY} before falling back.
+ * under {@link BACKUP_KEY} before falling back; a merely missing key is not
+ * a corruption and writes no backup.
  */
 export function loadDocument(): LoadResult {
-  throw new Error('Not implemented — lands with #136.');
+  const storage = getStorage();
+  if (!storage) {
+    return { doc: sampleCV, source: 'fallback', storageAvailable: false };
+  }
+
+  let raw: string | null;
+  try {
+    raw = storage.getItem(STORAGE_KEY);
+  } catch {
+    return { doc: sampleCV, source: 'fallback', storageAvailable: false };
+  }
+  if (raw === null) {
+    return { doc: sampleCV, source: 'fallback', storageAvailable: true };
+  }
+
+  let payload: unknown;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    preserveCorruptPayload(storage, raw);
+    return { doc: sampleCV, source: 'fallback', storageAvailable: true };
+  }
+
+  const shell = EnvelopeShellSchema.safeParse(payload);
+  if (!shell.success) {
+    preserveCorruptPayload(storage, raw);
+    return { doc: sampleCV, source: 'fallback', storageAvailable: true };
+  }
+
+  const doc = CVDocumentSchema.safeParse(shell.data.doc);
+  if (!doc.success) {
+    preserveCorruptPayload(storage, raw);
+    return { doc: sampleCV, source: 'fallback', storageAvailable: true };
+  }
+
+  return { doc: doc.data, source: 'storage', storageAvailable: true };
 }
 
 /**
