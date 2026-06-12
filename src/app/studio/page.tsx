@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { sampleCV } from '@/data/sample-cv';
 import { loadDocument, saveDocument } from '@/lib/storage';
 import { CVDocument, CVContent, CVDesignConfig } from '@/schemas/cv.schema';
@@ -52,6 +52,12 @@ export default function StudioPage() {
     setHydrated(true);
   }, []);
 
+  // Pending-save handoff to the flush path: the document waiting on the
+  // debounce timer and the live timer id, so hiding the tab can persist
+  // immediately without racing a duplicate write.
+  const pendingDocRef = useRef<CVDocument | null>(null);
+  const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Debounced autosave: persist cvData one debounce window after the last
   // change, gated by hydration. Cleanup cancels the pending timer on every
   // cvData change and on unmount, so continuous typing coalesces into at
@@ -60,11 +66,45 @@ export default function StudioPage() {
     if (!hydrated) {
       return;
     }
+    pendingDocRef.current = cvData;
     const timer = setTimeout(() => {
+      pendingDocRef.current = null;
+      flushTimerRef.current = null;
       saveDocument(cvData);
     }, AUTOSAVE_DEBOUNCE_MS);
+    flushTimerRef.current = timer;
     return () => clearTimeout(timer);
   }, [cvData, hydrated]);
+
+  // Flush the pending save the moment the tab is hidden or the page is
+  // unloading/entering bfcache. The timer is cancelled before the write so
+  // flush and debounce can never double-save. Deliberately no beforeunload
+  // (unreliable, bfcache-hostile, being phased out).
+  useEffect(() => {
+    const flushPendingSave = () => {
+      if (pendingDocRef.current === null) {
+        return;
+      }
+      if (flushTimerRef.current !== null) {
+        clearTimeout(flushTimerRef.current);
+        flushTimerRef.current = null;
+      }
+      const doc = pendingDocRef.current;
+      pendingDocRef.current = null;
+      saveDocument(doc);
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        flushPendingSave();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', flushPendingSave);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', flushPendingSave);
+    };
+  }, []);
 
   // Navigation States
   const [activeWorkflow, setActiveWorkflow] = useState<'editor' | 'lab' | 'hud'>('editor');
