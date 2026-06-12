@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { sampleCV } from '@/data/sample-cv';
 import { loadDocument, saveDocument, type SaveResult } from '@/lib/storage';
-import { exportDocument } from '@/lib/import-export';
+import { exportDocument, importDocumentFromFile, type ImportError } from '@/lib/import-export';
 import { CVDocument, CVContent, CVDesignConfig } from '@/schemas/cv.schema';
 import { renderActiveTemplate } from '@/lib/template-engine';
 import { LivePreviewCanvas } from '@/components/canvas/LivePreviewCanvas';
@@ -203,11 +203,13 @@ export default function StudioPage() {
     });
   };
 
-  // Export serialization (#146) wired into the #145 chrome; import file
-  // parsing lands in #147 — its stub only fixes the prop surface.
+  // Export (#146) + import pipeline (#147) wired into the #145 chrome. The
+  // latest import failure is parked in state for #148's inline error surface,
+  // which will destructure the value slot when it renders it.
+  const [, setImportError] = useState<ImportError | null>(null);
   const handleExport = () => exportDocument(cvData);
   const handleImportFile = (file: File) => {
-    void file;
+    void importDocumentFromFile(file, setCvData).then(setImportError);
   };
 
   // Pre-audit reports

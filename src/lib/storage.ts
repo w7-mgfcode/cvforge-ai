@@ -89,9 +89,11 @@ export type Unsubscribe = () => void;
 /**
  * Envelope shell — the inner doc is validated separately with
  * `CVDocumentSchema.safeParse` so a future v2 migration can hook in between
- * the version check and the document check.
+ * the version check and the document check. Exported (read-only reuse) for
+ * the file-import parse pipeline in `src/lib/import-export.ts`, so import
+ * and load validate the exact same envelope shape.
  */
-const EnvelopeShellSchema = z.object({
+export const EnvelopeShellSchema = z.object({
   schemaVersion: z.literal(SCHEMA_VERSION),
   savedAt: z.string(),
   doc: z.unknown()
