@@ -204,9 +204,9 @@ export default function StudioPage() {
   };
 
   // Export (#146) + import pipeline (#147) wired into the #145 chrome. The
-  // latest import failure is parked in state for #148's inline error surface,
-  // which will destructure the value slot when it renders it.
-  const [, setImportError] = useState<ImportError | null>(null);
+  // latest import failure is parked in state and rendered inline by #148's
+  // error surface inside ExportImportControls (null result = auto-clear).
+  const [importError, setImportError] = useState<ImportError | null>(null);
   const handleExport = () => exportDocument(cvData);
   const handleImportFile = (file: File) => {
     void importDocumentFromFile(file, setCvData).then(setImportError);
@@ -343,7 +343,7 @@ export default function StudioPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <ResetToSampleControl onReset={() => setCvData(sampleCV)} />
-                  <ExportImportControls onExport={handleExport} onImportFile={handleImportFile} />
+                  <ExportImportControls onExport={handleExport} onImportFile={handleImportFile} importError={importError} onDismissError={() => setImportError(null)} />
                   <button
                     onClick={() => window.print()}
                     className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold shadow-md hover:shadow-emerald-950/20 transition-all"
