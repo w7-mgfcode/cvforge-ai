@@ -161,19 +161,26 @@ Both project workflows resolve the board owner-agnostically via
 `repositoryOwner(login:) { ... on ProjectV2Owner { projectV2(number:) } }` (works for user- and
 org-owned boards).
 
-### `fpat-project-sync.yml` — labels → fields (S2 / #16)
+### `fpat-project-sync.yml` — labels → fields (S2 / #16, PR events #127)
 
-- **Triggers:** `issues` (`opened`, `labeled`, `unlabeled`, `reopened`) + `workflow_dispatch` (with an
-  `issue_number` input for manual re-sync / branch testing).
+- **Triggers:** `issues` and `pull_request` (each: `opened`, `labeled`, `unlabeled`, `reopened`) +
+  `workflow_dispatch` (with an `issue_number` input — accepts an issue **or PR** number for manual
+  re-sync / branch testing). PR events were added 2026-06-12 (#127, the formerly parked
+  `extend-project-sync-to-pr-events` decision) so auto-added PRs receive the same Type/Phase/Area
+  treatment as issues; decision log: `docs/reports/2026-06-12/board-cleanup-decision.md`.
 - **Behavior:** maps `type:*` → **Type**, `phase:*` → **Phase**, `area:*` → **Area** via
   `updateProjectV2ItemFieldValue`. Field and option IDs are resolved at runtime **by name** (no
   hardcoded option IDs); the documented label-suffix → option-name map lives in the workflow.
-- **Dual-token:** default `GITHUB_TOKEN` reads the issue's labels (`issues: read`);
-  `FPAT_PROJECT_TOKEN` writes the board (via a direct `fetch` GraphQL client, since github-script
-  cannot load a second Octokit).
+  Issues and PRs share one code path: the REST issues endpoint returns the correct content node
+  id (Issue or PullRequest) plus labels for either kind.
+- **Dual-token:** default `GITHUB_TOKEN` reads the issue's/PR's labels (`issues: read`,
+  `pull-requests: read`); `FPAT_PROJECT_TOKEN` writes the board (via a direct `fetch` GraphQL
+  client, since github-script cannot load a second Octokit). Fork PRs lack the secret and fail
+  the explicit token guard — acceptable for this single-maintainer repo.
 - **Idempotent:** re-setting a single-select to its current value is a no-op; a missing label leaves
   that field untouched (it does not clear).
-- **Out of scope (deliberately):** does not touch **Status** or **Score**, and never closes/edits issues.
+- **Out of scope (deliberately):** does not touch **Status**, **Score**, **Priority**, or
+  **Estimate**, and never closes/edits issues or PRs.
 
 ### `fpat-blocked-sweep.yml` — read-only invariant audit (S3 / #18)
 
