@@ -158,15 +158,63 @@ export function loadDocument(): LoadResult {
 }
 
 /**
+ * Read the `savedAt` of the currently stored envelope for the last-write-wins
+ * guard. Returns null when there is nothing stored or the payload does not
+ * parse as an envelope shell — a corrupt payload never blocks a valid save
+ * (the load path is responsible for backing it up).
+ */
+function readStoredSavedAt(storage: Storage): string | null {
+  let raw: string | null;
+  try {
+    raw = storage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+  if (raw === null) {
+    return null;
+  }
+  let payload: unknown;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  const shell = EnvelopeShellSchema.safeParse(payload);
+  return shell.success ? shell.data.savedAt : null;
+}
+
+/**
  * Wrap `doc` in a v1 envelope with a fresh `savedAt` and persist it.
  *
  * Refuses to overwrite an envelope carrying a strictly newer `savedAt`
- * (last-write-wins guard). Never throws: quota and availability failures
- * surface as {@link SaveResult} values.
+ * (last-write-wins guard — e.g. another tab wrote after this tab's state
+ * was loaded). Never throws: quota and availability failures surface as
+ * {@link SaveResult} values; an unparseable stored `savedAt` never blocks
+ * the write.
  */
 export function saveDocument(doc: CVDocument): SaveResult {
-  void doc;
-  throw new Error('Not implemented — lands with #137.');
+  const storage = getStorage();
+  if (!storage) {
+    return { status: 'unavailable' };
+  }
+
+  const savedAt = new Date().toISOString();
+  const storedSavedAt = readStoredSavedAt(storage);
+  if (storedSavedAt !== null) {
+    const storedMs = Date.parse(storedSavedAt);
+    if (!Number.isNaN(storedMs) && storedMs > Date.parse(savedAt)) {
+      return { status: 'skipped-newer', storedSavedAt };
+    }
+  }
+
+  const envelope: StorageEnvelope = { schemaVersion: SCHEMA_VERSION, savedAt, doc };
+  try {
+    storage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+  } catch {
+    // QuotaExceededError shapes differ across browsers — catch broadly.
+    return { status: 'unavailable' };
+  }
+  return { status: 'saved', savedAt };
 }
 
 /**
@@ -174,7 +222,20 @@ export function saveDocument(doc: CVDocument): SaveResult {
  * {@link BACKUP_KEY}). Safe to call when storage is unavailable.
  */
 export function clearDocument(): void {
-  throw new Error('Not implemented — lands with #137.');
+  const storage = getStorage();
+  if (!storage) {
+    return;
+  }
+  try {
+    storage.removeItem(STORAGE_KEY);
+  } catch {
+    // Blocked storage — nothing to clear.
+  }
+  try {
+    storage.removeItem(BACKUP_KEY);
+  } catch {
+    // Blocked storage — nothing to clear.
+  }
 }
 
 /**
