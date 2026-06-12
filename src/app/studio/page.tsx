@@ -11,6 +11,7 @@ import { ExperienceForm } from '@/components/editor/ExperienceForm';
 import { TokenControlPanel } from '@/components/design-panel/TokenControlPanel';
 import { CopilotDiffPanel } from '@/components/ai-assistant/CopilotDiffPanel';
 import { ParserGraphView } from '@/components/template-lab/ParserGraphView';
+import { ExportImportControls } from '@/components/persistence/ExportImportControls';
 import { auditDocumentData } from '@/lib/print-validator';
 import { 
   Layout, 
@@ -198,6 +199,13 @@ export default function StudioPage() {
     });
   };
 
+  // Export/import chrome stubs (#145) — serialization lands in #146,
+  // file parsing in #147; only the prop surface is fixed here.
+  const handleExport = () => {};
+  const handleImportFile = (file: File) => {
+    void file;
+  };
+
   // Pre-audit reports
   const auditReport = auditDocumentData(cvData);
 
@@ -326,12 +334,15 @@ export default function StudioPage() {
                   <span>DPI Target: 96 DPI</span>
                   <span>Dimensions: 210mm x 297mm</span>
                 </div>
-                <button
-                  onClick={() => window.print()}
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold shadow-md hover:shadow-emerald-950/20 transition-all"
-                >
-                  Compile & Export PDF
-                </button>
+                <div className="flex items-center space-x-2">
+                  <ExportImportControls onExport={handleExport} onImportFile={handleImportFile} />
+                  <button
+                    onClick={() => window.print()}
+                    className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold shadow-md hover:shadow-emerald-950/20 transition-all"
+                  >
+                    Compile & Export PDF
+                  </button>
+                </div>
               </div>
             </div>
 
