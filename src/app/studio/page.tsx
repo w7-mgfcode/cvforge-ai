@@ -11,6 +11,7 @@ import { ExperienceForm } from '@/components/editor/ExperienceForm';
 import { TokenControlPanel } from '@/components/design-panel/TokenControlPanel';
 import { CopilotDiffPanel } from '@/components/ai-assistant/CopilotDiffPanel';
 import { ParserGraphView } from '@/components/template-lab/ParserGraphView';
+import { SaveStateBadge } from '@/components/persistence/SaveStateBadge';
 import { auditDocumentData } from '@/lib/print-validator';
 import { 
   Layout, 
@@ -254,6 +255,7 @@ export default function StudioPage() {
 
         {/* User revision counter */}
         <div className="flex flex-col items-center">
+          <SaveStateBadge className="mb-3" />
           <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold font-mono text-slate-400">
             r{cvData.metadata.documentRevision}
           </div>
