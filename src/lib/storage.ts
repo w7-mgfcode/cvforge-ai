@@ -38,6 +38,20 @@ export interface StorageEnvelope {
 }
 
 /**
+ * Wrap `doc` in a v1 {@link StorageEnvelope}. This is the single construction
+ * site for the envelope shape — both the persistence write path
+ * ({@link saveDocument}) and file export (`src/lib/import-export.ts`) build
+ * envelopes here, so an exported file is always re-parseable by
+ * {@link loadDocument}'s envelope checks.
+ */
+export function createEnvelope(
+  doc: CVDocument,
+  savedAt: string = new Date().toISOString()
+): StorageEnvelope {
+  return { schemaVersion: SCHEMA_VERSION, savedAt, doc };
+}
+
+/**
  * Save lifecycle published through {@link subscribeSaveState}:
  * - `idle` — nothing persisted yet this session.
  * - `saving` — a write is in flight.
@@ -261,7 +275,7 @@ export function saveDocument(doc: CVDocument): SaveResult {
   }
 
   publishSaveState('saving');
-  const envelope: StorageEnvelope = { schemaVersion: SCHEMA_VERSION, savedAt, doc };
+  const envelope = createEnvelope(doc, savedAt);
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(envelope));
   } catch {
